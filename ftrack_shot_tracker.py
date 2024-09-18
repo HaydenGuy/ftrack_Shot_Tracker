@@ -22,10 +22,16 @@ def get_target_project(project_code):
     project = session.query(f"Project where name is {project_code}").first()
 
     if not project:
-        print("Could not find target_project")
+        print("Could not find target project")
         sys.exit(1)
     
     return project
+
+# Query the ftrack assets based on the asset type and return them
+def get_assets(asset_type, project):
+    assets = session.query(f"{asset_type} where project_id is '{project["id"]}'").all()
+
+    return assets
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
@@ -46,9 +52,19 @@ if __name__ == "__main__":
         print("Usage: python script.py <target_project_code>")
         sys.exit(1)
 
-    # Call function on the target project code (argument 2)
-    get_target_project(sys.argv[1])
+    # Call function on the target project code (argument 2) and assign as variable
+    project = get_target_project(sys.argv[1])
 
+    # Assign each of the asset types to variables
+    milestones = get_assets("Milestone", project)
+    asset_builds = get_assets("AssetBuild", project)
+    sequences = get_assets("Sequence", project)
+    shots = get_assets("Shot", project)
+    tasks = get_assets("Task", project)
+
+    # for m in milestones:
+    #     print(m["name"])
+    
     # Initalize app, create and show the window
     app = QApplication()
     window = ftrack_Shot_Tracker()
