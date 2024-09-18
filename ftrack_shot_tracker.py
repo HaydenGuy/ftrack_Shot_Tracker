@@ -2,13 +2,20 @@ import sys
 import os
 import ftrack_api
 
+from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
-# Information about the session
-# session = ftrack_api.Session(server_url="",
-#                              api_user="",
-#                              api_key="")
+# Load the .env file and assign the information to variables
+load_dotenv()
+server_url = os.getenv("SERVER_URL")
+api_user = os.getenv("API_USER")
+api_key = os.getenv("API_KEY")
+
+# Information used to connect to the ftrack session
+session = ftrack_api.Session(server_url=f"{server_url}",
+                             api_user=f"{api_user}",
+                             api_key=f"{api_key}")
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
