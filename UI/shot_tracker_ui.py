@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QMainWindow,
-    QSizePolicy, QStackedWidget, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QLabel,
+    QMainWindow, QSizePolicy, QStackedWidget, QVBoxLayout,
+    QWidget)
 
 class Ui_ftrack_Shot_Tracker(object):
     def setupUi(self, ftrack_Shot_Tracker):
@@ -27,10 +28,16 @@ class Ui_ftrack_Shot_Tracker(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.button_box = QVBoxLayout()
-        self.button_box.setObjectName(u"button_box")
+        self.combo_box_layout = QVBoxLayout()
+        self.combo_box_layout.setObjectName(u"combo_box_layout")
+        self.combo_box_layout.setContentsMargins(-1, -1, -1, 0)
+        self.project_names_combo = QComboBox(self.centralwidget)
+        self.project_names_combo.setObjectName(u"project_names_combo")
 
-        self.verticalLayout.addLayout(self.button_box)
+        self.combo_box_layout.addWidget(self.project_names_combo)
+
+
+        self.verticalLayout.addLayout(self.combo_box_layout)
 
         self.page_widget = QStackedWidget(self.centralwidget)
         self.page_widget.setObjectName(u"page_widget")
