@@ -3,7 +3,7 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QComboBox
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
 # Load the .env file and assign the information to variables
@@ -39,13 +39,23 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.setupUi(self)
 
         # Query all the session projects and store their names in the list 
-        project_names = [proj["name"] for proj in session.query("Project").all()]
+        self.project_names = [proj["name"] for proj in session.query("Project").all()]
 
-        self.button_create(project_names)
+        self.combo_box_create()
 
-    def button_create(self, button_names):
-        for button in button_names:
-            self.button_box.addWidget(QPushButton(f"{button}"))
+    # Set the combo box up with its items and funtionality
+    def combo_box_create(self):
+        # Set the project names and the items in the combo box list
+        self.project_names_combo.addItems(self.project_names)
+
+        # If a different item from the combo box is selected call the change page slot
+        self.project_names_combo.currentIndexChanged.connect(self.change_page)
+
+    # Change the page when the combo box item is changed
+    def change_page(self):
+        page_index = self.project_names_combo.currentIndex() # Get index of combo item
+        self.page_widget.setCurrentIndex(page_index) # Change page to index of item
+        
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
@@ -62,9 +72,6 @@ if __name__ == "__main__":
     sequences = get_assets("Sequence", project)
     shots = get_assets("Shot", project)
     tasks = get_assets("Task", project)
-
-    # for m in milestones:
-    #     print(m["name"])
     
     # Initalize app, create and show the window
     app = QApplication()
