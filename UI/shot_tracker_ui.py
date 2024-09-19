@@ -16,7 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QMainWindow, QMenuBar,
-    QSizePolicy, QStatusBar, QVBoxLayout, QWidget)
+    QSizePolicy, QStackedWidget, QStatusBar, QVBoxLayout,
+    QWidget)
 
 class Ui_ftrack_Shot_Tracker(object):
     def setupUi(self, ftrack_Shot_Tracker):
@@ -29,6 +30,22 @@ class Ui_ftrack_Shot_Tracker(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.button_box = QHBoxLayout()
         self.button_box.setObjectName(u"button_box")
+        self.page_widget = QStackedWidget(self.centralwidget)
+        self.page_widget.setObjectName(u"page_widget")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.page_widget.sizePolicy().hasHeightForWidth())
+        self.page_widget.setSizePolicy(sizePolicy)
+        self.page1 = QWidget()
+        self.page1.setObjectName(u"page1")
+        self.page_widget.addWidget(self.page1)
+        self.page2 = QWidget()
+        self.page2.setObjectName(u"page2")
+        self.page_widget.addWidget(self.page2)
+
+        self.button_box.addWidget(self.page_widget)
+
 
         self.verticalLayout.addLayout(self.button_box)
 
