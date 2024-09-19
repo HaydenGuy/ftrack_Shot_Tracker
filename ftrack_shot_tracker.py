@@ -38,9 +38,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         super().__init__()
         self.setupUi(self)
 
-        button_names = ["testing", "button", "names"]
+        # Query all the session projects and store their names in the list 
+        project_names = [proj["name"] for proj in session.query("Project").all()]
 
-        self.button_create(button_names)
+        self.button_create(project_names)
 
     def button_create(self, button_names):
         for button in button_names:
