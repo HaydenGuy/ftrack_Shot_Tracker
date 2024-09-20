@@ -44,40 +44,40 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_1.setObjectName(u"page_1")
         self.horizontalLayout_4 = QHBoxLayout(self.page_1)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.page_1_layout = QVBoxLayout()
+        self.page_1_layout.setObjectName(u"page_1_layout")
 
-        self.horizontalLayout_4.addLayout(self.verticalLayout_2)
+        self.horizontalLayout_4.addLayout(self.page_1_layout)
 
         self.page_widget.addWidget(self.page_1)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
         self.horizontalLayout_3 = QHBoxLayout(self.page_2)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.page_2_layout = QVBoxLayout()
+        self.page_2_layout.setObjectName(u"page_2_layout")
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_3)
+        self.horizontalLayout_3.addLayout(self.page_2_layout)
 
         self.page_widget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
         self.horizontalLayout_2 = QHBoxLayout(self.page_3)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.page_3_layout = QVBoxLayout()
+        self.page_3_layout.setObjectName(u"page_3_layout")
 
-        self.horizontalLayout_2.addLayout(self.verticalLayout_4)
+        self.horizontalLayout_2.addLayout(self.page_3_layout)
 
         self.page_widget.addWidget(self.page_3)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
         self.horizontalLayout = QHBoxLayout(self.page_4)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.verticalLayout_5 = QVBoxLayout()
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.page_4_layout = QVBoxLayout()
+        self.page_4_layout.setObjectName(u"page_4_layout")
 
-        self.horizontalLayout.addLayout(self.verticalLayout_5)
+        self.horizontalLayout.addLayout(self.page_4_layout)
 
         self.page_widget.addWidget(self.page_4)
 

@@ -30,28 +30,28 @@
       <widget class="QWidget" name="page_1">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2"/>
+         <layout class="QVBoxLayout" name="page_1_layout"/>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="page_2">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         <layout class="QVBoxLayout" name="page_2_layout"/>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="page_3">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4"/>
+         <layout class="QVBoxLayout" name="page_3_layout"/>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="page_4">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5"/>
+         <layout class="QVBoxLayout" name="page_4_layout"/>
         </item>
        </layout>
       </widget>
