@@ -15,9 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QLabel,
-    QMainWindow, QSizePolicy, QStackedWidget, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QMainWindow,
+    QSizePolicy, QStackedWidget, QVBoxLayout, QWidget)
 
 class Ui_ftrack_Shot_Tracker(object):
     def setupUi(self, ftrack_Shot_Tracker):
@@ -41,44 +40,44 @@ class Ui_ftrack_Shot_Tracker(object):
 
         self.page_widget = QStackedWidget(self.centralwidget)
         self.page_widget.setObjectName(u"page_widget")
-        self.page = QWidget()
-        self.page.setObjectName(u"page")
-        self.horizontalLayout_4 = QHBoxLayout(self.page)
+        self.page_1 = QWidget()
+        self.page_1.setObjectName(u"page_1")
+        self.horizontalLayout_4 = QHBoxLayout(self.page_1)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label = QLabel(self.page)
-        self.label.setObjectName(u"label")
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
 
-        self.horizontalLayout_4.addWidget(self.label)
+        self.horizontalLayout_4.addLayout(self.verticalLayout_2)
 
-        self.page_widget.addWidget(self.page)
+        self.page_widget.addWidget(self.page_1)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
         self.horizontalLayout_3 = QHBoxLayout(self.page_2)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_2 = QLabel(self.page_2)
-        self.label_2.setObjectName(u"label_2")
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
 
-        self.horizontalLayout_3.addWidget(self.label_2)
+        self.horizontalLayout_3.addLayout(self.verticalLayout_3)
 
         self.page_widget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
         self.horizontalLayout_2 = QHBoxLayout(self.page_3)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_3 = QLabel(self.page_3)
-        self.label_3.setObjectName(u"label_3")
+        self.verticalLayout_4 = QVBoxLayout()
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
 
-        self.horizontalLayout_2.addWidget(self.label_3)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_4)
 
         self.page_widget.addWidget(self.page_3)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
         self.horizontalLayout = QHBoxLayout(self.page_4)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_4 = QLabel(self.page_4)
-        self.label_4.setObjectName(u"label_4")
+        self.verticalLayout_5 = QVBoxLayout()
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
 
-        self.horizontalLayout.addWidget(self.label_4)
+        self.horizontalLayout.addLayout(self.verticalLayout_5)
 
         self.page_widget.addWidget(self.page_4)
 
@@ -93,9 +92,5 @@ class Ui_ftrack_Shot_Tracker(object):
 
     def retranslateUi(self, ftrack_Shot_Tracker):
         ftrack_Shot_Tracker.setWindowTitle(QCoreApplication.translate("ftrack_Shot_Tracker", u"ftrack Shot Tracker", None))
-        self.label.setText(QCoreApplication.translate("ftrack_Shot_Tracker", u"page1", None))
-        self.label_2.setText(QCoreApplication.translate("ftrack_Shot_Tracker", u"page2", None))
-        self.label_3.setText(QCoreApplication.translate("ftrack_Shot_Tracker", u"page3", None))
-        self.label_4.setText(QCoreApplication.translate("ftrack_Shot_Tracker", u"page4", None))
     # retranslateUi
 
