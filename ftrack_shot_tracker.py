@@ -3,7 +3,7 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QComboBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QComboBox, QLabel
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
 # Load the .env file and assign the information to variables
@@ -38,10 +38,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         super().__init__()
         self.setupUi(self)
 
+        # Call function on the target project code (argument 2) and assign as variable
+        self.project_code = get_target_project(sys.argv[1])
+
         # Query all the session projects and store their names in the list 
         self.project_names = [proj["name"] for proj in session.query("Project").all()]
 
         self.create_dropdown_menu()
+        self.create_asset_labels()
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -55,7 +59,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def change_page(self):
         page_index = self.project_names_combo.currentIndex() # Get index of combo item
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
-        
+
+    # Add labels based on asset names to the page1 layout - to be updated
+    def create_asset_labels(self):
+        asset_builds = get_assets("AssetBuild", self.project_code)
+
+        for asset in asset_builds[::-1]:
+            label = QLabel(asset["name"])
+            self.page_1_layout.addWidget(label)
+
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
