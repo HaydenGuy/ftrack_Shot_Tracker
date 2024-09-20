@@ -41,17 +41,17 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         # Query all the session projects and store their names in the list 
         self.project_names = [proj["name"] for proj in session.query("Project").all()]
 
-        self.combo_box_create()
+        self.create_dropdown_menu()
 
-    # Set the combo box up with its items and funtionality
-    def combo_box_create(self):
-        # Set the project names and the items in the combo box list
+    # Set the dropdown menu up with its items and funtionality
+    def create_dropdown_menu(self):
+        # Set the project names and the items in the dropdown menu list
         self.project_names_combo.addItems(self.project_names)
 
-        # If a different item from the combo box is selected call the change page slot
+        # If a different item from the dropdown menu is selected call the change page slot
         self.project_names_combo.currentIndexChanged.connect(self.change_page)
 
-    # Change the page when the combo box item is changed
+    # Change the page when the dropdown menu item is changed
     def change_page(self):
         page_index = self.project_names_combo.currentIndex() # Get index of combo item
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
