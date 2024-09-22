@@ -57,13 +57,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         page_index = self.project_names_combo.currentIndex() # Get index of combo item
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
 
-    # Add labels based on asset names to the page1 layout - to be updated
-    def create_asset_labels(self):
-        asset_builds = get_assets("AssetBuild", self.project_code)
+    # Add labels based on [milestone, sequence, asset_build] to the specified page layout
+    def create_page_labels(self, type, page):
+        asset_builds = get_assets(type, self.project_code)
 
         for asset in asset_builds[::-1]:
             label = QLabel(asset["name"])
-            self.page_2_layout.addWidget(label)
+            page.addWidget(label)
 
 
 if __name__ == "__main__":
