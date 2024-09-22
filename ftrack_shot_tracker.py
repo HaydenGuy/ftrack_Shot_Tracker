@@ -41,16 +41,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         # Call function on the target project code (argument 2) and assign as variable
         self.project_code = get_target_project(sys.argv[1])
 
-        # Query all the session projects and store their names in the list 
-        self.project_names = [proj["name"] for proj in session.query("Project").all()]
-
         self.create_dropdown_menu()
         self.create_asset_labels()
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
-        # Set the project names and the items in the dropdown menu list
-        self.project_names_combo.addItems(self.project_names)
+        # Set the items in the dropdown menu list
+        self.project_names_combo.addItems(["Milestones", "Asset Builds", "Sequences"])
 
         # If a different item from the dropdown menu is selected call the change page slot
         self.project_names_combo.currentIndexChanged.connect(self.change_page)
@@ -66,7 +63,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         for asset in asset_builds[::-1]:
             label = QLabel(asset["name"])
-            self.page_1_layout.addWidget(label)
+            self.page_2_layout.addWidget(label)
 
 
 if __name__ == "__main__":
