@@ -41,8 +41,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         # Call function on the target project code (argument 2) and assign as variable
         self.project_code = get_target_project(sys.argv[1])
 
+        self.create_ui()
+        
+    # Calls all of the UI creation methods
+    def create_ui(self):
         self.create_dropdown_menu()
-        self.create_asset_labels()
+        self.create_page_labels("Milestone", self.page_1_layout)
+        self.create_page_labels("AssetBuild", self.page_2_layout)
+        self.create_page_labels("Sequence", self.page_3_layout)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -58,12 +64,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
 
     # Add labels based on [milestone, sequence, asset_build] to the specified page layout
-    def create_page_labels(self, type, page):
-        asset_builds = get_assets(type, self.project_code)
+    def create_page_labels(self, asset_type: str, page_layout):
+        asset_type = get_assets(asset_type, self.project_code)
 
-        for asset in asset_builds[::-1]:
+        for asset in asset_type[::-1]:
             label = QLabel(asset["name"])
-            page.addWidget(label)
+            page_layout.addWidget(label)
 
 
 if __name__ == "__main__":
