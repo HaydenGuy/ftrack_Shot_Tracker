@@ -38,7 +38,12 @@
            <widget class="QTreeWidget" name="page_1_tree">
             <column>
              <property name="text">
-              <string notr="true">1</string>
+              <string>test</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>test2</string>
              </property>
             </column>
            </widget>

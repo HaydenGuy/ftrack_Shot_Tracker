@@ -48,9 +48,6 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_1_layout = QVBoxLayout()
         self.page_1_layout.setObjectName(u"page_1_layout")
         self.page_1_tree = QTreeWidget(self.page_1)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.page_1_tree.setHeaderItem(__qtreewidgetitem)
         self.page_1_tree.setObjectName(u"page_1_tree")
 
         self.page_1_layout.addWidget(self.page_1_tree)
@@ -66,9 +63,9 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_2_layout = QVBoxLayout()
         self.page_2_layout.setObjectName(u"page_2_layout")
         self.page_2_tree = QTreeWidget(self.page_2)
-        __qtreewidgetitem1 = QTreeWidgetItem()
-        __qtreewidgetitem1.setText(0, u"1");
-        self.page_2_tree.setHeaderItem(__qtreewidgetitem1)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1");
+        self.page_2_tree.setHeaderItem(__qtreewidgetitem)
         self.page_2_tree.setObjectName(u"page_2_tree")
 
         self.page_2_layout.addWidget(self.page_2_tree)
@@ -84,9 +81,9 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_3_layout = QVBoxLayout()
         self.page_3_layout.setObjectName(u"page_3_layout")
         self.page_3_tree = QTreeWidget(self.page_3)
-        __qtreewidgetitem2 = QTreeWidgetItem()
-        __qtreewidgetitem2.setText(0, u"1");
-        self.page_3_tree.setHeaderItem(__qtreewidgetitem2)
+        __qtreewidgetitem1 = QTreeWidgetItem()
+        __qtreewidgetitem1.setText(0, u"1");
+        self.page_3_tree.setHeaderItem(__qtreewidgetitem1)
         self.page_3_tree.setObjectName(u"page_3_tree")
 
         self.page_3_layout.addWidget(self.page_3_tree)
@@ -102,9 +99,9 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_4_layout = QVBoxLayout()
         self.page_4_layout.setObjectName(u"page_4_layout")
         self.page_4_tree = QTreeWidget(self.page_4)
-        __qtreewidgetitem3 = QTreeWidgetItem()
-        __qtreewidgetitem3.setText(0, u"1");
-        self.page_4_tree.setHeaderItem(__qtreewidgetitem3)
+        __qtreewidgetitem2 = QTreeWidgetItem()
+        __qtreewidgetitem2.setText(0, u"1");
+        self.page_4_tree.setHeaderItem(__qtreewidgetitem2)
         self.page_4_tree.setObjectName(u"page_4_tree")
 
         self.page_4_layout.addWidget(self.page_4_tree)
@@ -128,5 +125,8 @@ class Ui_ftrack_Shot_Tracker(object):
 
     def retranslateUi(self, ftrack_Shot_Tracker):
         ftrack_Shot_Tracker.setWindowTitle(QCoreApplication.translate("ftrack_Shot_Tracker", u"ftrack Shot Tracker", None))
+        ___qtreewidgetitem = self.page_1_tree.headerItem()
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"test2", None));
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"test", None));
     # retranslateUi
 
