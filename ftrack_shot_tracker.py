@@ -17,36 +17,36 @@ session = ftrack_api.Session(server_url=f"{server_url}",
                              api_user=f"{api_user}",
                              api_key=f"{api_key}")
 
-# Check if an ftrack project exists by calling its code and return the project if it does
-def get_target_project(project_code):
-    project = session.query(f"Project where name is {project_code}").first()
-
-    if not project:
-        print("Could not find target project")
-        sys.exit(1)
-    
-    return project
-
-# Query the ftrack assets based on the asset type and return them
-def get_assets(asset_type, project):
-    assets = session.query(f"{asset_type} where project_id is '{project["id"]}'").all()
-
-    return assets
-
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
         # Call function on the target project code (argument 2) and assign as variable
-        self.project_code = get_target_project(sys.argv[1])
+        self.project_code = self.get_target_project(sys.argv[1])
 
-        self.milestones = get_assets("Milestone", self.project_code )
-        self.asset_builds = get_assets("AssetBuild", self.project_code )
-        self.sequences = get_assets("Sequence", self.project_code )
+        self.milestones = self.get_assets("Milestone", self.project_code )
+        self.asset_builds = self.get_assets("AssetBuild", self.project_code )
+        self.sequences = self.get_assets("Sequence", self.project_code )
 
         self.create_ui()
         
+    # Check if an ftrack project exists by calling its code and return the project if it does
+    def get_target_project(self, project_code):
+        project = session.query(f"Project where name is {project_code}").first()
+    
+        if not project:
+            print("Could not find target project")
+            sys.exit(1)
+        
+        return project
+    
+    # Query the ftrack assets based on the asset type and return them
+    def get_assets(self, asset_type, project):
+        assets = session.query(f"{asset_type} where project_id is '{project["id"]}'").all()
+    
+        return assets
+
     # Calls all of the UI creation methods
     def create_ui(self):
         self.create_dropdown_menu()
@@ -82,13 +82,6 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python script.py <target_project_code>")
         sys.exit(1)
-
-    # # Call function on the target project code (argument 2) and assign as variable
-    # project = get_target_project(sys.argv[1])
-
-    # # Assign each of the asset types to variables
-    # shots = get_assets("Shot", project)
-    # tasks = get_assets("Task", project)
     
     # Initalize app, create and show the window
     app = QApplication()
