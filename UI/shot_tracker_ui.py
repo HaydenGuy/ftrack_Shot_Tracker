@@ -23,7 +23,7 @@ class Ui_ftrack_Shot_Tracker(object):
     def setupUi(self, ftrack_Shot_Tracker):
         if not ftrack_Shot_Tracker.objectName():
             ftrack_Shot_Tracker.setObjectName(u"ftrack_Shot_Tracker")
-        ftrack_Shot_Tracker.resize(800, 600)
+        ftrack_Shot_Tracker.resize(1000, 600)
         self.centralwidget = QWidget(ftrack_Shot_Tracker)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -58,56 +58,47 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_widget.addWidget(self.page_1)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.horizontalLayout_3 = QHBoxLayout(self.page_2)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.verticalLayout_4 = QVBoxLayout(self.page_2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.page_2_layout = QVBoxLayout()
         self.page_2_layout.setObjectName(u"page_2_layout")
         self.page_2_tree = QTreeWidget(self.page_2)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.page_2_tree.setHeaderItem(__qtreewidgetitem)
         self.page_2_tree.setObjectName(u"page_2_tree")
 
         self.page_2_layout.addWidget(self.page_2_tree)
 
 
-        self.horizontalLayout_3.addLayout(self.page_2_layout)
+        self.verticalLayout_4.addLayout(self.page_2_layout)
 
         self.page_widget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
-        self.horizontalLayout_2 = QHBoxLayout(self.page_3)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.verticalLayout_5 = QVBoxLayout(self.page_3)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.page_3_layout = QVBoxLayout()
         self.page_3_layout.setObjectName(u"page_3_layout")
         self.page_3_tree = QTreeWidget(self.page_3)
-        __qtreewidgetitem1 = QTreeWidgetItem()
-        __qtreewidgetitem1.setText(0, u"1");
-        self.page_3_tree.setHeaderItem(__qtreewidgetitem1)
         self.page_3_tree.setObjectName(u"page_3_tree")
 
         self.page_3_layout.addWidget(self.page_3_tree)
 
 
-        self.horizontalLayout_2.addLayout(self.page_3_layout)
+        self.verticalLayout_5.addLayout(self.page_3_layout)
 
         self.page_widget.addWidget(self.page_3)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
-        self.horizontalLayout = QHBoxLayout(self.page_4)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.verticalLayout_3 = QVBoxLayout(self.page_4)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.page_4_layout = QVBoxLayout()
         self.page_4_layout.setObjectName(u"page_4_layout")
         self.page_4_tree = QTreeWidget(self.page_4)
-        __qtreewidgetitem2 = QTreeWidgetItem()
-        __qtreewidgetitem2.setText(0, u"1");
-        self.page_4_tree.setHeaderItem(__qtreewidgetitem2)
         self.page_4_tree.setObjectName(u"page_4_tree")
 
         self.page_4_layout.addWidget(self.page_4_tree)
 
 
-        self.horizontalLayout.addLayout(self.page_4_layout)
+        self.verticalLayout_3.addLayout(self.page_4_layout)
 
         self.page_widget.addWidget(self.page_4)
 
@@ -117,7 +108,7 @@ class Ui_ftrack_Shot_Tracker(object):
 
         self.retranslateUi(ftrack_Shot_Tracker)
 
-        self.page_widget.setCurrentIndex(0)
+        self.page_widget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(ftrack_Shot_Tracker)
@@ -126,7 +117,44 @@ class Ui_ftrack_Shot_Tracker(object):
     def retranslateUi(self, ftrack_Shot_Tracker):
         ftrack_Shot_Tracker.setWindowTitle(QCoreApplication.translate("ftrack_Shot_Tracker", u"ftrack Shot Tracker", None))
         ___qtreewidgetitem = self.page_1_tree.headerItem()
-        ___qtreewidgetitem.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"test2", None));
-        ___qtreewidgetitem.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"test", None));
+        ___qtreewidgetitem.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
+        ___qtreewidgetitem.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
+        ___qtreewidgetitem.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
+        ___qtreewidgetitem.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("ftrack_Shot_Tracker", u"Status", None));
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
+        ___qtreewidgetitem1 = self.page_2_tree.headerItem()
+        ___qtreewidgetitem1.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem1.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
+        ___qtreewidgetitem1.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem1.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
+        ___qtreewidgetitem1.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
+        ___qtreewidgetitem1.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
+        ___qtreewidgetitem1.setText(2, QCoreApplication.translate("ftrack_Shot_Tracker", u"Status", None));
+        ___qtreewidgetitem1.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
+        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
+        ___qtreewidgetitem2 = self.page_3_tree.headerItem()
+        ___qtreewidgetitem2.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem2.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
+        ___qtreewidgetitem2.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem2.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
+        ___qtreewidgetitem2.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
+        ___qtreewidgetitem2.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
+        ___qtreewidgetitem2.setText(2, QCoreApplication.translate("ftrack_Shot_Tracker", u"Status", None));
+        ___qtreewidgetitem2.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
+        ___qtreewidgetitem2.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
+        ___qtreewidgetitem3 = self.page_4_tree.headerItem()
+        ___qtreewidgetitem3.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem3.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
+        ___qtreewidgetitem3.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem3.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
+        ___qtreewidgetitem3.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
+        ___qtreewidgetitem3.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
+        ___qtreewidgetitem3.setText(2, QCoreApplication.translate("ftrack_Shot_Tracker", u"Status", None));
+        ___qtreewidgetitem3.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
+        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
     # retranslateUi
 
