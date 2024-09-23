@@ -3,7 +3,7 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QComboBox, QLabel
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QTreeWidget, QTreeWidgetItem
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
 # Load the .env file and assign the information to variables
@@ -49,6 +49,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.create_page_labels("Milestone", self.page_1_layout)
         self.create_page_labels("AssetBuild", self.page_2_layout)
         self.create_page_labels("Sequence", self.page_3_layout)
+        self.fill_tree_information("Grandfather", self.page_2_tree)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -70,6 +71,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         for asset in asset_type[::-1]:
             label = QLabel(asset["name"])
             page_layout.addWidget(label)
+
+    def fill_tree_information(self, asset_name, tree_widget):
+        parent_item = QTreeWidgetItem(tree_widget)
+        parent_item.setText(0, asset_name)
+        parent_item.setText(1, "TESTING THIS")
+
+        child_item = QTreeWidgetItem(parent_item)
+        child_item.setText(0, "Child")
+        child_item.setText(1, "Child testing")
 
 
 if __name__ == "__main__":
