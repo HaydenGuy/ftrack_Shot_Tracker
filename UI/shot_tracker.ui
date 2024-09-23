@@ -14,251 +14,276 @@
    <string>ftrack Shot Tracker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
-     <layout class="QVBoxLayout" name="combo_box_layout">
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QComboBox" name="project_names_combo"/>
+       <widget class="QComboBox" name="asset_type_combo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="page_widget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="page_1">
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QVBoxLayout" name="page_1_layout">
+            <item>
+             <widget class="QTreeWidget" name="page_1_tree">
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+              </property>
+              <column>
+               <property name="text">
+                <string>Tasks</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Type</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Status</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Assignee</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Start date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Due date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>State</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Priority</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_2">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <layout class="QVBoxLayout" name="page_2_layout">
+            <item>
+             <widget class="QTreeWidget" name="page_2_tree">
+              <column>
+               <property name="text">
+                <string>Tasks</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Type</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Status</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Assignee</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Start date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Due date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>State</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Priority</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_3">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QVBoxLayout" name="page_3_layout">
+            <item>
+             <widget class="QTreeWidget" name="page_3_tree">
+              <column>
+               <property name="text">
+                <string>Tasks</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Type</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Status</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Assignee</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Start date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Due date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>State</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Priority</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_4">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <layout class="QVBoxLayout" name="page_4_layout">
+            <item>
+             <widget class="QTreeWidget" name="page_4_tree">
+              <column>
+               <property name="text">
+                <string>Tasks</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Type</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Status</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Assignee</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Start date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Due date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>State</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Priority</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QStackedWidget" name="page_widget">
-      <property name="currentIndex">
-       <number>3</number>
-      </property>
-      <widget class="QWidget" name="page_1">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <layout class="QVBoxLayout" name="page_1_layout">
-          <item>
-           <widget class="QTreeWidget" name="page_1_tree">
-            <column>
-             <property name="text">
-              <string>Tasks</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Type</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Status</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Assignee</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Start date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Due date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>State</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Priority</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Description</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_2">
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <layout class="QVBoxLayout" name="page_2_layout">
-          <item>
-           <widget class="QTreeWidget" name="page_2_tree">
-            <column>
-             <property name="text">
-              <string>Tasks</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Type</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Status</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Assignee</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Start date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Due date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>State</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Priority</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Description</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_3">
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <layout class="QVBoxLayout" name="page_3_layout">
-          <item>
-           <widget class="QTreeWidget" name="page_3_tree">
-            <column>
-             <property name="text">
-              <string>Tasks</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Type</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Status</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Assignee</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Start date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Due date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>State</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Priority</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Description</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_4">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <layout class="QVBoxLayout" name="page_4_layout">
-          <item>
-           <widget class="QTreeWidget" name="page_4_tree">
-            <column>
-             <property name="text">
-              <string>Tasks</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Type</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Status</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Assignee</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Start date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Due date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>State</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Priority</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Description</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </widget>
     </item>
    </layout>
   </widget>

@@ -15,9 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QHeaderView,
-    QMainWindow, QSizePolicy, QStackedWidget, QTreeWidget,
-    QTreeWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QHeaderView, QMainWindow,
+    QSizePolicy, QStackedWidget, QTreeWidget, QTreeWidgetItem,
+    QVBoxLayout, QWidget)
 
 class Ui_ftrack_Shot_Tracker(object):
     def setupUi(self, ftrack_Shot_Tracker):
@@ -26,34 +26,43 @@ class Ui_ftrack_Shot_Tracker(object):
         ftrack_Shot_Tracker.resize(1000, 600)
         self.centralwidget = QWidget(ftrack_Shot_Tracker)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_7 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.combo_box_layout = QVBoxLayout()
-        self.combo_box_layout.setObjectName(u"combo_box_layout")
-        self.combo_box_layout.setContentsMargins(-1, -1, -1, 0)
-        self.project_names_combo = QComboBox(self.centralwidget)
-        self.project_names_combo.setObjectName(u"project_names_combo")
+        self.asset_type_combo = QComboBox(self.centralwidget)
+        self.asset_type_combo.setObjectName(u"asset_type_combo")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.asset_type_combo.sizePolicy().hasHeightForWidth())
+        self.asset_type_combo.setSizePolicy(sizePolicy)
 
-        self.combo_box_layout.addWidget(self.project_names_combo)
-
-
-        self.verticalLayout.addLayout(self.combo_box_layout)
+        self.verticalLayout.addWidget(self.asset_type_combo)
 
         self.page_widget = QStackedWidget(self.centralwidget)
         self.page_widget.setObjectName(u"page_widget")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.page_widget.sizePolicy().hasHeightForWidth())
+        self.page_widget.setSizePolicy(sizePolicy1)
+        self.page_widget.setSizeIncrement(QSize(0, 0))
+        self.page_widget.setBaseSize(QSize(0, 0))
         self.page_1 = QWidget()
         self.page_1.setObjectName(u"page_1")
-        self.horizontalLayout_4 = QHBoxLayout(self.page_1)
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.verticalLayout_6 = QVBoxLayout(self.page_1)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.page_1_layout = QVBoxLayout()
         self.page_1_layout.setObjectName(u"page_1_layout")
         self.page_1_tree = QTreeWidget(self.page_1)
         self.page_1_tree.setObjectName(u"page_1_tree")
+        self.page_1_tree.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
         self.page_1_layout.addWidget(self.page_1_tree)
 
 
-        self.horizontalLayout_4.addLayout(self.page_1_layout)
+        self.verticalLayout_6.addLayout(self.page_1_layout)
 
         self.page_widget.addWidget(self.page_1)
         self.page_2 = QWidget()
@@ -104,11 +113,14 @@ class Ui_ftrack_Shot_Tracker(object):
 
         self.verticalLayout.addWidget(self.page_widget)
 
+
+        self.verticalLayout_7.addLayout(self.verticalLayout)
+
         ftrack_Shot_Tracker.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(ftrack_Shot_Tracker)
 
-        self.page_widget.setCurrentIndex(3)
+        self.page_widget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(ftrack_Shot_Tracker)
