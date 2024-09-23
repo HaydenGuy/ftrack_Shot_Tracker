@@ -3,7 +3,7 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QTreeWidget, QTreeWidgetItem
+from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
 # Load the .env file and assign the information to variables
@@ -46,7 +46,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         assets = session.query(f"{asset_type} where project_id is '{project["id"]}'").all()
     
         return assets
-
+    
     # Calls all of the UI creation methods
     def create_ui(self):
         self.create_dropdown_menu()
@@ -68,14 +68,20 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
 
     def fill_tree_information(self, assets, tree_widget):
-        for asset in assets:
-            item = QTreeWidgetItem(tree_widget)
-            item.setText(0, asset["name"])
+        for asset in assets[::-1]:
+            parent_item = QTreeWidgetItem(tree_widget)
+            parent_item.setText(0, asset["name"])
+            children = asset["children"]
 
-        # child_item = QTreeWidgetItem(parent_item)
-        # child_item.setText(0, "Child")
-        # child_item.setText(1, "Child testing")
+            for child in children:
+                child_item = QTreeWidgetItem(parent_item)
+                child_item.setText(0, child["name"])
 
+                more_children = child["children"]
+
+                for m_child in more_children:
+                    m_child_item = QTreeWidgetItem(child_item)
+                    m_child_item.setText(0, m_child["name"])
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
