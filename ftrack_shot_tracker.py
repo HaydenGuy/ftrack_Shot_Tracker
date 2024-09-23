@@ -50,9 +50,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Calls all of the UI creation methods
     def create_ui(self):
         self.create_dropdown_menu()
-        self.create_page_labels("Milestone", self.page_1_layout)
-        self.create_page_labels("AssetBuild", self.page_2_layout)
-        self.create_page_labels("Sequence", self.page_3_layout)
         self.fill_tree_information(self.milestones, self.page_1_tree)
         self.fill_tree_information(self.asset_builds, self.page_2_tree)
         self.fill_tree_information(self.sequences, self.page_3_tree)
@@ -69,14 +66,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def change_page(self):
         page_index = self.project_names_combo.currentIndex() # Get index of combo item
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
-
-    # Add labels based on [milestone, sequence, asset_build] to the specified page layout
-    def create_page_labels(self, asset_type: str, page_layout):
-        asset_type = get_assets(asset_type, self.project_code)
-
-        for asset in asset_type[::-1]:
-            label = QLabel(asset["name"])
-            page_layout.addWidget(label)
 
     def fill_tree_information(self, assets, tree_widget):
         for asset in assets:
