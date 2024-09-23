@@ -53,7 +53,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.create_page_labels("Milestone", self.page_1_layout)
         self.create_page_labels("AssetBuild", self.page_2_layout)
         self.create_page_labels("Sequence", self.page_3_layout)
-        self.fill_tree_information("Grandfather", self.page_2_tree)
+        self.fill_tree_information(self.milestones, self.page_1_tree)
+        self.fill_tree_information(self.asset_builds, self.page_2_tree)
+        self.fill_tree_information(self.sequences, self.page_3_tree)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -76,14 +78,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             label = QLabel(asset["name"])
             page_layout.addWidget(label)
 
-    def fill_tree_information(self, asset_name, tree_widget):
-        parent_item = QTreeWidgetItem(tree_widget)
-        parent_item.setText(0, asset_name)
-        parent_item.setText(1, "TESTING THIS")
+    def fill_tree_information(self, assets, tree_widget):
+        for asset in assets:
+            item = QTreeWidgetItem(tree_widget)
+            item.setText(0, asset["name"])
 
-        child_item = QTreeWidgetItem(parent_item)
-        child_item.setText(0, "Child")
-        child_item.setText(1, "Child testing")
+        # child_item = QTreeWidgetItem(parent_item)
+        # child_item.setText(0, "Child")
+        # child_item.setText(1, "Child testing")
 
 
 if __name__ == "__main__":
