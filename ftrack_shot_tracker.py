@@ -57,14 +57,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
         # Set the items in the dropdown menu list
-        self.project_names_combo.addItems(["Milestones", "Asset Builds", "Sequences"])
+        self.asset_type_combo.addItems(["Milestones", "Asset Builds", "Sequences"])
 
         # If a different item from the dropdown menu is selected call the change page slot
-        self.project_names_combo.currentIndexChanged.connect(self.change_page)
+        self.asset_type_combo.currentIndexChanged.connect(self.change_page)
 
     # Change the page when the dropdown menu item is changed
     def change_page(self):
-        page_index = self.project_names_combo.currentIndex() # Get index of combo item
+        page_index = self.asset_type_combo.currentIndex() # Get index of combo item
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
 
     def fill_tree_information(self, assets, tree_widget):
