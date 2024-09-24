@@ -50,6 +50,20 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         return assets
     
     # Gets the information for a given task and returns it as a list
+    def get_milestone_asset_build_sequence_information(self, asset):
+        asset_info = [asset["name"],
+                      asset["type"]["name"],
+                      asset["status"]["name"],
+                      None,
+                      None,
+                      None,
+                      asset["status"]["state"]["name"],
+                      asset["priority"]["name"],  ### THIS CAUSING ISSUES
+                      asset["description"]]
+        
+        return asset_info
+
+    # Gets the information for a given task and returns it as a list
     def get_task_information(self, asset):
         try:
             # Try to get assignees email else set to none
@@ -106,7 +120,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         for asset in assets[::-1]:
             item = QTreeWidgetItem(tree_widget)
             item.setFlags(item.flags() | Qt.ItemIsEditable)
-            item.setText(0, asset["name"])
+
+            info = self.get_milestone_asset_build_sequence_information(asset)
+            print(info)
+            # for i, inf in enumerate(info):
+                # item.setText(i, inf)
 
     def fill_tree_information(self):
         pass
