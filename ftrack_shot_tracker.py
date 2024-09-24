@@ -103,8 +103,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     def fill_tree_milestones_asset_builds_sequences(self, assets, tree_widget):
         for asset in assets[::-1]:
-            parent_item = QTreeWidgetItem(tree_widget)
-            parent_item.setText(0, asset["name"])
+            item = QTreeWidgetItem(tree_widget)
+            item.setText(0, asset["name"])
 
     def fill_tree_information(self):
         pass
