@@ -4,6 +4,7 @@ import ftrack_api
 
 from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem
+from PySide6.QtCore import Qt
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
 # Load the .env file and assign the information to variables
@@ -104,6 +105,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def fill_tree_milestones_asset_builds_sequences(self, assets, tree_widget):
         for asset in assets[::-1]:
             item = QTreeWidgetItem(tree_widget)
+            item.setFlags(item.flags() | Qt.ItemIsEditable)
             item.setText(0, asset["name"])
 
     def fill_tree_information(self):
