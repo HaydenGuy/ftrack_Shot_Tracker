@@ -132,7 +132,7 @@ class Ui_ftrack_Shot_Tracker(object):
         ___qtreewidgetitem.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
         ___qtreewidgetitem.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
         ___qtreewidgetitem.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
-        ___qtreewidgetitem.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
+        ___qtreewidgetitem.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"End date", None));
         ___qtreewidgetitem.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
         ___qtreewidgetitem.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("ftrack_Shot_Tracker", u"Status", None));

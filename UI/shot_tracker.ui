@@ -86,7 +86,7 @@
               </column>
               <column>
                <property name="text">
-                <string>Due date</string>
+                <string>End date</string>
                </property>
               </column>
               <column>
