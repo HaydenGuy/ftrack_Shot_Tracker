@@ -64,16 +64,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         try:
             # Try format the due date unless one is not set
-            due_date = asset["due_date"].format("YYYY-MM-DD")
+            end_date = asset["end_date"].format("YYYY-MM-DD")
         except AttributeError:
-            due_date = None
+            end_date = None
         
         asset_info = [asset["name"],
                       asset["type"]["name"],
                       asset["status"]["name"],
                       assignee,
                       start_date,
-                      due_date,
+                      end_date,
                       asset["status"]["state"]["name"],
                       asset["priority"]["name"],
                       asset["description"]]
