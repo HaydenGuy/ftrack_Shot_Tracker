@@ -23,11 +23,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.setupUi(self)
 
         # Call function on the target project code (argument 2) and assign as variable
-        self.project_code = self.get_target_project(sys.argv[1])
+        self.project = self.get_target_project(sys.argv[1])
 
-        self.milestones = self.get_assets("Milestone", self.project_code )
-        self.asset_builds = self.get_assets("AssetBuild", self.project_code )
-        self.sequences = self.get_assets("Sequence", self.project_code )
+        self.milestones = self.get_assets("Milestone", self.project)
+        self.asset_builds = self.get_assets("AssetBuild", self.project)
+        self.sequences = self.get_assets("Sequence", self.project)
+        self.tasks = self.get_assets("Task", self.project)
 
         self.create_ui()
         
@@ -47,12 +48,45 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     
         return assets
     
+    # Gets the information for a given task and returns it as a list
+    def get_task_information(self, asset):
+        try:
+            # Try to get assignees email else set to none
+            assignee = asset["assignments"][0]["resource"]["username"]
+        except IndexError:
+            assignee = None
+
+        try:
+            # Try format the start date unless one is not set
+            start_date = asset["start_date"].format("YYYY-MM-DD")
+        except AttributeError:
+            start_date = None
+
+        try:
+            # Try format the due date unless one is not set
+            due_date = asset["due_date"].format("YYYY-MM-DD")
+        except AttributeError:
+            due_date = None
+        
+        asset_info = [asset["name"],
+                      asset["type"]["name"],
+                      asset["status"]["name"],
+                      assignee,
+                      start_date,
+                      due_date,
+                      asset["status"]["state"]["name"],
+                      asset["priority"]["name"],
+                      asset["description"]]
+        
+        return asset_info
+
     # Calls all of the UI creation methods
     def create_ui(self):
         self.create_dropdown_menu()
-        self.fill_tree_information(self.milestones, self.page_1_tree)
-        self.fill_tree_information(self.asset_builds, self.page_2_tree)
-        self.fill_tree_information(self.sequences, self.page_3_tree)
+        self.fill_tree_information(self.tasks, self.page_1_tree)
+        # self.fill_tree_information(self.milestones, self.page_1_tree)
+        # self.fill_tree_information(self.asset_builds, self.page_2_tree)
+        # self.fill_tree_information(self.sequences, self.page_3_tree)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -70,18 +104,23 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def fill_tree_information(self, assets, tree_widget):
         for asset in assets[::-1]:
             parent_item = QTreeWidgetItem(tree_widget)
-            parent_item.setText(0, asset["name"])
-            children = asset["children"]
+            asset_info = self.get_task_information(asset)
+            for i, info in enumerate(asset_info):
+                parent_item.setText(i, info)
+        #     for i in range(len(asset_info)):
+        #         parent_item.setText(i, asset_info[i])
+            
+        #     children = asset["children"]
 
-            for child in children:
-                child_item = QTreeWidgetItem(parent_item)
-                child_item.setText(0, child["name"])
+        #     for child in children:
+        #         child_item = QTreeWidgetItem(parent_item)
+        #         child_item.setText(0, child["name"])
 
-                more_children = child["children"]
+        #         more_children = child["children"]
 
-                for m_child in more_children:
-                    m_child_item = QTreeWidgetItem(child_item)
-                    m_child_item.setText(0, m_child["name"])
+        #         for m_child in more_children:
+        #             m_child_item = QTreeWidgetItem(child_item)
+        #             m_child_item.setText(0, m_child["name"])
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
