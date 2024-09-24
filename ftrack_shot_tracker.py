@@ -83,10 +83,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Calls all of the UI creation methods
     def create_ui(self):
         self.create_dropdown_menu()
-        self.fill_tree_information(self.tasks, self.page_1_tree)
-        # self.fill_tree_information(self.milestones, self.page_1_tree)
-        # self.fill_tree_information(self.asset_builds, self.page_2_tree)
-        # self.fill_tree_information(self.sequences, self.page_3_tree)
+        # self.fill_tree_information(self.tasks, self.page_1_tree)
+        self.fill_tree_milestones_asset_builds_sequences(self.milestones, self.page_1_tree)
+        self.fill_tree_milestones_asset_builds_sequences(self.asset_builds, self.page_2_tree)
+        self.fill_tree_milestones_asset_builds_sequences(self.sequences, self.page_3_tree)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -101,12 +101,18 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         page_index = self.asset_type_combo.currentIndex() # Get index of combo item
         self.page_widget.setCurrentIndex(page_index) # Change page to index of item
 
-    def fill_tree_information(self, assets, tree_widget):
+    def fill_tree_milestones_asset_builds_sequences(self, assets, tree_widget):
         for asset in assets[::-1]:
             parent_item = QTreeWidgetItem(tree_widget)
-            asset_info = self.get_task_information(asset)
-            for i, info in enumerate(asset_info):
-                parent_item.setText(i, info)
+            parent_item.setText(0, asset["name"])
+
+    def fill_tree_information(self):
+        pass
+        # for asset in assets[::-1]:
+        #     parent_item = QTreeWidgetItem(tree_widget)
+        #     asset_info = self.get_task_information(asset)
+        #     for i, info in enumerate(asset_info):
+        #         parent_item.setText(i, info)
         #     for i in range(len(asset_info)):
         #         parent_item.setText(i, asset_info[i])
             
