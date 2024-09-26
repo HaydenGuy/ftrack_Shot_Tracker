@@ -49,50 +49,27 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     
         return assets
     
-    # Gets the information for a given task and returns it as a list
-    def get_milestone_asset_build_sequence_information(self, asset):
-        asset_info = [asset["name"],
-                      asset["type"]["name"],
-                      asset["status"]["name"],
-                      None,
-                      None,
-                      None,
-                      asset["status"]["state"]["name"],
-                      asset["priority"]["name"],  ### THIS CAUSING ISSUES
-                      asset["description"]]
-        
-        return asset_info
-
-    # Gets the information for a given task and returns it as a list
-    def get_task_information(self, asset):
+    # Check if the asset information returns as None and if it does set it to None
+    def check_if_none(self, getter):
         try:
-            # Try to get assignees email else set to none
-            assignee = asset["assignments"][0]["resource"]["username"]
-        except IndexError:
-            assignee = None
-
-        try:
-            # Try format the start date unless one is not set
-            start_date = asset["start_date"].format("YYYY-MM-DD")
-        except AttributeError:
-            start_date = None
-
-        try:
-            # Try format the due date unless one is not set
-            end_date = asset["end_date"].format("YYYY-MM-DD")
-        except AttributeError:
-            end_date = None
+            return getter()
+        except (TypeError, AttributeError, KeyError, IndexError):
+            return None
         
-        asset_info = [asset["name"],
-                      asset["type"]["name"],
-                      asset["status"]["name"],
-                      assignee,
-                      start_date,
-                      end_date,
-                      asset["status"]["state"]["name"],
-                      asset["priority"]["name"],
-                      asset["description"]]
-        
+    # Gets the assets information for a given asset and returns it as a list
+    def get_asset_information(self, asset):
+        asset_info = [
+            self.check_if_none(lambda: asset["name"]),
+            self.check_if_none(lambda: asset["type"]["name"]),
+            self.check_if_none(lambda: asset["status"]["name"]),
+            self.check_if_none(lambda: asset["assignments"][0]["resource"]["username"]),
+            self.check_if_none(lambda: asset["start_date"].format("YYYY-MM-DD")),
+            self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
+            self.check_if_none(lambda: asset["status"]["state"]["name"]),
+            self.check_if_none(lambda: asset["priority"]["name"]),
+            self.check_if_none(lambda: asset["description"])
+        ]
+
         return asset_info
 
     # Calls all of the UI creation methods
@@ -121,7 +98,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             item = QTreeWidgetItem(tree_widget)
             item.setFlags(item.flags() | Qt.ItemIsEditable)
 
-            info = self.get_milestone_asset_build_sequence_information(asset)
+            info = self.get_asset_information(asset)
             print(info)
             # for i, inf in enumerate(info):
                 # item.setText(i, inf)
