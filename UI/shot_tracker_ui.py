@@ -120,7 +120,7 @@ class Ui_ftrack_Shot_Tracker(object):
 
         self.retranslateUi(ftrack_Shot_Tracker)
 
-        self.page_widget.setCurrentIndex(0)
+        self.page_widget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(ftrack_Shot_Tracker)
@@ -129,9 +129,8 @@ class Ui_ftrack_Shot_Tracker(object):
     def retranslateUi(self, ftrack_Shot_Tracker):
         ftrack_Shot_Tracker.setWindowTitle(QCoreApplication.translate("ftrack_Shot_Tracker", u"ftrack Shot Tracker", None))
         ___qtreewidgetitem = self.page_1_tree.headerItem()
-        ___qtreewidgetitem.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
-        ___qtreewidgetitem.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
-        ___qtreewidgetitem.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
         ___qtreewidgetitem.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"End date", None));
         ___qtreewidgetitem.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
         ___qtreewidgetitem.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
@@ -139,9 +138,8 @@ class Ui_ftrack_Shot_Tracker(object):
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
         ___qtreewidgetitem1 = self.page_2_tree.headerItem()
-        ___qtreewidgetitem1.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
-        ___qtreewidgetitem1.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
-        ___qtreewidgetitem1.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem1.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem1.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
         ___qtreewidgetitem1.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
         ___qtreewidgetitem1.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
         ___qtreewidgetitem1.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
@@ -149,9 +147,8 @@ class Ui_ftrack_Shot_Tracker(object):
         ___qtreewidgetitem1.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
         ___qtreewidgetitem1.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
         ___qtreewidgetitem2 = self.page_3_tree.headerItem()
-        ___qtreewidgetitem2.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
-        ___qtreewidgetitem2.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
-        ___qtreewidgetitem2.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem2.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem2.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
         ___qtreewidgetitem2.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
         ___qtreewidgetitem2.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
         ___qtreewidgetitem2.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));
@@ -159,9 +156,8 @@ class Ui_ftrack_Shot_Tracker(object):
         ___qtreewidgetitem2.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
         ___qtreewidgetitem2.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
         ___qtreewidgetitem3 = self.page_4_tree.headerItem()
-        ___qtreewidgetitem3.setText(8, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
-        ___qtreewidgetitem3.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
-        ___qtreewidgetitem3.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"State", None));
+        ___qtreewidgetitem3.setText(7, QCoreApplication.translate("ftrack_Shot_Tracker", u"Description", None));
+        ___qtreewidgetitem3.setText(6, QCoreApplication.translate("ftrack_Shot_Tracker", u"Priority", None));
         ___qtreewidgetitem3.setText(5, QCoreApplication.translate("ftrack_Shot_Tracker", u"Due date", None));
         ___qtreewidgetitem3.setText(4, QCoreApplication.translate("ftrack_Shot_Tracker", u"Start date", None));
         ___qtreewidgetitem3.setText(3, QCoreApplication.translate("ftrack_Shot_Tracker", u"Assignee", None));

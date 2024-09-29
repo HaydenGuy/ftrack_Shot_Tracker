@@ -70,7 +70,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             self.check_if_none(
                 lambda: asset["start_date"].format("YYYY-MM-DD")),
             self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
-            self.check_if_none(lambda: asset["status"]["state"]["name"]),
             self.check_if_none(lambda: asset["priority"]["name"]),
             self.check_if_none(lambda: asset["description"])
         ]
