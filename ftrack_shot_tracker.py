@@ -61,18 +61,18 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
-        asset_info = [
-            self.check_if_none(lambda: asset["name"]),
-            self.check_if_none(lambda: asset["type"]["name"]),
-            self.check_if_none(lambda: asset["status"]["name"]),
-            self.check_if_none(
+        asset_info = {
+            "name": self.check_if_none(lambda: asset["name"]),
+            "type": self.check_if_none(lambda: asset["type"]["name"]),
+            "status": self.check_if_none(lambda: asset["status"]["name"]),
+            "assignee": self.check_if_none(
                 lambda: asset["assignments"][0]["resource"]["username"]),
-            self.check_if_none(
+            "start_date": self.check_if_none(
                 lambda: asset["start_date"].format("YYYY-MM-DD")),
-            self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
-            self.check_if_none(lambda: asset["priority"]["name"]),
-            self.check_if_none(lambda: asset["description"])
-        ]
+            "end_date": self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
+            "priority": self.check_if_none(lambda: asset["priority"]["name"]),
+            "description" : self.check_if_none(lambda: asset["description"])
+             }
 
         return asset_info
 
