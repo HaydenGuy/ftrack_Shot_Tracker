@@ -125,11 +125,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             child_item.setFlags(child_item.flags() | Qt.ItemIsEditable)
 
             # Creates a dictionary with asset information
-            info = self.get_asset_information(parent_asset)
+            child_info = self.get_asset_information(child)
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings):
-                child_item.setText(i, info[heading])
+                child_item.setText(i, child_info[heading])
 
             # Recursively call self to set any additional children
             self.fill_child_information(child, child_item)
