@@ -82,6 +82,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.fill_tree_information(self.milestones, self.page_1_tree)
         self.fill_tree_information(self.asset_builds, self.page_2_tree)
         self.fill_tree_information(self.sequences, self.page_3_tree)
+        self.page_widget.setCurrentIndex(0) # Sets the page widget to page 1 (fixes issues where page is upon loading)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
