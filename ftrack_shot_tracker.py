@@ -1,7 +1,6 @@
 import sys
 import os
 import ftrack_api
-import time
 
 from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem
