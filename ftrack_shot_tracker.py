@@ -1,6 +1,7 @@
 import sys
 import os
 import ftrack_api
+import time
 
 from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem
@@ -31,6 +32,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.asset_builds = self.get_assets("AssetBuild", self.project)
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
+
+        self.column_headings = ["name", "type", "status", "assignee", "start_date", "end_date", "priority", "description"]
 
         self.create_ui()
 
@@ -101,16 +104,17 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Fills in the tree information for the passed tree widget
     def fill_tree_information(self, assets, tree_widget):
-        for asset in assets[::-1]:  # Fills info for the Milestones, Sequences, AssetBuilds
+        for asset in reversed(assets):
             item = QTreeWidgetItem(tree_widget)
             item.setFlags(item.flags() | Qt.ItemIsEditable)
 
-            # Retrieves the table information
+            # Creates a dictionary with asset information
             info = self.get_asset_information(asset)
-            for i, inf in enumerate(info):
-                item.setText(i, inf)  # Set the table info in postion i
 
-            # Retrieves and sets the child information for the Milestones, Sequences, AssetBuilds
+            # Calls the info dictionary and set the tree widget index i to the respective value
+            for i, heading in enumerate(self.column_headings): 
+                item.setText(i, info[heading])
+
             self.fill_child_information(asset, item)
 
     # Retrieves the children for a parent asset/item and sets the information in the table widget
@@ -121,10 +125,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             child_item = QTreeWidgetItem(parent_item)
             child_item.setFlags(child_item.flags() | Qt.ItemIsEditable)
 
-            # Retrieves the table information
-            info = self.get_asset_information(child)
-            for i, inf in enumerate(info):
-                child_item.setText(i, inf)  # Set the table info in postion i
+            # Creates a dictionary with asset information
+            info = self.get_asset_information(parent_asset)
+
+            # Calls the info dictionary and set the tree widget index i to the respective value
+            for i, heading in enumerate(self.column_headings):
+                child_item.setText(i, info[heading])
 
             # Recursively call self to set any additional children
             self.fill_child_information(child, child_item)
