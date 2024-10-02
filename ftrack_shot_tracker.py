@@ -84,7 +84,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.fill_tree_information(self.milestones, self.page_1_tree)
         self.fill_tree_information(self.asset_builds, self.page_2_tree)
         self.fill_tree_information(self.sequences, self.page_3_tree)
-        self.page_widget.setCurrentIndex(0) # Sets the page widget to page 1 (fixes issues where page is upon loading)
+        self.page_widget.setCurrentIndex(0) # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
+        self.resize_columns(self.page_1_tree)
+        self.resize_columns(self.page_2_tree)
+        self.resize_columns(self.page_3_tree)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -134,6 +137,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Recursively call self to set any additional children
             self.fill_child_information(child, child_item)
 
+    # Resizes the columns to fit the content in a tree widget
+    def resize_columns(self, tree_widget):
+        column_count = tree_widget.columnCount()
+
+        for i in range(column_count):
+            tree_widget.resizeColumnToContents(i)
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
