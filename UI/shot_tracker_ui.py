@@ -23,7 +23,7 @@ class Ui_ftrack_Shot_Tracker(object):
     def setupUi(self, ftrack_Shot_Tracker):
         if not ftrack_Shot_Tracker.objectName():
             ftrack_Shot_Tracker.setObjectName(u"ftrack_Shot_Tracker")
-        ftrack_Shot_Tracker.resize(1000, 600)
+        ftrack_Shot_Tracker.resize(1200, 600)
         self.centralwidget = QWidget(ftrack_Shot_Tracker)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_7 = QVBoxLayout(self.centralwidget)
@@ -120,7 +120,7 @@ class Ui_ftrack_Shot_Tracker(object):
 
         self.retranslateUi(ftrack_Shot_Tracker)
 
-        self.page_widget.setCurrentIndex(3)
+        self.page_widget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(ftrack_Shot_Tracker)
