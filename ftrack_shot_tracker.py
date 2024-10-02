@@ -3,7 +3,7 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateEdit
+from PySide6.QtWidgets import QApplication, QMainWindow, QStyledItemDelegate, QTreeWidgetItem, QDateEdit
 from PySide6.QtCore import Qt, QDate
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
@@ -17,6 +17,25 @@ api_key = os.getenv("API_KEY")
 session = ftrack_api.Session(server_url=f"{server_url}",
                              api_user=f"{api_user}",
                              api_key=f"{api_key}")
+
+class calendar_delegate(QStyledItemDelegate):
+    def __init__(self, parent=None):
+        super(calendar_delegate, self).__init__(parent)
+
+    def create_editor(self, parent):
+        # Create a QDateEdit with a calendar popup
+        editor = QDateEdit(parent)
+        editor.setCalendarPopup(True)
+        return editor
+    
+    def set_editor_data(self, editor, index):
+        # Get the data from the item and set it to the editor
+        date = index.model().data(index, Qt.EditRole)
+        editor.setDate(QDate.fromString(date, "yyyy-MM-dd"))
+
+    def set_model_data(self, editor, model, index):
+        # Set the editor data back to the model
+        model.setData(index, editor.date().toString("yyyy-MM-dd"), Qt.EditRole)
 
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
@@ -87,6 +106,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.resize_columns(self.page_1_tree)
         self.resize_columns(self.page_2_tree)
         self.resize_columns(self.page_3_tree)
+        # self.create_date_cells(5, self.page_1_tree)
+        # self.create_date_cells(6, self.page_1_tree)
         self.page_widget.setCurrentIndex(0) # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
 
     # Set the dropdown menu up with its items and funtionality
@@ -116,8 +137,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings): 
                 item.setText(i, info[heading])
-                self.create_date_cells(info["start_date"], 4, item, tree_widget)
-                self.create_date_cells(info["end_date"], 5, item, tree_widget)                
 
             self.fill_child_information(asset, item)
 
@@ -135,8 +154,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings):
                 child_item.setText(i, child_info[heading])
-                self.create_date_cells(child_info["start_date"], 4, child_item, parent_item)
-                self.create_date_cells(child_info["end_date"], 5, child_item, parent_item)
 
             # Recursively call self to set any additional children
             self.fill_child_information(child, child_item)
@@ -150,21 +167,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             tree_widget.resizeColumnToContents(i)
 
     # Set the date in the given cell based on the provided date 
-    def create_date_cells(self, date, date_cell, item, tree_widget):
-        try:
-            date_edit = QDateEdit()
-
-            if date: # Checks if the date is not None
-                year, month, day = map(int, date.split("-")) # Takes ftrack format YYYY-MM-DD and splits into individual vars
-                date_edit.setDate(QDate(year, month, day)) # Set the date to the date
-            else:
-                date_edit.setDate(QDate.currentDate()) # Set to current date
-
-            date_edit.setCalendarPopup(True) # Enable calendar popup 
-            tree_widget.setItemWidget(item, date_cell, date_edit) # Set the given cell to be a QDateEdit
-            
-        except AttributeError:
-            pass
+    # def create_date_cells(self, column, tree_widget):
+    #     delegate = calendar_delegate()
+    #     tree_widget.setItemDelegateForColumn(column, delegate)
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
