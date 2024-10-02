@@ -142,6 +142,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Resizes the columns to fit the content in a tree widget
     def resize_columns(self, tree_widget):
         column_count = tree_widget.columnCount()
+        tree_widget.expandAll()
 
         for i in range(column_count):
             tree_widget.resizeColumnToContents(i)
