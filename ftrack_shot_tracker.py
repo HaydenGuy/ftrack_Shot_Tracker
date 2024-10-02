@@ -116,7 +116,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings): 
                 item.setText(i, info[heading])
-                self.create_date_cells(info["start_date"], info["end_date"], item, tree_widget)
+                self.create_date_cells(info["start_date"], 4, item, tree_widget)
+                self.create_date_cells(info["end_date"], 5, item, tree_widget)                
 
             self.fill_child_information(asset, item)
 
@@ -134,7 +135,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings):
                 child_item.setText(i, child_info[heading])
-                self.create_date_cells(child_info["start_date"], child_info["end_date"], child_item, parent_item) # COULD BE IMPROVED
+                self.create_date_cells(child_info["start_date"], 4, child_item, parent_item)
+                self.create_date_cells(child_info["end_date"], 5, child_item, parent_item)
 
             # Recursively call self to set any additional children
             self.fill_child_information(child, child_item)
@@ -147,20 +149,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         for i in range(column_count):
             tree_widget.resizeColumnToContents(i)
 
-    # Set the date in the tree based on the ftrack start/end dates 
-    def create_date_cells(self, start_date, end_date, item, tree_widget): # NOT WORKING WITH EMPTY DATES FIX BASED ON CHILDREN ALL SHOULD BE DATE EDIT
+    # Set the date in the given cell based on the provided date 
+    def create_date_cells(self, date, date_cell, item, tree_widget):
         try:
             start_date_edit = QDateEdit()
-            start_year, start_month, start_day = map(int, start_date.split("-")) # Takes ftrack format YYYY-MM-DD and splits into individual vars
+            start_year, start_month, start_day = map(int, date.split("-")) # Takes ftrack format YYYY-MM-DD and splits into individual vars
             start_date_edit.setDate(QDate(start_year, start_month, start_day)) # Set the date to the date
-            start_date_edit.setCalendarPopup(True)  # Enable calendar popup ??NOTWORKING??
-            tree_widget.setItemWidget(item, 4, start_date_edit) # Set cell 4 to the date edit widget
-
-            end_date_edit = QDateEdit()
-            end_year, end_month, end_day = map(int, end_date.split("-"))
-            end_date_edit.setDate(QDate(end_year, end_month, end_day))
-            end_date_edit.setCalendarPopup(True)  # Enable calendar popup
-            tree_widget.setItemWidget(item, 5, end_date_edit)        
+            start_date_edit.setCalendarPopup(True)  # Enable calendar popup 
+            tree_widget.setItemWidget(item, date_cell, start_date_edit) # Set the given cell to be a QDateEdit
         except AttributeError:
             pass
 
