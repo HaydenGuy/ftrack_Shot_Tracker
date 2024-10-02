@@ -3,8 +3,8 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateEdit
+from PySide6.QtCore import Qt, QDate
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
 # Load the .env file and assign the information to variables
@@ -84,10 +84,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.fill_tree_information(self.milestones, self.page_1_tree)
         self.fill_tree_information(self.asset_builds, self.page_2_tree)
         self.fill_tree_information(self.sequences, self.page_3_tree)
-        self.page_widget.setCurrentIndex(0) # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
         self.resize_columns(self.page_1_tree)
         self.resize_columns(self.page_2_tree)
         self.resize_columns(self.page_3_tree)
+        self.page_widget.setCurrentIndex(0) # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -116,6 +116,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings): 
                 item.setText(i, info[heading])
+                self.create_date_cells(info["start_date"], info["end_date"], item, tree_widget)
 
             self.fill_child_information(asset, item)
 
@@ -133,6 +134,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings):
                 child_item.setText(i, child_info[heading])
+                self.create_date_cells(child_info["start_date"], child_info["end_date"], child_item, parent_item)
 
             # Recursively call self to set any additional children
             self.fill_child_information(child, child_item)
@@ -143,6 +145,23 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         for i in range(column_count):
             tree_widget.resizeColumnToContents(i)
+
+    # Set the date in the tree based on the ftrack start/end dates 
+    def create_date_cells(self, start_date, end_date, item, tree_widget):
+        try:
+            start_date_edit = QDateEdit()
+            start_year, start_month, start_day = map(int, start_date.split("-")) # Takes ftrack format YYYY-MM-DD and splits into individual vars
+            start_date_edit.setDate(QDate(start_year, start_month, start_day)) # Set the date to the date
+            start_date_edit.setCalendarPopup(True)  # Enable calendar popup ??NOTWORKING??
+            tree_widget.setItemWidget(item, 4, start_date_edit) # Set cell 4 to the date edit widget
+
+            end_date_edit = QDateEdit()
+            end_year, end_month, end_day = map(int, end_date.split("-"))
+            end_date_edit.setDate(QDate(end_year, end_month, end_day))
+            end_date_edit.setCalendarPopup(True)  # Enable calendar popup
+            tree_widget.setItemWidget(item, 5, end_date_edit)        
+        except AttributeError:
+            pass
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
