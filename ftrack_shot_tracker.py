@@ -134,7 +134,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings):
                 child_item.setText(i, child_info[heading])
-                self.create_date_cells(child_info["start_date"], child_info["end_date"], child_item, parent_item)
+                self.create_date_cells(child_info["start_date"], child_info["end_date"], child_item, parent_item) # COULD BE IMPROVED
 
             # Recursively call self to set any additional children
             self.fill_child_information(child, child_item)
@@ -147,7 +147,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             tree_widget.resizeColumnToContents(i)
 
     # Set the date in the tree based on the ftrack start/end dates 
-    def create_date_cells(self, start_date, end_date, item, tree_widget):
+    def create_date_cells(self, start_date, end_date, item, tree_widget): # NOT WORKING WITH EMPTY DATES FIX BASED ON CHILDREN ALL SHOULD BE DATE EDIT
         try:
             start_date_edit = QDateEdit()
             start_year, start_month, start_day = map(int, start_date.split("-")) # Takes ftrack format YYYY-MM-DD and splits into individual vars
