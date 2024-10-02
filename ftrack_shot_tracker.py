@@ -152,11 +152,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Set the date in the given cell based on the provided date 
     def create_date_cells(self, date, date_cell, item, tree_widget):
         try:
-            start_date_edit = QDateEdit()
-            start_year, start_month, start_day = map(int, date.split("-")) # Takes ftrack format YYYY-MM-DD and splits into individual vars
-            start_date_edit.setDate(QDate(start_year, start_month, start_day)) # Set the date to the date
-            start_date_edit.setCalendarPopup(True)  # Enable calendar popup 
-            tree_widget.setItemWidget(item, date_cell, start_date_edit) # Set the given cell to be a QDateEdit
+            date_edit = QDateEdit()
+            year, month, day = map(int, date.split("-")) # Takes ftrack format YYYY-MM-DD and splits into individual vars
+            date_edit.setDate(QDate(year, month, day)) # Set the date to the date
+            date_edit.setCalendarPopup(True)  # Enable calendar popup 
+            tree_widget.setItemWidget(item, date_cell, date_edit) # Set the given cell to be a QDateEdit
         except AttributeError:
             pass
 
