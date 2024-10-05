@@ -58,6 +58,7 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_1_tree = QTreeWidget(self.page_1)
         self.page_1_tree.setObjectName(u"page_1_tree")
         self.page_1_tree.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.page_1_tree.setSortingEnabled(True)
 
         self.page_1_layout.addWidget(self.page_1_tree)
 
@@ -73,6 +74,7 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_2_layout.setObjectName(u"page_2_layout")
         self.page_2_tree = QTreeWidget(self.page_2)
         self.page_2_tree.setObjectName(u"page_2_tree")
+        self.page_2_tree.setSortingEnabled(True)
 
         self.page_2_layout.addWidget(self.page_2_tree)
 
@@ -88,6 +90,7 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_3_layout.setObjectName(u"page_3_layout")
         self.page_3_tree = QTreeWidget(self.page_3)
         self.page_3_tree.setObjectName(u"page_3_tree")
+        self.page_3_tree.setSortingEnabled(True)
 
         self.page_3_layout.addWidget(self.page_3_tree)
 
@@ -103,6 +106,7 @@ class Ui_ftrack_Shot_Tracker(object):
         self.page_4_layout.setObjectName(u"page_4_layout")
         self.page_4_tree = QTreeWidget(self.page_4)
         self.page_4_tree.setObjectName(u"page_4_tree")
+        self.page_4_tree.setSortingEnabled(True)
 
         self.page_4_layout.addWidget(self.page_4_tree)
 
@@ -120,7 +124,7 @@ class Ui_ftrack_Shot_Tracker(object):
 
         self.retranslateUi(ftrack_Shot_Tracker)
 
-        self.page_widget.setCurrentIndex(0)
+        self.page_widget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(ftrack_Shot_Tracker)
