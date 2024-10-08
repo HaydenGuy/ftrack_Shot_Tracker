@@ -131,8 +131,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings):
-                if i == 4:
-                    self.create_calendar_cells("2022-01-15", child_item, 5, self.page_2_tree)
+                if i == 4 and child_info[heading] != None:
+                    self.create_calendar_cells(child_info[heading], child_item, 4, self.page_2_tree)
+                elif i == 5 and child_info[heading] != None:
+                    self.create_calendar_cells(child_info[heading], child_item, 5, self.page_2_tree)
                 else:    
                     child_item.setText(i, child_info[heading])
 
@@ -148,7 +150,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             tree_widget.resizeColumnToContents(i)
 
     def create_calendar_cells(self, date, item, column, tree_widget):
-        year, month, day = date.split("-") # FIX THIS - ATTRIBUTEERROR NONETYPE
+        year, month, day = date.split("-")
         date_edit = QDateEdit()
         date_edit.setCalendarPopup(True)
         date_edit.setDate(QDate(int(year), int(month), int(day)))
