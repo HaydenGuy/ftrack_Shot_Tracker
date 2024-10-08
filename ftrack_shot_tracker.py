@@ -132,7 +132,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(self.column_headings):
                 if i == 4 and child_info[heading] != None:
-                    self.create_calendar_cells(child_info[heading], child_item, 4, self.page_2_tree)
+                    self.create_calendar_cells(child_info[heading], child_item, 4, self.page_2_tree) # CURRENTLY ONLY PAGE 2 - Have it work only on tasks and have the date pull from other cells
                 elif i == 5 and child_info[heading] != None:
                     self.create_calendar_cells(child_info[heading], child_item, 5, self.page_2_tree)
                 else:    
