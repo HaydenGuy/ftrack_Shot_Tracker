@@ -18,14 +18,16 @@ session = ftrack_api.Session(server_url=f"{server_url}",
                              api_user=f"{api_user}",
                              api_key=f"{api_key}")
 
+COLUMN_HEADINGS = ["name", "type", "status", "assignee", "start_date", "end_date", "priority", "description"]
+
 TASK_NAMES_ID = {
         "Animation": "44dc3636-4164-11df-9218-0019bb4983d8",
-        "Audio_Mix": "a557384c-a5b5-4aec-b192-2049db0975d1",
-        "Brand_Assets": "bec6a235-717f-4225-8d9f-bde3a7fd2667",
+        "Audio Mix": "a557384c-a5b5-4aec-b192-2049db0975d1",
+        "Brand Assets": "bec6a235-717f-4225-8d9f-bde3a7fd2667",
         "Character": "66d145f0-13c6-11e3-abf2-f23c91dfaa16",
         "Color": "d410af88-73e9-4a2f-be54-dabb3fd09f50",
         "Compositing": "44dd23b6-4164-11df-9218-0019bb4983d8",
-        "Concept_Art": "56807358-a0f4-11e9-9843-d27cf242b68b",
+        "Concept Art": "56807358-a0f4-11e9-9843-d27cf242b68b",
         "Conform": "a3ead45c-ae42-11e9-9454-d27cf242b68b",
         "Deliverable": "ae1e2480-f24e-11e2-bd1f-f23c91dfaa16",
         "Editing": "cc46c4c6-13d2-11e3-8915-f23c91dfaa16",
@@ -34,9 +36,9 @@ TASK_NAMES_ID = {
         "FX": "44dcea86-4164-11df-9218-0019bb4983d8",
         "Layout": "ffaebf7a-9dca-11e9-8346-d27cf242b68b",
         "Lighting": "44dd08fe-4164-11df-9218-0019bb4983d8",
-        "Long_Form": "20b1c08e-dea7-468c-a72d-0817ee2ed6ec",
+        "Long Form": "20b1c08e-dea7-468c-a72d-0817ee2ed6ec",
         "Lookdev": "44dc8cd0-4164-11df-9218-0019bb4983d8",
-        "Matte_Painting": "66d2038c-13c6-11e3-abf2-f23c91dfaa16",
+        "Matte Painting": "66d2038c-13c6-11e3-abf2-f23c91dfaa16",
         "Modeling": "44dc53c8-4164-11df-9218-0019bb4983d8",
         "Music": "8233270a-14ac-4802-9e47-2e7a774563c0",
         "News": "387efc10-d040-4cb4-bfdd-47e8995f0cef",
@@ -46,14 +48,14 @@ TASK_NAMES_ID = {
         "Rendering": "262225e8-9dcb-11e9-82b8-d27cf242b68b",
         "Rigging": "44dd5868-4164-11df-9218-0019bb4983d8",
         "Rotoscoping": "c3bcfdb4-ad7d-11e1-a444-f23c91df1211",
-        "Short_Form": "d1aa3488-299e-45d1-8469-51fa1b10cebe",
+        "Short Form": "d1aa3488-299e-45d1-8469-51fa1b10cebe",
         "Social": "a566a954-ee06-487f-a1db-3103cfb62ec2",
         "Sports": "32617c36-dc40-4bd2-8ae0-375194ae8616",
         "Texture": "a750a84f-b253-11eb-ad41-1e003a0c2434",
         "Tracking": "44dd3ed2-4164-11df-9218-0019bb4983d8",
         "Vehicle": "8c39f908-8b4c-11eb-9cdb-c2ffbce28b68",
-        "Video_Shoot": "b7df1bd9-9268-42ea-8be2-6b99abc1730f",
-        "Voice_Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
+        "Video Shoot": "b7df1bd9-9268-42ea-8be2-6b99abc1730f",
+        "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
     }
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
@@ -68,8 +70,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.asset_builds = self.get_assets("AssetBuild", self.project)
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
-
-        self.column_headings = ["name", "type", "status", "assignee", "start_date", "end_date", "priority", "description"]
 
         self.create_ui()
 
@@ -151,13 +151,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             info = self.get_asset_information(asset)
 
             # Calls the info dictionary and set the tree widget index i to the respective value
-            for i, heading in enumerate(self.column_headings):
+            for i, heading in enumerate(COLUMN_HEADINGS):
                 item.setText(i, info[heading])
 
-            self.fill_child_information(asset, item)
+            self.fill_child_information(asset, item, tree_widget)
 
     # Retrieves the children for a parent asset/item and sets the information in the table widget
-    def fill_child_information(self, parent_asset, parent_item):
+    def fill_child_information(self, parent_asset, parent_item, tree_widget):
         children = parent_asset["children"]
 
         for child in children:  # Fills info for Shots and Tasks
@@ -167,17 +167,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Creates a dictionary with asset information
             child_info = self.get_asset_information(child)
 
-            # Calls the info dictionary and set the tree widget index i to the respective value
-            for i, heading in enumerate(self.column_headings):
-                if i == 4 and child_info[heading] != None:
-                    self.create_calendar_cells(child_info[heading], child_item, 4, self.page_2_tree) # CURRENTLY ONLY PAGE 2 - Have it work only on tasks and have the date pull from other cells
-                elif i == 5 and child_info[heading] != None:
-                    self.create_calendar_cells(child_info[heading], child_item, 5, self.page_2_tree)
+            # Calls the child_info dictionary and set the tree widget index i to the respective value
+            for i, heading in enumerate(COLUMN_HEADINGS):
+                if child_info["type"] in TASK_NAMES_ID and i in {4, 5}: # If the type is an accepted task type create calendar cells
+                    self.create_calendar_cells(child_info[heading], child_item, i, tree_widget)
                 else:    
                     child_item.setText(i, child_info[heading])
 
             # Recursively call self to set any additional children
-            self.fill_child_information(child, child_item)
+            self.fill_child_information(child, child_item, tree_widget)
 
     # Resizes the columns to fit the content in a tree widget
     def resize_columns(self, tree_widget):
