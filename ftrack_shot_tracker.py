@@ -18,6 +18,44 @@ session = ftrack_api.Session(server_url=f"{server_url}",
                              api_user=f"{api_user}",
                              api_key=f"{api_key}")
 
+TASK_NAMES_ID = {
+        "Animation": "44dc3636-4164-11df-9218-0019bb4983d8",
+        "Audio_Mix": "a557384c-a5b5-4aec-b192-2049db0975d1",
+        "Brand_Assets": "bec6a235-717f-4225-8d9f-bde3a7fd2667",
+        "Character": "66d145f0-13c6-11e3-abf2-f23c91dfaa16",
+        "Color": "d410af88-73e9-4a2f-be54-dabb3fd09f50",
+        "Compositing": "44dd23b6-4164-11df-9218-0019bb4983d8",
+        "Concept_Art": "56807358-a0f4-11e9-9843-d27cf242b68b",
+        "Conform": "a3ead45c-ae42-11e9-9454-d27cf242b68b",
+        "Deliverable": "ae1e2480-f24e-11e2-bd1f-f23c91dfaa16",
+        "Editing": "cc46c4c6-13d2-11e3-8915-f23c91dfaa16",
+        "Environment": "66d1daba-13c6-11e3-abf2-f23c91dfaa16",
+        "Furniture": "0e996e82-6662-11ed-a73a-92ba0fc0dc3d",
+        "FX": "44dcea86-4164-11df-9218-0019bb4983d8",
+        "Layout": "ffaebf7a-9dca-11e9-8346-d27cf242b68b",
+        "Lighting": "44dd08fe-4164-11df-9218-0019bb4983d8",
+        "Long_Form": "20b1c08e-dea7-468c-a72d-0817ee2ed6ec",
+        "Lookdev": "44dc8cd0-4164-11df-9218-0019bb4983d8",
+        "Matte_Painting": "66d2038c-13c6-11e3-abf2-f23c91dfaa16",
+        "Modeling": "44dc53c8-4164-11df-9218-0019bb4983d8",
+        "Music": "8233270a-14ac-4802-9e47-2e7a774563c0",
+        "News": "387efc10-d040-4cb4-bfdd-47e8995f0cef",
+        "Previz": "44dc6ffc-4164-11df-9218-0019bb4983d8",
+        "Production": "b628a004-ad7d-11e1-896c-f23c91df1211",
+        "Prop": "66d1aedc-13c6-11e3-abf2-f23c91dfaa16",
+        "Rendering": "262225e8-9dcb-11e9-82b8-d27cf242b68b",
+        "Rigging": "44dd5868-4164-11df-9218-0019bb4983d8",
+        "Rotoscoping": "c3bcfdb4-ad7d-11e1-a444-f23c91df1211",
+        "Short_Form": "d1aa3488-299e-45d1-8469-51fa1b10cebe",
+        "Social": "a566a954-ee06-487f-a1db-3103cfb62ec2",
+        "Sports": "32617c36-dc40-4bd2-8ae0-375194ae8616",
+        "Texture": "a750a84f-b253-11eb-ad41-1e003a0c2434",
+        "Tracking": "44dd3ed2-4164-11df-9218-0019bb4983d8",
+        "Vehicle": "8c39f908-8b4c-11eb-9cdb-c2ffbce28b68",
+        "Video_Shoot": "b7df1bd9-9268-42ea-8be2-6b99abc1730f",
+        "Voice_Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
+    }
+
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
         super().__init__()
