@@ -185,10 +185,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         for i in range(column_count):
             tree_widget.resizeColumnToContents(i)
 
+    # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, column, tree_widget):
         year, month, day = date.split("-")
         date_edit = QDateEdit()
         date_edit.setCalendarPopup(True)
+        date_edit.setDisplayFormat("yyyy-MM-dd")
         date_edit.setDate(QDate(int(year), int(month), int(day)))
         tree_widget.setItemWidget(item, column, date_edit)
 
