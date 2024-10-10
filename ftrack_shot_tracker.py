@@ -18,45 +18,47 @@ session = ftrack_api.Session(server_url=f"{server_url}",
                              api_user=f"{api_user}",
                              api_key=f"{api_key}")
 
-COLUMN_HEADINGS = ["name", "type", "status", "assignee", "start_date", "end_date", "priority", "description"]
+COLUMN_HEADINGS = ["name", "type", "status", "assignee",
+                   "start_date", "end_date", "priority", "description"]
 
 TASK_NAMES_ID = {
-        "Animation": "44dc3636-4164-11df-9218-0019bb4983d8",
-        "Audio Mix": "a557384c-a5b5-4aec-b192-2049db0975d1",
-        "Brand Assets": "bec6a235-717f-4225-8d9f-bde3a7fd2667",
-        "Character": "66d145f0-13c6-11e3-abf2-f23c91dfaa16",
-        "Color": "d410af88-73e9-4a2f-be54-dabb3fd09f50",
-        "Compositing": "44dd23b6-4164-11df-9218-0019bb4983d8",
-        "Concept Art": "56807358-a0f4-11e9-9843-d27cf242b68b",
-        "Conform": "a3ead45c-ae42-11e9-9454-d27cf242b68b",
-        "Deliverable": "ae1e2480-f24e-11e2-bd1f-f23c91dfaa16",
-        "Editing": "cc46c4c6-13d2-11e3-8915-f23c91dfaa16",
-        "Environment": "66d1daba-13c6-11e3-abf2-f23c91dfaa16",
-        "Furniture": "0e996e82-6662-11ed-a73a-92ba0fc0dc3d",
-        "FX": "44dcea86-4164-11df-9218-0019bb4983d8",
-        "Layout": "ffaebf7a-9dca-11e9-8346-d27cf242b68b",
-        "Lighting": "44dd08fe-4164-11df-9218-0019bb4983d8",
-        "Long Form": "20b1c08e-dea7-468c-a72d-0817ee2ed6ec",
-        "Lookdev": "44dc8cd0-4164-11df-9218-0019bb4983d8",
-        "Matte Painting": "66d2038c-13c6-11e3-abf2-f23c91dfaa16",
-        "Modeling": "44dc53c8-4164-11df-9218-0019bb4983d8",
-        "Music": "8233270a-14ac-4802-9e47-2e7a774563c0",
-        "News": "387efc10-d040-4cb4-bfdd-47e8995f0cef",
-        "Previz": "44dc6ffc-4164-11df-9218-0019bb4983d8",
-        "Production": "b628a004-ad7d-11e1-896c-f23c91df1211",
-        "Prop": "66d1aedc-13c6-11e3-abf2-f23c91dfaa16",
-        "Rendering": "262225e8-9dcb-11e9-82b8-d27cf242b68b",
-        "Rigging": "44dd5868-4164-11df-9218-0019bb4983d8",
-        "Rotoscoping": "c3bcfdb4-ad7d-11e1-a444-f23c91df1211",
-        "Short Form": "d1aa3488-299e-45d1-8469-51fa1b10cebe",
-        "Social": "a566a954-ee06-487f-a1db-3103cfb62ec2",
-        "Sports": "32617c36-dc40-4bd2-8ae0-375194ae8616",
-        "Texture": "a750a84f-b253-11eb-ad41-1e003a0c2434",
-        "Tracking": "44dd3ed2-4164-11df-9218-0019bb4983d8",
-        "Vehicle": "8c39f908-8b4c-11eb-9cdb-c2ffbce28b68",
-        "Video Shoot": "b7df1bd9-9268-42ea-8be2-6b99abc1730f",
-        "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
-    }
+    "Animation": "44dc3636-4164-11df-9218-0019bb4983d8",
+    "Audio Mix": "a557384c-a5b5-4aec-b192-2049db0975d1",
+    "Brand Assets": "bec6a235-717f-4225-8d9f-bde3a7fd2667",
+    "Character": "66d145f0-13c6-11e3-abf2-f23c91dfaa16",
+    "Color": "d410af88-73e9-4a2f-be54-dabb3fd09f50",
+    "Compositing": "44dd23b6-4164-11df-9218-0019bb4983d8",
+    "Concept Art": "56807358-a0f4-11e9-9843-d27cf242b68b",
+    "Conform": "a3ead45c-ae42-11e9-9454-d27cf242b68b",
+    "Deliverable": "ae1e2480-f24e-11e2-bd1f-f23c91dfaa16",
+    "Editing": "cc46c4c6-13d2-11e3-8915-f23c91dfaa16",
+    "Environment": "66d1daba-13c6-11e3-abf2-f23c91dfaa16",
+    "Furniture": "0e996e82-6662-11ed-a73a-92ba0fc0dc3d",
+    "FX": "44dcea86-4164-11df-9218-0019bb4983d8",
+    "Layout": "ffaebf7a-9dca-11e9-8346-d27cf242b68b",
+    "Lighting": "44dd08fe-4164-11df-9218-0019bb4983d8",
+    "Long Form": "20b1c08e-dea7-468c-a72d-0817ee2ed6ec",
+    "Lookdev": "44dc8cd0-4164-11df-9218-0019bb4983d8",
+    "Matte Painting": "66d2038c-13c6-11e3-abf2-f23c91dfaa16",
+    "Modeling": "44dc53c8-4164-11df-9218-0019bb4983d8",
+    "Music": "8233270a-14ac-4802-9e47-2e7a774563c0",
+    "News": "387efc10-d040-4cb4-bfdd-47e8995f0cef",
+    "Previz": "44dc6ffc-4164-11df-9218-0019bb4983d8",
+    "Production": "b628a004-ad7d-11e1-896c-f23c91df1211",
+    "Prop": "66d1aedc-13c6-11e3-abf2-f23c91dfaa16",
+    "Rendering": "262225e8-9dcb-11e9-82b8-d27cf242b68b",
+    "Rigging": "44dd5868-4164-11df-9218-0019bb4983d8",
+    "Rotoscoping": "c3bcfdb4-ad7d-11e1-a444-f23c91df1211",
+    "Short Form": "d1aa3488-299e-45d1-8469-51fa1b10cebe",
+    "Social": "a566a954-ee06-487f-a1db-3103cfb62ec2",
+    "Sports": "32617c36-dc40-4bd2-8ae0-375194ae8616",
+    "Texture": "a750a84f-b253-11eb-ad41-1e003a0c2434",
+    "Tracking": "44dd3ed2-4164-11df-9218-0019bb4983d8",
+    "Vehicle": "8c39f908-8b4c-11eb-9cdb-c2ffbce28b68",
+    "Video Shoot": "b7df1bd9-9268-42ea-8be2-6b99abc1730f",
+    "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
+}
+
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
@@ -105,13 +107,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             "type": self.check_if_none(lambda: asset["type"]["name"]),
             "status": self.check_if_none(lambda: asset["status"]["name"]),
             "assignee": self.check_if_none(
-                lambda: asset["assignments"][0]["resource"]["username"]),
+                lambda: asset["assignments"][0]["resource"]["first_name"] + " " + asset["assignments"][0]["resource"]["last_name"]),
             "start_date": self.check_if_none(
                 lambda: asset["start_date"].format("YYYY-MM-DD")),
             "end_date": self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
             "priority": self.check_if_none(lambda: asset["priority"]["name"]),
-            "description" : self.check_if_none(lambda: asset["description"])
-             }
+            "description": self.check_if_none(lambda: asset["description"])
+        }
 
         return asset_info
 
@@ -124,7 +126,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.resize_columns(self.page_1_tree)
         self.resize_columns(self.page_2_tree)
         self.resize_columns(self.page_3_tree)
-        self.page_widget.setCurrentIndex(0) # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
+        # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
+        self.page_widget.setCurrentIndex(0)
 
     # Set the dropdown menu up with its items and funtionality
     def create_dropdown_menu(self):
@@ -169,9 +172,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                if child_info["type"] in TASK_NAMES_ID and i in {4, 5}: # If the type is an accepted task type create calendar cells
-                    self.create_calendar_cells(child_info[heading], child_item, i, tree_widget)
-                else:    
+                # If the type is an accepted task type create calendar cells
+                if child_info["type"] in TASK_NAMES_ID and i in {4, 5}:
+                    self.create_calendar_cells(
+                        child_info[heading], child_item, i, tree_widget)
+                else:
                     child_item.setText(i, child_info[heading])
 
             # Recursively call self to set any additional children
@@ -193,6 +198,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         date_edit.setDisplayFormat("yyyy-MM-dd")
         date_edit.setDate(QDate(int(year), int(month), int(day)))
         tree_widget.setItemWidget(item, column, date_edit)
+
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
