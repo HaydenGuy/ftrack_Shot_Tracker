@@ -110,20 +110,26 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             return entity_type
         else:
             return f"{entity_type} ({type})"
-        
+    
+    # Sets the assignee info which is used in get_asset_information
     def set_assignee_info(self, asset):
-        first_name = self.check_if_none(lambda: asset["assignments"][0]["resource"]["first_name"])
-        last_name = self.check_if_none(lambda: asset["assignments"][0]["resource"]["last_name"])
+        # Checks if there are assignees otherwise sets as None
+        assignees = self.check_if_none(lambda: asset["assignments"]) 
+        names = []
 
-        if first_name == None and last_name == None:
+        if assignees != None:
+            for i in range(len(assignees)): # Add first+last names to the names list
+                first_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["first_name"])
+                last_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["last_name"])
+
+                names.append(f"{first_name} {last_name}")
+
+        # If names list empty assignees is empty cell else cell is all names separated by comma eg. John Smith, Mary Kelly
+        if not names:        
             return ""
-        elif first_name == None:
-            return last_name
-        elif last_name == None:
-            return first_name
         else:
-            return f"{first_name} {last_name}"
-        
+            return ", ".join(names)
+
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
         asset_info = {
