@@ -104,15 +104,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def get_asset_information(self, asset):
         asset_info = {
             "name": self.check_if_none(lambda: asset["name"]),
-            "type": self.check_if_none(lambda: asset["type"]["name"]),
+            "type": self.check_if_none(lambda: asset.entity_type + " (" + asset["type"]["name"] + ")"), # eg. Task (Concept Art)
             "status": self.check_if_none(lambda: asset["status"]["name"]),
             "assignee": self.check_if_none(
-                lambda: asset["assignments"][0]["resource"]["first_name"] + " " + asset["assignments"][0]["resource"]["last_name"]),
+                lambda: asset["assignments"][0]["resource"]["first_name"] + " " + asset["assignments"][0]["resource"]["last_name"]), # eg. Hayden Guy
             "start_date": self.check_if_none(
                 lambda: asset["start_date"].format("YYYY-MM-DD")),
             "end_date": self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
             "priority": self.check_if_none(lambda: asset["priority"]["name"]),
-            "description": self.check_if_none(lambda: asset["description"])
+            "description": self.check_if_none(lambda: asset["description"]),
         }
 
         return asset_info
