@@ -3,9 +3,10 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateEdit, QComboBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateEdit
 from PySide6.QtCore import Qt, QDate
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
+from pyqt6_multiselect_combobox import MultiSelectComboBox
 
 # Load the .env file and assign the information to variables
 load_dotenv()
@@ -58,7 +59,6 @@ TASK_NAMES_ID = {
     "Video Shoot": "b7df1bd9-9268-42ea-8be2-6b99abc1730f",
     "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
 }
-
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
@@ -228,7 +228,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         date_edit.setDisplayFormat("yyyy-MM-dd")
         date_edit.setDate(QDate(int(year), int(month), int(day)))
         tree_widget.setItemWidget(item, column, date_edit)
-
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
