@@ -3,7 +3,7 @@ import os
 import ftrack_api
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateEdit
+from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateEdit, QComboBox
 from PySide6.QtCore import Qt, QDate
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 
