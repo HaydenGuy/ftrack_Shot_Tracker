@@ -99,12 +99,23 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             return getter()
         except (TypeError, AttributeError, IndexError):
             return None
+    
+    # Sets the type info which is used in get_asset_information
+    def set_type_info(self, asset):
+        type = self.check_if_none(lambda: asset["type"]["name"]) # Check if None
+        entity_type = asset.entity_type # AssetBuild/Sequence/Shot etc. 
+
+        # Return Sequence or Shot - else return eg. Task (Concept Art)
+        if entity_type == "Sequence" or entity_type == "Shot":
+            return entity_type
+        else:
+            return f"{entity_type} ({type})"
 
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
         asset_info = {
             "name": asset["name"],
-            "type": self.check_if_none(lambda: asset.entity_type + " (" + asset["type"]["name"] + ")"), # eg. Task (Concept Art)
+            "type": self.set_type_info(asset),
             "status": self.check_if_none(lambda: asset["status"]["name"]),
             "assignee": self.check_if_none(
                 lambda: asset["assignments"][0]["resource"]["first_name"] + " " + asset["assignments"][0]["resource"]["last_name"]), # eg. Hayden Guy
