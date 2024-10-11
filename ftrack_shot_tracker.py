@@ -110,15 +110,27 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             return entity_type
         else:
             return f"{entity_type} ({type})"
+        
+    def set_assignee_info(self, asset):
+        first_name = self.check_if_none(lambda: asset["assignments"][0]["resource"]["first_name"])
+        last_name = self.check_if_none(lambda: asset["assignments"][0]["resource"]["last_name"])
 
+        if first_name == None and last_name == None:
+            return ""
+        elif first_name == None:
+            return last_name
+        elif last_name == None:
+            return first_name
+        else:
+            return f"{first_name} {last_name}"
+        
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
         asset_info = {
             "name": asset["name"],
             "type": self.set_type_info(asset),
             "status": self.check_if_none(lambda: asset["status"]["name"]),
-            "assignee": self.check_if_none(
-                lambda: asset["assignments"][0]["resource"]["first_name"] + " " + asset["assignments"][0]["resource"]["last_name"]), # eg. Hayden Guy
+            "assignee": self.set_assignee_info(asset),
             "start_date": self.check_if_none(
                 lambda: asset["start_date"].format("YYYY-MM-DD")),
             "end_date": self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
