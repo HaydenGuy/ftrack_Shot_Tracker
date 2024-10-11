@@ -97,13 +97,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def check_if_none(self, getter):
         try:
             return getter()
-        except (TypeError, AttributeError, KeyError, IndexError):
+        except (TypeError, AttributeError, IndexError):
             return None
 
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
         asset_info = {
-            "name": self.check_if_none(lambda: asset["name"]),
+            "name": asset["name"],
             "type": self.check_if_none(lambda: asset.entity_type + " (" + asset["type"]["name"] + ")"), # eg. Task (Concept Art)
             "status": self.check_if_none(lambda: asset["status"]["name"]),
             "assignee": self.check_if_none(
