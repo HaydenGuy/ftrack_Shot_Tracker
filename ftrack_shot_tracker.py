@@ -60,7 +60,7 @@ TASK_NAMES_ID = {
     "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
 }
 
-STATUS = ["Not started", "Ready to start", "In progress",
+STATUSES = ["Not started", "Ready to start", "In progress",
           "Pending Review", "On Hold", "Client Approved"]
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
