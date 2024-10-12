@@ -60,6 +60,9 @@ TASK_NAMES_ID = {
     "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
 }
 
+STATUS = ["Not started", "Ready to start", "In progress",
+          "Pending Review", "On Hold", "Client Approved"]
+
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
         super().__init__()
@@ -73,7 +76,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
 
-        self.team = self.get_project_team_members(self.project["id"])
+        self.team_members = self.get_project_team_members(self.project["id"])
 
         self.create_ui()
 
@@ -251,6 +254,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         date_edit.setDisplayFormat("yyyy-MM-dd")
         date_edit.setDate(QDate(int(year), int(month), int(day)))
         tree_widget.setItemWidget(item, column, date_edit)
+
+    def create_multi_combo_box(self, combo_items, item, column, tree_widget):
+        combo = MultiSelectComboBox()
+        combo.addItems(combo_items)
+        tree_widget.setItemWidget(item, column, combo)
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
