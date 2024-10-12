@@ -73,6 +73,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
 
+        # users = self.get_project_team_members("test")
+        # for user in users:
+        #     print(user["name"])
+
         self.create_ui()
 
     # Check if an ftrack project exists by calling its code and return the project if it does
@@ -110,20 +114,23 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             return entity_type
         else:
             return f"{entity_type} ({type})"
-    
+
     # Sets the assignee info which is used in get_asset_information
     def set_assignee_info(self, asset):
         # Checks if there are assignees otherwise sets as None
         assignees = self.check_if_none(lambda: asset["assignments"]) 
         names = []
 
-        if assignees != None:
-            for i in range(len(assignees)): # Add first+last names to the names list
-                first_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["first_name"])
-                last_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["last_name"])
+        if assignees:
+                try:
+                    for i in range(len(assignees)): # Add first+last names to the names list
+                        first_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["first_name"])
+                        last_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["last_name"])
 
-                names.append(f"{first_name} {last_name}")
-
+                        names.append(f"{first_name} {last_name}")
+                except KeyError:
+                    pass
+        
         # If names list empty assignees is empty cell else cell is all names separated by comma eg. John Smith, Mary Kelly
         if not names:        
             return ""
