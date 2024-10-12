@@ -227,6 +227,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
+                if i == 3:
+                    self.create_multi_combo_box(self.team_members, child_item, i, tree_widget) # CURRENTLY MAKING THE CALENDAR CELLS NOT WORK
+
                 # If the type is an accepted task type create calendar cells
                 if child_info["type"] in TASK_NAMES_ID and i in {4, 5}:
                     self.create_calendar_cells(
@@ -255,6 +258,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         date_edit.setDate(QDate(int(year), int(month), int(day)))
         tree_widget.setItemWidget(item, column, date_edit)
 
+    # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
         combo = MultiSelectComboBox()
         combo.addItems(combo_items)
