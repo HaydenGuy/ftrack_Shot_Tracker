@@ -73,9 +73,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
 
-        # users = self.get_project_team_members("test")
-        # for user in users:
-        #     print(user["name"])
+        self.team = self.get_project_team_members(self.project["id"])
 
         self.create_ui()
 
@@ -96,7 +94,25 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                                project["id"]}'").all()
 
         return assets
+    
+    def get_project_team_members(self, project_id):
+        # Query tasks in project
+        tasks = session.query(f"Task where project.id is '{project_id}'").all()
 
+        # Create set of unique users based on tasks in the project
+        unqiue_members = set()
+        for task in tasks:
+            for assignment in task['assignments']:
+                user = assignment['resource']  # The assigned user
+                unqiue_members.add(user)
+
+        # Create and return a sorted list of the first+last names of each of the unique users
+        team = []
+        for user in unqiue_members:
+            team.append(f"{user["first_name"]} {user["last_name"]}")
+
+        return sorted(team)
+    
     # Check if the asset information returns as None and if it does set it to None
     def check_if_none(self, getter):
         try:
