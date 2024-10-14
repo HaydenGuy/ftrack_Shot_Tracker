@@ -99,20 +99,17 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         return assets
     
     def get_project_team_members(self, project_id):
-        # Query tasks in project
-        tasks = session.query(f"Task where project.id is '{project_id}'").all()
-
-        # Create set of unique users based on tasks in the project
-        unqiue_members = set()
-        for task in tasks:
-            for assignment in task['assignments']:
-                user = assignment['resource']  # The assigned user
-                unqiue_members.add(user)
-
-        # Create and return a sorted list of the first+last names of each of the unique users
+        users = session.query(
+            f"User where assignments.context_id in (select id from TypedContext where project_id is '{project_id}')"
+        ).all()  ## THE ISSUE RIGHT NOW IS IT WILL NOT PULL USERS IF THERE ARE NO USERS ASSIGNED
+        
         team = []
-        for user in unqiue_members:
-            team.append(f"{user["first_name"]} {user["last_name"]}")
+
+        if users:
+            for user in users:
+                team.append(f"{user["first_name"]} {user["last_name"]}")
+        else:
+            pass
 
         return sorted(team)
     
@@ -136,25 +133,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Sets the assignee info which is used in get_asset_information
     def set_assignee_info(self, asset):
-        # Checks if there are assignees otherwise sets as None
-        assignees = self.check_if_none(lambda: asset["assignments"]) 
-        names = []
-
-        if assignees:
-                try:
-                    for i in range(len(assignees)): # Add first+last names to the names list
-                        first_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["first_name"])
-                        last_name = self.check_if_none(lambda: asset["assignments"][i]["resource"]["last_name"])
-
-                        names.append(f"{first_name} {last_name}")
-                except KeyError:
-                    pass
+        team = self.team_members
         
-        # If names list empty assignees is empty cell else cell is all names separated by comma eg. John Smith, Mary Kelly
-        if not names:        
-            return ""
+        if not team:         
+            return "" # Return empty if no team members
+        elif asset.entity_type in ["AssetBuild", "Sequence", "Shot"]:
+            return "" # Return empty if the entity type is in the given list
         else:
-            return ", ".join(names)
+            return ", ".join(team) # Return team members separated by , (John Smith, Mary Anne)
 
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
@@ -268,7 +254,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         combo.addItems(combo_items)
         tree_widget.setItemWidget(item, column, combo)
 
-if __name__ == "__main__":
+if __name__ == "__main__":SE
     # Print usage statement and exit if there are not two arguments
     if len(sys.argv) != 2:
         print("Usage: python script.py <target_project_code>")
