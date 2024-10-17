@@ -76,7 +76,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
 
-        self.team_members = self.get_project_team_members(self.project["id"])
+        self.team_members = self.get_project_team_members(self.project)
 
         self.create_ui()
 
@@ -98,20 +98,28 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         return assets
     
-    def get_project_team_members(self, project_id):
-        users = session.query(
-            f"User where assignments.context_id in (select id from TypedContext where project_id is '{project_id}')"
-        ).all()  ## THE ISSUE RIGHT NOW IS IT WILL NOT PULL USERS IF THERE ARE NO USERS ASSIGNED
-        
-        team = []
+    # Returns a set of the project team members ("John Smith", "Mary Anne")
+    def get_project_team_members(self, project):
+        team_members = set()
 
-        if users:
-            for user in users:
-                team.append(f"{user["first_name"]} {user["last_name"]}")
-        else:
-            pass
+        # Add all allocated groups and users
+        for allocation in project['allocations']:
 
-        return sorted(team)
+            # Resources are either groups or a user
+            resource = allocation['resource']
+
+            # If the resource is a group, add its members
+            if isinstance(resource, session.types['Group']):
+                for membership in resource['memberships']:
+                    user = membership['user']
+                    team_members.add(user['first_name'] + " " + user["last_name"])
+
+            # The resource is a user, add it.
+            else:
+                user = resource
+                team_members.add(user['first_name'] + " " + user["last_name"])
+
+        return team_members
     
     # Check if the asset information returns as None and if it does set it to None
     def check_if_none(self, getter):
@@ -254,7 +262,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         combo.addItems(combo_items)
         tree_widget.setItemWidget(item, column, combo)
 
-if __name__ == "__main__":SE
+if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
     if len(sys.argv) != 2:
         print("Usage: python script.py <target_project_code>")
