@@ -159,7 +159,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def get_asset_information(self, asset):
         asset_info = {
             "name": asset["name"],
-            "type": self.set_type_info(asset),
+            "type": self.set_type_info(asset), # Task (Editing), Asset Buiild (Character)
             "status": self.check_if_none(lambda: asset["status"]["name"]),
             "assignee": self.set_assignee_info(asset),
             "start_date": self.check_if_none(
@@ -167,7 +167,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             "end_date": self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
             "priority": self.check_if_none(lambda: asset["priority"]["name"]),
             "description": self.check_if_none(lambda: asset["description"]),
-            "type_name": self.check_if_none(lambda: asset["type"]["name"])
+            "type_name": self.check_if_none(lambda: asset["type"]["name"]), # Conform, Editing, Previz
+            "entity_type": self.check_if_none(lambda: asset.entity_type) # Task, Milestone, Asset Build
         }
 
         return asset_info
