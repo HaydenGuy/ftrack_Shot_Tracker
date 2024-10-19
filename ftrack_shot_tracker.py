@@ -259,9 +259,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         column_count = tree_widget.columnCount()
         tree_widget.expandAll()
 
+        # Resize all columns to size of content except assignees which has set starting value
         for i in range(column_count):
-            if i != 3: # Makes it so the assignee column doesn't resize
+            if i != 3:
                 tree_widget.resizeColumnToContents(i)
+            else:
+                tree_widget.setColumnWidth(3, 200)
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, column, tree_widget):
