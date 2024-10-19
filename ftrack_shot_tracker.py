@@ -76,8 +76,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
 
-        self.team_members = self.get_project_team_members(self.project)
-
+        # Get a set of the team_members and a set of the project_groups
+        self.team_members, self.project_groups = self.get_project_team_members_and_groups(self.project)
+        
         self.create_ui()
 
     # Check if an ftrack project exists by calling its code and return the project if it does
@@ -98,28 +99,32 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         return assets
     
-    # Returns a set of the project team members ("John Smith", "Mary Anne")
-    def get_project_team_members(self, project):
+    # Returns two sets; 1.team_members ("John Smith", "Mary Anne") and 2.project_groups ("Modeling Team", "Lighting Team")
+    def get_project_team_members_and_groups(self, project):
         team_members = set()
+        project_groups = set()
 
         # Add all allocated groups and users
-        for allocation in project['allocations']:
+        for allocation in project["allocations"]:
 
             # Resources are either groups or a user
-            resource = allocation['resource']
+            resource = allocation["resource"]
 
-            # If the resource is a group, add its members
-            if isinstance(resource, session.types['Group']):
-                for membership in resource['memberships']:
-                    user = membership['user']
-                    team_members.add(user['first_name'] + " " + user["last_name"])
+            # If the resource is a group, add its members to team_members and add the group name to project_groups
+            if isinstance(resource, session.types["Group"]):
+                project_groups.add(resource["name"]) # Add the group name to the set
 
-            # The resource is a user, add it.
+                # Get the users from the groups and add them to team_members
+                for membership in resource["memberships"]:
+                    user = membership["user"]
+                    team_members.add(user["first_name"] + " " + user["last_name"])
+
+            # The resource is a user, add it
             else:
                 user = resource
-                team_members.add(user['first_name'] + " " + user["last_name"])
+                team_members.add(user["first_name"] + " " + user["last_name"])
 
-        return team_members
+        return team_members, project_groups
     
     # Check if the asset information returns as None and if it does set it to None
     def check_if_none(self, getter):
