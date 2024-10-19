@@ -211,7 +211,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                item.setText(i, info[heading])
+                # Sets the assignee combobox to team members if its a Task or Milestone 
+                if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
+                    self.create_multi_combo_box(self.team_members, item, i, tree_widget)
+                elif i == 3: # Sets assignee combobox to project groups if its not a Task or Milestone
+                    self.create_multi_combo_box(self.project_groups, item, i, tree_widget)
+                else:
+                    item.setText(i, info[heading])
 
             self.fill_child_information(asset, item, tree_widget)
 
@@ -228,13 +234,20 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                if i == 3:
+
+                # Sets the assignee combobox to team members if its a Task or Milestone 
+                if i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
                     self.create_multi_combo_box(self.team_members, child_item, i, tree_widget)
+
+                # Sets assignee combobox to project groups if its not a Task or Milestone
+                elif i == 3: 
+                    self.create_multi_combo_box(self.project_groups, child_item, i, tree_widget)
 
                 # If the type is an accepted task type create calendar cells
                 if child_info["type_name"] in TASK_NAMES_ID and i in {4, 5}:
                     self.create_calendar_cells(
                         child_info[heading], child_item, i, tree_widget)
+                    
                 else:
                     child_item.setText(i, child_info[heading])
 
