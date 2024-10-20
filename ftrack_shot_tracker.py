@@ -229,23 +229,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, item, i, tree_widget)
-                    combo_indexes = []
-
-                    for name in info["assignee"]:
-                        i = combo.findText(name)
-                        combo_indexes.append(i)    
-
-                    combo.setCurrentIndexes(combo_indexes)
+                    self.set_combo_box_assignees(info["assignee"], combo)
 
                 elif i == 3: # Sets assignee combobox to project groups if its not a Task or Milestone
                     combo = self.create_multi_combo_box(self.project_groups, item, i, tree_widget)
-                    combo_indexes = []
-
-                    for name in info["assignee"]:
-                        i = combo.findText(name)
-                        combo_indexes.append(i)    
-
-                    combo.setCurrentIndexes(combo_indexes)
+                    self.set_combo_box_assignees(info["assignee"], combo)
 
                 else:
                     try:
@@ -272,24 +260,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, child_item, i, tree_widget)
-                    combo_indexes = []
-
-                    for name in child_info["assignee"]:
-                        i = combo.findText(name)
-                        combo_indexes.append(i)    
-
-                    combo.setCurrentIndexes(combo_indexes)
+                    self.set_combo_box_assignees(child_info["assignee"], combo)
 
                 # Sets assignee combobox to project groups if its not a Task or Milestone
                 elif i == 3: 
                     combo = self.create_multi_combo_box(self.project_groups, child_item, i, tree_widget)
-                    combo_indexes = []
-
-                    for name in child_info["assignee"]:
-                        i = combo.findText(name)
-                        combo_indexes.append(i)    
-
-                    combo.setCurrentIndexes(combo_indexes)
+                    self.set_combo_box_assignees(child_info["assignee"], combo)
 
                 # If the type is an accepted task type create calendar cells
                 if child_info["type_name"] in TASK_NAMES_ID and i in {4, 5}:
@@ -335,6 +311,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         tree_widget.setItemWidget(item, column, combo)
 
         return combo
+
+    # Takes an *item*["assignee"] and checks those on in the passed combobox 
+    def set_combo_box_assignees(self, info_assignees, combo):
+        combo_indexes = []
+
+        for name in info_assignees:
+            i = combo.findText(name)
+            combo_indexes.append(i)    
+
+        combo.setCurrentIndexes(combo_indexes)
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
