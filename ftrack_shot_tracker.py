@@ -137,7 +137,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def set_type_info(self, asset):
         type = self.check_if_none(lambda: asset["type"]["name"]) # Check if None
         entity_type = asset.entity_type # AssetBuild/Sequence/Shot etc. 
-
         # Return Sequence or Shot - else return eg. Task (Concept Art)
         if entity_type == "Sequence" or entity_type == "Shot":
             return entity_type
@@ -235,6 +234,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                     combo = self.create_multi_combo_box(self.project_groups, item, i, tree_widget)
                     self.set_combo_box_assignees(info["assignee"], combo)
 
+                # If the item is a Milestone set the end_date calendar cells
+                if info["entity_type"] == "Milestone" and i == 5:
+                    self.create_calendar_cells(
+                        info[heading], item, i, tree_widget)
                 else:
                     try:
                         item.setText(i, info[heading])
