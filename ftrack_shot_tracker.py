@@ -307,6 +307,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         except AttributeError:
             pass
 
+        date_edit.dateChanged.connect(self.date_changed)
+
+    def date_changed(self, date): # Date change is currently setting it 1 day less on ftrack (probably a date_time thing)
+        print(date.toString("yyyy-MM-dd"))
+        # new_date = datetime(date.year(), date.month(), date.day())
+        # new_end_date_utc = new_date.replace(tzinfo=timezone.utc)
+        # milestone = session.query(f"Milestone where id is 'cac38610-ac10-4299-9e6d-bcb166b2d8ce'").one()
+        # milestone["end_date"] = new_end_date_utc
+        # session.commit()
+
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
         combo = MultiSelectComboBox()
