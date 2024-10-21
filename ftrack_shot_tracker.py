@@ -1,10 +1,13 @@
 import sys
 import os
 import ftrack_api
+import pytz
+import tzlocal
+from datetime import datetime
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateEdit
-from PySide6.QtCore import Qt, QDate
+from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateTimeEdit
+from PySide6.QtCore import Qt, QDate, QTime, QDateTime
 from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
 from pyqt6_multiselect_combobox import MultiSelectComboBox
 
@@ -62,6 +65,8 @@ TASK_NAMES_ID = {
 
 STATUSES = ["Not started", "Ready to start", "In progress",
           "Pending Review", "On Hold", "Client Approved"]
+
+LOCAL_TZ = tzlocal.get_localzone()
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def __init__(self):
@@ -169,16 +174,33 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         else:
             return names
 
+    # def set_local_datetime(self, asset):
+    #     try:
+    #         ftrack_start_date = asset["start_date"]
+    #         ftrack_end_date = asset["end_date"]
+    #         return ftrack_start_date, ftrack_end_date
+    #     except AttributeError:
+    #         pass
+        
+    #     # local_start_date = ftrack_start_date.astimezone(LOCAL_TZ)
+    #     # local_end_date = ftrack_end_date.astimezone(LOCAL_TZ)
+        
+    #     # return local_start_date, local_end_date
+    
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
+        # try:
+        #     start_date, end_date = self.set_local_datetime(asset)
+        # except TypeError:
+        #     start_date, end_date = None, None
+
         asset_info = {
             "name": asset["name"],
             "type": self.set_type_info(asset), # Task (Editing), Asset Buiild (Character)
             "status": self.check_if_none(lambda: asset["status"]["name"]),
             "assignee": self.set_assignee_info(asset),
-            "start_date": self.check_if_none(
-                lambda: asset["start_date"].format("YYYY-MM-DD")),
-            "end_date": self.check_if_none(lambda: asset["end_date"].format("YYYY-MM-DD")),
+            "start_date": self.check_if_none(lambda: asset["start_date"]),
+            "end_date": self.check_if_none(lambda: asset["end_date"]),
             "priority": self.check_if_none(lambda: asset["priority"]["name"]),
             "description": self.check_if_none(lambda: asset["description"]),
             "type_name": self.check_if_none(lambda: asset["type"]["name"]), # Conform, Editing, Previz
@@ -298,23 +320,28 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, column, tree_widget):
         try:
-            year, month, day = date.split("-")
-            date_edit = QDateEdit()
-            date_edit.setCalendarPopup(True)
-            date_edit.setDisplayFormat("yyyy-MM-dd")
-            date_edit.setDate(QDate(int(year), int(month), int(day)))
-            tree_widget.setItemWidget(item, column, date_edit)
+            local_datetime_obj = date.astimezone(LOCAL_TZ)
+            year = local_datetime_obj.year
+            month = local_datetime_obj.month
+            day = local_datetime_obj.day
+            hours = local_datetime_obj.hour
+            minutes = local_datetime_obj.minute
+            seconds = local_datetime_obj.second
+            timezone_offset = local_datetime_obj.strftime("%z")
+            datetime_edit = QDateTimeEdit()
+            datetime_edit.setCalendarPopup(True)
+            datetime_edit.setDisplayFormat("yyyy-MM-dd")
+            datetime_edit.setDateTime(QDateTime(QDate(int(year), int(month), int(day)), QTime(int(hours), int(minutes), int(seconds))))
+            tree_widget.setItemWidget(item, column, datetime_edit)
+            datetime_edit.dateTimeChanged.connect(self.date_changed)
         except AttributeError:
             pass
 
-        date_edit.dateChanged.connect(self.date_changed)
-
-    def date_changed(self, date): # Date change is currently setting it 1 day less on ftrack (probably a date_time thing)
-        print(date.toString("yyyy-MM-dd"))
+    def date_changed(self, date_time): 
+        print(date_time.toString("yyyy-MM-dd HH:mm:ss"))
         # new_date = datetime(date.year(), date.month(), date.day())
-        # new_end_date_utc = new_date.replace(tzinfo=timezone.utc)
         # milestone = session.query(f"Milestone where id is 'cac38610-ac10-4299-9e6d-bcb166b2d8ce'").one()
-        # milestone["end_date"] = new_end_date_utc
+        # milestone["end_date"] = new_date
         # session.commit()
 
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
