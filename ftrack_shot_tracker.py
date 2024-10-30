@@ -254,7 +254,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         combo.addItems(combo_items)
         tree_widget.setItemWidget(item, column, combo)
 
-if __name__ == "__main__":SE
+if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
     if len(sys.argv) != 2:
         print("Usage: python script.py <target_project_code>")
