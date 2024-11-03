@@ -327,7 +327,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             hours = local_datetime_obj.hour
             minutes = local_datetime_obj.minute
             seconds = local_datetime_obj.second
-            timezone_offset = local_datetime_obj.strftime("%z")
             datetime_edit = QDateTimeEdit()
             datetime_edit.setCalendarPopup(True)
             datetime_edit.setDisplayFormat("yyyy-MM-dd")
