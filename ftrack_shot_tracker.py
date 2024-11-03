@@ -336,12 +336,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         except AttributeError:
             pass
 
-    def date_changed(self, date_time): 
+    def date_changed(self, date_time): # Needs to receive more information like start or end, Task ID, need to save variable elsewhere to all commit when save is pressed
         utc = date_time.toUTC()
         utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
         milestone = session.query(f"Task where id is 'dc4f596a-65a7-11ed-a73a-92ba0fc0dc3d'").one()
         milestone["end_date"] = utc_datetime
-        session.commit()
 
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
