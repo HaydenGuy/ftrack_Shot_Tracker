@@ -338,13 +338,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             pass
 
     def date_changed(self, date_time): 
-        print(date_time.toString("yyyy-MM-dd HH:mm:ss"))
-        utc = date_time.toUTC() # THIS IS THE KEY. Conversion necessary
-        print(utc.toString("yyyy-MM-dd HH:mm:ss"))
-        # new_date = datetime(date_time.date().year(), date_time.date().month(), date_time.date().day())
-        # milestone = session.query(f"Task where id is 'dc4f596a-65a7-11ed-a73a-92ba0fc0dc3d'").one()
-        # milestone["end_date"] = new_date
-        # session.commit()
+        utc = date_time.toUTC()
+        utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
+        milestone = session.query(f"Task where id is 'dc4f596a-65a7-11ed-a73a-92ba0fc0dc3d'").one()
+        milestone["end_date"] = utc_datetime
+        session.commit()
 
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
