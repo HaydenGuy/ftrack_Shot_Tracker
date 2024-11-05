@@ -86,6 +86,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         
         self.create_ui()
 
+        self.save_btn.clicked.connect(self.save_session)
+
     # Check if an ftrack project exists by calling its code and return the project if it does
     def get_target_project(self, project_code):
         project = session.query(f"Project where name is {
@@ -349,6 +351,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             combo_indexes.append(i)    
 
         combo.setCurrentIndexes(combo_indexes)
+
+    def save_session(self):
+        session.commit()
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
