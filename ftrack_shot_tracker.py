@@ -332,15 +332,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             datetime_edit.setDisplayFormat("yyyy-MM-dd")
             datetime_edit.setDateTime(QDateTime(QDate(int(year), int(month), int(day)), QTime(int(hours), int(minutes), int(seconds))))
             tree_widget.setItemWidget(item, column, datetime_edit)
-            datetime_edit.dateTimeChanged.connect(self.date_changed)
+            datetime_edit.dateTimeChanged.connect(lambda date_time: self.date_changed(date_time, item))
         except AttributeError:
             pass
 
-    def date_changed(self, date_time): # Needs to receive more information like start or end, Task ID, need to save variable elsewhere to all commit when save is pressed
-        utc = date_time.toUTC()
-        utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
-        milestone = session.query(f"Task where id is 'dc4f596a-65a7-11ed-a73a-92ba0fc0dc3d'").one()
-        milestone["end_date"] = utc_datetime
+    def date_changed(self, date_time, item): # Needs to receive more information like start or end, Task ID, need to save variable elsewhere to all commit when save is pressed
+        print(item.text())
+        # utc = date_time.toUTC()
+        # utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
+        # milestone = session.query(f"Task where id is 'dc4f596a-65a7-11ed-a73a-92ba0fc0dc3d'").one()
+        # milestone["end_date"] = utc_datetime
 
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
