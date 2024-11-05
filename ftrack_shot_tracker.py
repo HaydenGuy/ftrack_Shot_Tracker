@@ -81,10 +81,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
 
+        # Stores QTreeWidgetItem as a key and the info dictionary from get_asset_info as values
+        self.tree_item_and_info = {}
+
         # Get a set of the team_members and a set of the project_groups
         self.team_members, self.project_groups = self.get_project_team_members_and_groups(self.project)
         
         self.create_ui()
+
+        self.page_1_tree.itemChanged.connect(self.item_changed)
 
         self.save_btn.clicked.connect(self.save_session)
 
@@ -234,6 +239,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Creates a dictionary with asset information
             info = self.get_asset_information(asset)
 
+            # Adds the tree item and its info to dictionary for easy use in other methods
+            self.tree_item_and_info[item] = info
+
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
                 # Sets the assignee combobox to team members if its a Task or Milestone 
@@ -267,6 +275,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Creates a dictionary with asset information
             child_info = self.get_asset_information(child)
+
+            # Adds the tree item and its info to dictionary for easy use in other methods
+            self.tree_item_and_info[child_item] = child_info
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
@@ -354,6 +365,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             combo_indexes.append(i)    
 
         combo.setCurrentIndexes(combo_indexes)
+
+    def item_changed(self, item, column):
+        if column == 0:
+            name = self.tree_item_and_info[item]["name"]
+            print(name)
+
+    def update_name(self, name, entity_type, id):
+        asset = session.query(f"{entity_type} where id is '{id}'").one()
+
+        asset["name"] = name
 
     def save_session(self):
         session.commit()
