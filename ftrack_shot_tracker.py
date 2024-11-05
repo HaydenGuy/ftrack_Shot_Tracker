@@ -369,7 +369,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def item_changed(self, item, column):
         if column == 0:
             name = self.tree_item_and_info[item]["name"]
-            print(name)
+            
 
     def update_name(self, name, entity_type, id):
         asset = session.query(f"{entity_type} where id is '{id}'").one()
