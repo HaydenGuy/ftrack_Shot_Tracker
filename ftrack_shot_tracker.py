@@ -8,7 +8,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateTimeEdit
 from PySide6.QtCore import Qt, QDate, QTime, QDateTime
-from UI.shot_tracker_ui import Ui_ftrack_Shot_Tracker
+from UI.shot_tracker import Ui_ftrack_Shot_Tracker
 from pyqt6_multiselect_combobox import MultiSelectComboBox
 
 # Load the .env file and assign the information to variables
@@ -173,26 +173,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             return groups
         else:
             return names
-
-    # def set_local_datetime(self, asset):
-    #     try:
-    #         ftrack_start_date = asset["start_date"]
-    #         ftrack_end_date = asset["end_date"]
-    #         return ftrack_start_date, ftrack_end_date
-    #     except AttributeError:
-    #         pass
-        
-    #     # local_start_date = ftrack_start_date.astimezone(LOCAL_TZ)
-    #     # local_end_date = ftrack_end_date.astimezone(LOCAL_TZ)
-        
-    #     # return local_start_date, local_end_date
     
     # Gets the assets information for a given asset and returns it as a list
     def get_asset_information(self, asset):
-        # try:
-        #     start_date, end_date = self.set_local_datetime(asset)
-        # except TypeError:
-        #     start_date, end_date = None, None
 
         asset_info = {
             "name": asset["name"],
@@ -204,7 +187,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             "priority": self.check_if_none(lambda: asset["priority"]["name"]),
             "description": self.check_if_none(lambda: asset["description"]),
             "type_name": self.check_if_none(lambda: asset["type"]["name"]), # Conform, Editing, Previz
-            "entity_type": self.check_if_none(lambda: asset.entity_type) # Task, Milestone, Asset Build
+            "entity_type": self.check_if_none(lambda: asset.entity_type), # Task, Milestone, Asset Build
+            "id": self.check_if_none(lambda: asset["id"])
         }
 
         return asset_info
@@ -259,7 +243,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 # If the item is a Milestone set the end_date calendar cells
                 if info["entity_type"] == "Milestone" and i == 5:
                     self.create_calendar_cells(
-                        info[heading], item, i, tree_widget)
+                        info[heading], item, info["id"], info["entity_type"], i, tree_widget)
                 else:
                     try:
                         item.setText(i, info[heading])
@@ -295,7 +279,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 # If the type is an accepted task type create calendar cells
                 if child_info["type_name"] in TASK_NAMES_ID and i in {4, 5}:
                     self.create_calendar_cells(
-                        child_info[heading], child_item, i, tree_widget)
+                        child_info[heading], child_item, child_info["id"], child_info["entity_type"], i, tree_widget)
                 else:
                     try:
                         child_item.setText(i, child_info[heading])
@@ -318,7 +302,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 tree_widget.setColumnWidth(3, 200)
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
-    def create_calendar_cells(self, date, item, column, tree_widget):
+    def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
         try:
             local_datetime_obj = date.astimezone(LOCAL_TZ)
             year = local_datetime_obj.year
@@ -332,17 +316,22 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             datetime_edit.setDisplayFormat("yyyy-MM-dd")
             datetime_edit.setDateTime(QDateTime(QDate(int(year), int(month), int(day)), QTime(int(hours), int(minutes), int(seconds))))
             tree_widget.setItemWidget(item, column, datetime_edit)
-            datetime_edit.dateTimeChanged.connect(lambda date_time: self.date_changed(date_time, item))
+            datetime_edit.dateTimeChanged.connect(lambda date_time: self.date_changed(date_time, id, entity_type, column))
         except AttributeError:
             pass
 
-    def date_changed(self, date_time, item): # Needs to receive more information like start or end, Task ID, need to save variable elsewhere to all commit when save is pressed
-        print(item.text())
-        # utc = date_time.toUTC()
-        # utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
-        # milestone = session.query(f"Task where id is 'dc4f596a-65a7-11ed-a73a-92ba0fc0dc3d'").one()
-        # milestone["end_date"] = utc_datetime
+    def date_changed(self, date_time, id, entity_type, column): # Needs to receive more information like start or end, Task ID, need to save variable elsewhere to all commit when save is pressed
+        utc = date_time.toUTC()
+        utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
+        asset = session.query(f"{entity_type} where id is '{id}'").one()
 
+        if column == 4:
+            asset["start_date"] = utc_datetime
+        elif column == 5:
+            asset["end_date"] = utc_datetime
+        else:
+            pass
+        
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
         combo = MultiSelectComboBox()
