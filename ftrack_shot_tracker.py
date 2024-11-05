@@ -204,6 +204,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.resize_columns(self.page_1_tree)
         self.resize_columns(self.page_2_tree)
         self.resize_columns(self.page_3_tree)
+        self.page_1_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
+        self.page_2_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
+        self.page_3_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
         # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
         self.page_widget.setCurrentIndex(0)
 
