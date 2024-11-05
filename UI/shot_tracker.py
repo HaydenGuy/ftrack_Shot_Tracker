@@ -15,9 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QHeaderView, QMainWindow,
-    QSizePolicy, QStackedWidget, QTreeWidget, QTreeWidgetItem,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QHeaderView,
+    QMainWindow, QPushButton, QSizePolicy, QStackedWidget,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_ftrack_Shot_Tracker(object):
     def setupUi(self, ftrack_Shot_Tracker):
@@ -120,6 +120,17 @@ class Ui_ftrack_Shot_Tracker(object):
 
         self.verticalLayout_7.addLayout(self.verticalLayout)
 
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
+        self.save_btn = QPushButton(self.centralwidget)
+        self.save_btn.setObjectName(u"save_btn")
+
+        self.horizontalLayout.addWidget(self.save_btn)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout)
+
         ftrack_Shot_Tracker.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(ftrack_Shot_Tracker)
@@ -168,5 +179,6 @@ class Ui_ftrack_Shot_Tracker(object):
         ___qtreewidgetitem3.setText(2, QCoreApplication.translate("ftrack_Shot_Tracker", u"Status", None));
         ___qtreewidgetitem3.setText(1, QCoreApplication.translate("ftrack_Shot_Tracker", u"Type", None));
         ___qtreewidgetitem3.setText(0, QCoreApplication.translate("ftrack_Shot_Tracker", u"Tasks", None));
+        self.save_btn.setText(QCoreApplication.translate("ftrack_Shot_Tracker", u"Save", None))
     # retranslateUi
 
