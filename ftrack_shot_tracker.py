@@ -1,7 +1,6 @@
 import sys
 import os
 import ftrack_api
-import pytz
 import tzlocal
 from datetime import datetime
 
@@ -61,6 +60,10 @@ TASK_NAMES_ID = {
     "Vehicle": "8c39f908-8b4c-11eb-9cdb-c2ffbce28b68",
     "Video Shoot": "b7df1bd9-9268-42ea-8be2-6b99abc1730f",
     "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
+}
+
+ASSET_BUILD_NAMES_ID = {
+
 }
 
 STATUSES = ["Not started", "Ready to start", "In progress",
