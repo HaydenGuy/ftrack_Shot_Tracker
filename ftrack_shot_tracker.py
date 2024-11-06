@@ -62,10 +62,6 @@ TASK_NAMES_ID = {
     "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
 }
 
-ASSET_BUILD_NAMES_ID = {
-
-}
-
 STATUSES = ["Not started", "Ready to start", "In progress",
           "Pending Review", "On Hold", "Client Approved"]
 
