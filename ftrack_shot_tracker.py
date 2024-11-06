@@ -89,8 +89,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         
         self.create_ui()
 
+        # Call item_changed when an item updated on any of tree widgets
         self.page_1_tree.itemChanged.connect(self.item_changed)
-
+        self.page_2_tree.itemChanged.connect(self.item_changed)
+        self.page_3_tree.itemChanged.connect(self.item_changed)
+        
         self.save_btn.clicked.connect(self.save_session)
 
     # Check if an ftrack project exists by calling its code and return the project if it does
@@ -366,11 +369,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         combo.setCurrentIndexes(combo_indexes)
 
+    # Calls a specific method when an item in a particular column is updated
     def item_changed(self, item, column):
+        # Get the updated text on the tree widget and update item name on ftrack 
         if column == 0:
-            name = self.tree_item_and_info[item]["name"]
-            
+            new_name = item.text(column)
+            entity_type = self.tree_item_and_info[item]["entity_type"]
+            id = self.tree_item_and_info[item]["id"]
+            self.update_name(new_name, entity_type, id)
 
+    # Update the name of the passed item on ftrack (ready for commit/save)
     def update_name(self, name, entity_type, id):
         asset = session.query(f"{entity_type} where id is '{id}'").one()
 
