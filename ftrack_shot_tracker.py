@@ -62,6 +62,29 @@ TASK_NAMES_ID = {
     "Voice Over": "2ea3363d-8617-4e45-ad23-ae678ec50b43"
 }
 
+# AssetBuilds for animation template only - need to make change based on what project type is loaded same with task and milestone
+ASSET_BUILD_NAMES_ID = {
+    "Character": "66d145f0-13c6-11e3-abf2-f23c91dfaa16",
+    "Environment": "66d1daba-13c6-11e3-abf2-f23c91dfaa16",
+    "Prop": "66d1aedc-13c6-11e3-abf2-f23c91dfaa16",
+}
+
+MILESTONE_NAMES_ID = {
+    "Concept Art": "56807358-a0f4-11e9-9843-d27cf242b68b",
+    "Modeling": "44dc53c8-4164-11df-9218-0019bb4983d8",
+    "Rigging": "44dd5868-4164-11df-9218-0019bb4983d8",
+    "Texture": "a750a84f-b253-11eb-ad41-1e003a0c2434",
+    "Lookdev": "44dc8cd0-4164-11df-9218-0019bb4983d8",
+    "Production": "b628a004-ad7d-11e1-896c-f23c91df1211",
+    "Editing": "cc46c4c6-13d2-11e3-8915-f23c91dfaa16",
+    "Layout": "ffaebf7a-9dca-11e9-8346-d27cf242b68b",
+    "Animation": "44dc3636-4164-11df-9218-0019bb4983d8",
+    "Lighting": "44dd08fe-4164-11df-9218-0019bb4983d8",
+    "Rendering": "262225e8-9dcb-11e9-82b8-d27cf242b68b",
+    "Compositing": "44dd23b6-4164-11df-9218-0019bb4983d8",
+    "Deliverable": "ae1e2480-f24e-11e2-bd1f-f23c91dfaa16",
+}
+
 STATUSES = ["Not started", "Ready to start", "In progress",
           "Pending Review", "On Hold", "Client Approved"]
 
