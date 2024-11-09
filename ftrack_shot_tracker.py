@@ -5,7 +5,7 @@ import tzlocal
 from datetime import datetime
 
 from dotenv import load_dotenv
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateTimeEdit
+from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateTimeEdit, QComboBox
 from PySide6.QtCore import Qt, QDate, QTime, QDateTime
 from UI.shot_tracker import Ui_ftrack_Shot_Tracker
 from pyqt6_multiselect_combobox import MultiSelectComboBox
