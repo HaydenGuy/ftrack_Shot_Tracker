@@ -673,6 +673,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         # Gets the project type (Animation, VFX, Model Production)
         self.project_type = self.project["project_schema"]["name"]
 
+        # Initialize type lists that will be used in the Type combobox based on the project type
+        self.asset_build_type_list = self.get_type_lists(self.project_type, "AssetBuild", TASK_NAMES_ID)
+        self.milestone_type_list = self.get_type_lists(self.project_type, "Milestone", TASK_NAMES_ID)
+        self.task_type_list = self.get_type_lists(self.project_type, "Task", TASK_NAMES_ID)
+
         self.milestones = self.get_assets("Milestone", self.project)
         self.asset_builds = self.get_assets("AssetBuild", self.project)
         self.sequences = self.get_assets("Sequence", self.project)
@@ -738,6 +743,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         return team_members, project_groups
     
+    # Return a list of the Types for the passed asset_type using items from the TASK_NAME_ID dictionary
+    def get_type_lists(self, project_type, asset_type, dictionary):
+        types = []
+
+        for type_name, info in dictionary.items():
+            if info[project_type][asset_type] == "Y":
+                types.append(type_name)
+
+        return types
+
     # Check if the asset information returns as None and if it does set it to None
     def check_if_none(self, getter):
         try:
