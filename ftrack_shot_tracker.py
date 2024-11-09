@@ -917,6 +917,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
         try:
+            # Split local time into individual variables
             local_datetime_obj = date.astimezone(LOCAL_TZ)
             year = local_datetime_obj.year
             month = local_datetime_obj.month
@@ -924,16 +925,21 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             hours = local_datetime_obj.hour
             minutes = local_datetime_obj.minute
             seconds = local_datetime_obj.second
+
+            # Create QDateTimeEdit and set it to the tree widget cell
             datetime_edit = QDateTimeEdit()
             datetime_edit.setCalendarPopup(True)
             datetime_edit.setDisplayFormat("yyyy-MM-dd")
             datetime_edit.setDateTime(QDateTime(QDate(int(year), int(month), int(day)), QTime(int(hours), int(minutes), int(seconds))))
             tree_widget.setItemWidget(item, column, datetime_edit)
+            
+            # When the date is changed call the date_changed method and pass it additional variables using lambda
             datetime_edit.dateTimeChanged.connect(lambda date_time: self.date_changed(date_time, id, entity_type, column))
         except AttributeError:
             pass
 
-    def date_changed(self, date_time, id, entity_type, column): # Needs to receive more information like start or end, Task ID, need to save variable elsewhere to all commit when save is pressed
+    # Sets the start/end date of the changed date cell to the correct utc date
+    def date_changed(self, date_time, id, entity_type, column):
         utc = date_time.toUTC()
         utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
         asset = session.query(f"{entity_type} where id is '{id}'").one()
