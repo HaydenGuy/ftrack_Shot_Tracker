@@ -859,8 +859,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
+                if i == 1 and info["entity_type"] == "AssetBuild": # PLACEHOLDER
+                    combo = QComboBox()
+                    combo.addItems(self.asset_build_type_list)
+                    tree_widget.setItemWidget(item, 1, combo)
+
                 # Sets the assignee combobox to team members if its a Task or Milestone 
-                if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
+                elif i == 3 and info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, item, i, tree_widget)
                     self.set_combo_box_assignees(info["assignee"], combo)
 
