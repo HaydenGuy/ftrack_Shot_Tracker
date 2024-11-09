@@ -670,6 +670,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         # Call function on the target project code (argument 2) and assign as variable
         self.project = self.get_target_project(sys.argv[1])
 
+        # Gets the project type (Animation, VFX, Model Production)
+        self.project_type = self.project["project_schema"]["name"]
+
         self.milestones = self.get_assets("Milestone", self.project)
         self.asset_builds = self.get_assets("AssetBuild", self.project)
         self.sequences = self.get_assets("Sequence", self.project)
