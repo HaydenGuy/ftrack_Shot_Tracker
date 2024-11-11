@@ -859,10 +859,17 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                if i == 1 and info["entity_type"] == "AssetBuild": # PLACEHOLDER
-                    combo = QComboBox()
-                    combo.addItems(self.asset_build_type_list)
-                    tree_widget.setItemWidget(item, 1, combo)
+                # Set a type list or text based on entity type to the type column
+                if i == 1:
+                    match info["entity_type"]: 
+                        case "AssetBuild":
+                            self.set_type_list(self.asset_build_type_list, info, item, tree_widget)
+                        case "Milestone":
+                            self.set_type_list(self.milestone_type_list, info, item, tree_widget)
+                        case "Task":
+                            self.set_type_list(self.task_type_list, info, item, tree_widget)                   
+                        case "*":
+                            item.setText(i, info[heading])
 
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 elif i == 3 and info["entity_type"] in ["Task", "Milestone"]:
@@ -901,6 +908,17 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
+                # Set a type list or text based on entity type to the type column
+                if i == 1:
+                    match child_info["entity_type"]: 
+                        case "AssetBuild":
+                            self.set_type_list(self.asset_build_type_list, child_info, child_item, tree_widget)
+                        case "Milestone":
+                            self.set_type_list(self.milestone_type_list, child_info, child_item, tree_widget)
+                        case "Task":
+                            self.set_type_list(self.task_type_list, child_info, child_item, tree_widget)                   
+                        case "*":
+                            child_item.setText(i, child_info[heading])
 
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
@@ -936,6 +954,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 tree_widget.resizeColumnToContents(i)
             else:
                 tree_widget.setColumnWidth(3, 200)
+
+    # Set the type column to the respective type_list using combo boxes
+    def set_type_list(self, type_list, info, item, tree_widget):
+        combo = QComboBox()
+        combo.addItems(type_list)
+        active = combo.findText(info["type_name"])
+        combo.setCurrentIndex(active)
+        tree_widget.setItemWidget(item, 1, combo)
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
