@@ -695,6 +695,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_1_tree.itemChanged.connect(self.item_changed)
         self.page_2_tree.itemChanged.connect(self.item_changed)
         self.page_3_tree.itemChanged.connect(self.item_changed)
+
+        # self.page_1_tree.itemClicked.connect(self.dropdown_selection)
         
         self.save_btn.clicked.connect(self.save_session)
 
@@ -872,7 +874,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                             item.setText(i, info[heading])
 
                 # Sets the assignee combobox to team members if its a Task or Milestone 
-                elif i == 3 and info["entity_type"] in ["Task", "Milestone"]:
+                if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, item, i, tree_widget)
                     self.set_combo_box_assignees(info["assignee"], combo)
 
@@ -954,7 +956,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 tree_widget.resizeColumnToContents(i)
             else:
                 tree_widget.setColumnWidth(3, 200)
-
+            
     # Set the type column to the respective type_list using combo boxes
     def set_type_list(self, type_list, info, item, tree_widget):
         combo = QComboBox()
@@ -962,6 +964,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         active = combo.findText(info["type_name"])
         combo.setCurrentIndex(active)
         tree_widget.setItemWidget(item, 1, combo)
+
+        combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo))
+
+        combo.showPopup()
+
+    def set_item_text_from_combo(self, tree_widget, item, combo):
+        text = combo.currentText()
+        item.setText(1, text)
+
+        tree_widget.removeItemWidget(item, 1)
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
