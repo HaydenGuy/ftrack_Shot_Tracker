@@ -696,6 +696,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_2_tree.itemChanged.connect(self.item_changed)
         self.page_3_tree.itemChanged.connect(self.item_changed)
 
+        # TODO Add comments to these and children - get the update on ftrack working - fix bug where not selecting leaves combo open
         self.page_1_tree.itemClicked.connect(lambda item, column: self.set_type_list(item, column, self.page_1_tree))
         self.page_2_tree.itemClicked.connect(lambda item, column: self.set_type_list(item, column, self.page_2_tree))
         self.page_3_tree.itemClicked.connect(lambda item, column: self.set_type_list(item, column, self.page_3_tree))
@@ -863,21 +864,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                # Set a type list or text based on entity type to the type column
-                # if i == 1:
-                    # self.page_1_tree.itemClicked.connect(lambda _: self.set_type_list(
-#                         self.milestone_type_list, info, item, tree_widget))
-
-                #     match info["entity_type"]: 
-                #         case "AssetBuild":
-                #             self.set_type_list(self.asset_build_type_list, info, item, tree_widget)
-                #         case "Milestone":
-                #             self.set_type_list(self.milestone_type_list, info, item, tree_widget)
-                #         case "Task":
-                #             self.set_type_list(self.task_type_list, info, item, tree_widget)                   
-                #         case "*":
-                #             item.setText(i, info[heading])
-
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, item, i, tree_widget)
@@ -915,18 +901,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                # Set a type list or text based on entity type to the type column
-                # if i == 1:
-                #     match child_info["entity_type"]: 
-                #         case "AssetBuild":
-                #             self.set_type_list(self.asset_build_type_list, child_info, child_item, tree_widget)
-                #         case "Milestone":
-                #             self.set_type_list(self.milestone_type_list, child_info, child_item, tree_widget)
-                #         case "Task":
-                #             self.set_type_list(self.task_type_list, child_info, child_item, tree_widget)                   
-                #         case "*":
-                #             child_item.setText(i, child_info[heading])
-
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, child_item, i, tree_widget)
