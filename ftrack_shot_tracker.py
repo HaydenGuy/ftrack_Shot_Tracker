@@ -1024,13 +1024,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             new_name = item.text(column)
             entity_type = self.tree_item_and_info[item]["entity_type"]
             id = self.tree_item_and_info[item]["id"]
-            self.update_name(new_name, entity_type, id)
+            self.update_item("name", new_name, entity_type, id)
 
     # Update the name of the passed item on ftrack (ready for commit/save)
-    def update_name(self, name, entity_type, id):
+    def update_item(self, to_change, change_to, entity_type, id):
         asset = session.query(f"{entity_type} where id is '{id}'").one()
 
-        asset["name"] = name
+        asset[to_change] = change_to
 
     def save_session(self):
         session.commit()
