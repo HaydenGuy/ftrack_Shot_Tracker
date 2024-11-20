@@ -936,29 +936,31 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             else:
                 tree_widget.setColumnWidth(3, 200)
 
+    # Creates a combobox to be used when selecting an item from the type column 
     def set_type_list(self, item, column, tree_widget):
         if column == 1 and self.tree_item_and_info[item]["entity_type"] in ["AssetBuild", "Milestone", "Task"]:
             combo = QComboBox()
-            combo.addItems(self.milestone_type_list)
+            combo.addItems(self.milestone_type_list)  # Populate combo with milestone types
 
-            current_text = item.text(1)
-            type_name = current_text.split("(")[1].split(")")[0]
-            active = combo.findText(type_name)
-            combo.setCurrentIndex(active)
-            tree_widget.setItemWidget(item, 1, combo)
+            current_text = item.text(1)  # Get the current text in column 1
+            type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
+            active = combo.findText(type_name)  # Find index of the extracted text
+            combo.setCurrentIndex(active)  # Set active combo item to extracted text name
 
+            tree_widget.setItemWidget(item, 1, combo)  # Replace column 1 with the combo box
             combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo))
-            
             combo.showPopup()
         else:
             pass
 
+    # Takes the type combo item and sets its value as text in the column
     def set_item_text_from_combo(self, tree_widget, item, combo):
         entity_type = self.tree_item_and_info[item]["entity_type"]
+
+        # Update column 1 text to the selected combo value
         text = f"{entity_type} ({combo.currentText()})"
         item.setText(1, text)
-
-        tree_widget.removeItemWidget(item, 1)
+        tree_widget.removeItemWidget(item, 1)  # Remove the combo box
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
