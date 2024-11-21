@@ -1032,14 +1032,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         # Get the updated text on the tree widget and update item name on ftrack 
         if column == 0:
             new_name = item.text(column) # Get the text in the column
-            self.update_item("name", new_name, entity_type, id)
-            # NEED TO UPDATE THE tree_item_info DICT
+            self.update_item("name", new_name, entity_type, id) # Update the items name on ftrack
+            self.tree_item_and_info[item]["name"] = new_name # Update the items name in the dict
         if column == 1:
             current_text = item.text(column)
             type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
             type_id = TASK_NAMES_ID[type_name]["ID"] # Get the type ID from the global dict
             new_type = session.query(f"Type where id is {type_id}").one() # Query the type from ftrack
-            self.update_item("type", new_type, entity_type, id)
+            self.update_item("type", new_type, entity_type, id) # Update the items type on ftrack
+            self.tree_item_and_info[item]["type"] = new_type["name"] # Update the items name in the dict
 
     # Update the name of the passed item on ftrack (ready for commit/save)
     def update_item(self, to_change, change_to, entity_type, id):
