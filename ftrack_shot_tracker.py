@@ -938,9 +938,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Creates a combobox to be used when selecting an item from the type column 
     def set_type_list(self, item, column, tree_widget):
-        if column == 1 and self.tree_item_and_info[item]["entity_type"] in ["AssetBuild", "Milestone", "Task"]:
+        entity_type = self.tree_item_and_info[item]["entity_type"]
+        if column == 1 and entity_type in ["AssetBuild", "Milestone", "Task"]:
             combo = QComboBox()
-            combo.addItems(self.milestone_type_list)  # Populate combo with milestone types
+            match entity_type: # Populate combo with respective type list
+                case "AssetBuild":
+                    combo.addItems(self.asset_build_type_list)
+                case "Milestone":
+                    combo.addItems(self.milestone_type_list)
+                case "Task":
+                    combo.addItems(self.task_type_list)
 
             current_text = item.text(1)  # Get the current text in column 1
             type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
