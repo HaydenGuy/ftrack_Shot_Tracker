@@ -1019,12 +1019,20 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Calls a specific method when an item in a particular column is updated
     def item_changed(self, item, column):
+        entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
+        id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
+
         # Get the updated text on the tree widget and update item name on ftrack 
         if column == 0:
-            new_name = item.text(column)
-            entity_type = self.tree_item_and_info[item]["entity_type"]
-            id = self.tree_item_and_info[item]["id"]
+            new_name = item.text(column) # Get the text in the column
             self.update_item("name", new_name, entity_type, id)
+            # NEED TO UPDATE THE tree_item_info DICT
+        if column == 1:
+            current_text = item.text(column)
+            type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
+            type_id = TASK_NAMES_ID[type_name]["ID"] # Get the type ID from the global dict
+            new_type = session.query(f"Type where id is {type_id}").one() # Query the type from ftrack
+            self.update_item("type", new_type, entity_type, id)
 
     # Update the name of the passed item on ftrack (ready for commit/save)
     def update_item(self, to_change, change_to, entity_type, id):
