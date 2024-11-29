@@ -955,18 +955,18 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             combo.setCurrentIndex(active)  # Set active combo item to extracted text name
 
             tree_widget.setItemWidget(item, 1, combo)  # Replace column 1 with the combo box
-            combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo))
+            combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo, 1))
             combo.showPopup()
         else:
             pass
 
     # Takes the type combo item and sets its value as text in the column
-    def set_item_text_from_combo(self, tree_widget, item, combo):
+    def set_item_text_from_combo(self, tree_widget, item, combo, column):
         entity_type = self.tree_item_and_info[item]["entity_type"]
 
         # Update column 1 text to the selected combo value
         text = f"{entity_type} ({combo.currentText()})"
-        item.setText(1, text)
+        item.setText(column, text)
         tree_widget.removeItemWidget(item, 1)  # Remove the combo box
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
