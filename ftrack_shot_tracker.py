@@ -966,8 +966,19 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         entity_type = self.tree_item_and_info[item]["entity_type"]
         if column == 2 and entity_type in ["AssetBuild", "Milestone", "Task"]:
             combo = QComboBox()
-            
+            if entity_type == "Milestone":
+                combo.addItems(MILESTONE_STATUSES)
+            else:
+                combo.addItems(ASSET_BUILD_TASK_STATUSES)
 
+            current_text = item.text(1)
+            active = combo.findText(current_text)
+            combo.setCurrentIndex(active)
+
+            tree_widget.setItemWidget(item, 2, combo)
+        else:
+            pass
+            
     # Takes the type combo item and sets its value as text in the column
     def set_item_text_from_combo(self, tree_widget, item, combo, column):
         entity_type = self.tree_item_and_info[item]["entity_type"]
