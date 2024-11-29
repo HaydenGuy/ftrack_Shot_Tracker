@@ -657,8 +657,10 @@ TASK_NAMES_ID = {
     }
 }
 
-STATUSES = ["Not started", "Ready to start", "In progress",
-          "Pending Review", "On Hold", "Client Approved"]
+MILESTONE_STATUSES = ["Not Started", "In Progress", "Completed"]
+
+ASSET_BUILD_TASK_STATUSES = ["Not started", "Ready to start", "In progress",
+          "Pending Review", "On Hold", "Approved"]
 
 LOCAL_TZ = tzlocal.get_localzone()
 
@@ -959,6 +961,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             combo.showPopup()
         else:
             pass
+
+    def set_status_list(self, item, column, tree_widget):
+        entity_type = self.tree_item_and_info[item]["entity_type"]
+        if column == 2 and entity_type in ["AssetBuild", "Milestone", "Task"]:
+            combo = QComboBox()
+            
 
     # Takes the type combo item and sets its value as text in the column
     def set_item_text_from_combo(self, tree_widget, item, combo, column):
