@@ -698,10 +698,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_2_tree.itemChanged.connect(self.item_changed)
         self.page_3_tree.itemChanged.connect(self.item_changed)
 
-        # TODO Add comments to these and children - get the update on ftrack working - fix bug where not selecting leaves combo open
-        self.page_1_tree.itemClicked.connect(lambda item, column: self.set_type_list(item, column, self.page_1_tree))
-        self.page_2_tree.itemClicked.connect(lambda item, column: self.set_type_list(item, column, self.page_2_tree))
-        self.page_3_tree.itemClicked.connect(lambda item, column: self.set_type_list(item, column, self.page_3_tree))
+        # Clicking items in column 1 or 2 on a tree widget calls a method to set the type or status
+        self.page_1_tree.itemClicked.connect(lambda item, column: self.set_type_or_status_list(item, column, self.page_1_tree))
+        self.page_2_tree.itemClicked.connect(lambda item, column: self.set_type_or_status_list(item, column, self.page_2_tree))
+        self.page_3_tree.itemClicked.connect(lambda item, column: self.set_type_or_status_list(item, column, self.page_3_tree))
         
         self.save_btn.clicked.connect(self.save_session)
 
@@ -938,11 +938,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             else:
                 tree_widget.setColumnWidth(3, 200)
 
-    # Creates a combobox to be used when selecting an item from the type column 
-    def set_type_list(self, item, column, tree_widget):
-        entity_type = self.tree_item_and_info[item]["entity_type"]
+    # Creates a combobox to be used when selecting an item from the type or status column
+    def set_type_or_status_list(self, item, column, tree_widget):
+        combo = QComboBox()
+        current_text = item.text(column)  # Get the current text in column 1
+        entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type of item that was clicked
+        
+        # Logic to create a type list combo
         if column == 1 and entity_type in ["AssetBuild", "Milestone", "Task"]:
-            combo = QComboBox()
             match entity_type: # Populate combo with respective type list
                 case "AssetBuild":
                     combo.addItems(self.asset_build_type_list)
@@ -951,42 +954,44 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 case "Task":
                     combo.addItems(self.task_type_list)
 
-            current_text = item.text(1)  # Get the current text in column 1
+            
             type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
             active = combo.findText(type_name)  # Find index of the extracted text
             combo.setCurrentIndex(active)  # Set active combo item to extracted text name
 
-            tree_widget.setItemWidget(item, 1, combo)  # Replace column 1 with the combo box
-            combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo, 1))
+            tree_widget.setItemWidget(item, column, combo)  # Replace column 1 with the combo box
+            combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo, column))
             combo.showPopup()
-        else:
-            pass
-
-    def set_status_list(self, item, column, tree_widget):
-        entity_type = self.tree_item_and_info[item]["entity_type"]
-        if column == 2 and entity_type in ["AssetBuild", "Milestone", "Task"]:
-            combo = QComboBox()
+        
+        # Logic to create a status combo 
+        elif column == 2 and entity_type in ["AssetBuild", "Milestone", "Task"]:
+            
             if entity_type == "Milestone":
                 combo.addItems(MILESTONE_STATUSES)
             else:
                 combo.addItems(ASSET_BUILD_TASK_STATUSES)
 
-            current_text = item.text(1)
-            active = combo.findText(current_text)
-            combo.setCurrentIndex(active)
+            active = combo.findText(current_text) # Find currently set text in the combo
+            combo.setCurrentIndex(active) # Set the active text to the combo current index
 
-            tree_widget.setItemWidget(item, 2, combo)
+            tree_widget.setItemWidget(item, column, combo) # Replace column 2 with the combo box
+            combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo, column))
+            combo.showPopup()
         else:
             pass
             
-    # Takes the type combo item and sets its value as text in the column
+    # Takes the passed combo item and sets its value as text in the column
     def set_item_text_from_combo(self, tree_widget, item, combo, column):
-        entity_type = self.tree_item_and_info[item]["entity_type"]
+        if column == 1: # For types
+            entity_type = self.tree_item_and_info[item]["entity_type"]
 
-        # Update column 1 text to the selected combo value
-        text = f"{entity_type} ({combo.currentText()})"
+            # Task (Layout), Asset Build (Modeling) etc.
+            text = f"{entity_type} ({combo.currentText()})"
+        else:
+            text = combo.currentText()
+
         item.setText(column, text)
-        tree_widget.removeItemWidget(item, 1)  # Remove the combo box
+        tree_widget.removeItemWidget(item, column)  # Remove the combo box
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
