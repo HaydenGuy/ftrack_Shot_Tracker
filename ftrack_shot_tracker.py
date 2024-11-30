@@ -7,6 +7,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateTimeEdit, QComboBox
 from PySide6.QtCore import Qt, QDate, QTime, QDateTime
+from PySide6.QtGui import QBrush, QColor
 from UI.shot_tracker import Ui_ftrack_Shot_Tracker
 from pyqt6_multiselect_combobox import MultiSelectComboBox
 
@@ -989,6 +990,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             text = f"{entity_type} ({combo.currentText()})"
         else:
             text = combo.currentText()
+            brush = QBrush(QColor("red"))
+            item.setBackground(column, brush)
 
         item.setText(column, text)
         tree_widget.removeItemWidget(item, column)  # Remove the combo box
