@@ -659,18 +659,18 @@ TASK_NAMES_ID = {
 }
 
 MILESTONE_STATUSES = {
-    "Not Started": "#cacaca",
-    "In Progress": "#3498db",
-    "Completed": "#lcbc90"
+    "Not Started": (255, 255, 255),
+    "In Progress": (52, 152, 219),
+    "Completed": (28, 188, 144)
 }
 
 ASSET_BUILD_TASK_STATUSES = {
-    "Not started": "#cacaca",
-    "Ready to start": "#00ffff",
-    "In progress": "#3498db",
-    "Pending Review": "#flc40f",
-    "On Hold": "#e74c3c",
-    "Approved": "#lcbc90"
+    "Not started": (255, 255, 255),
+    "Ready to start": (0, 255, 255),
+    "In progress": (52, 152, 219),
+    "Pending Review": (241, 196, 15),
+    "On Hold": (231, 76, 60),
+    "Approved": (28, 188, 144)
 }
 
 LOCAL_TZ = tzlocal.get_localzone()
@@ -980,7 +980,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             if entity_type == "Milestone":
                 combo.addItems(list(MILESTONE_STATUSES.keys()))
             else:
-                combo.addItems(list(ASSET_BUILD_TASK_STATUSES.keys))
+                combo.addItems(list(ASSET_BUILD_TASK_STATUSES.keys()))
 
             active = combo.findText(current_text) # Find currently set text in the combo
             combo.setCurrentIndex(active) # Set the active text to the combo current index
@@ -993,15 +993,21 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             
     # Takes the passed combo item and sets its value as text in the column
     def set_item_text_from_combo(self, tree_widget, item, combo, column):
+        entity_type = self.tree_item_and_info[item]["entity_type"]
         if column == 1: # For types
-            entity_type = self.tree_item_and_info[item]["entity_type"]
-
             # Task (Layout), Asset Build (Modeling) etc.
             text = f"{entity_type} ({combo.currentText()})"
         else:
             text = combo.currentText()
-            brush = QBrush(QColor("red"))
-            item.setBackground(column, brush)
+            
+            # Return the rgb values of the key text in specified dictionary 
+            if entity_type == "Milestone":
+                r, g, b = MILESTONE_STATUSES[text][0], MILESTONE_STATUSES[text][1], MILESTONE_STATUSES[text][2]
+            else:
+                r, g, b = ASSET_BUILD_TASK_STATUSES[text][0], ASSET_BUILD_TASK_STATUSES[text][1], ASSET_BUILD_TASK_STATUSES[text][2]
+            
+            brush = QBrush(QColor(r, g, b)) # Create brush and brush color
+            item.setBackground(column, brush) # Set background to brush color
 
         item.setText(column, text)
         tree_widget.removeItemWidget(item, column)  # Remove the combo box
