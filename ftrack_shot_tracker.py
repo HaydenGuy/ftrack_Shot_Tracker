@@ -659,8 +659,8 @@ TASK_NAMES_ID = {
 }
 
 MILESTONE_STATUSES = {
-    "Not Started": (255, 255, 255),
-    "In Progress": (52, 152, 219),
+    "Not started": (255, 255, 255),
+    "In progress": (52, 152, 219),
     "Completed": (28, 188, 144)
 }
 
@@ -877,6 +877,21 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
+                
+                # Set background color of status cells
+                if i == 2 and info["entity_type"] == "Milestone":
+                    text = info["status"]
+                    r, g, b = MILESTONE_STATUSES[text][0], MILESTONE_STATUSES[text][1], MILESTONE_STATUSES[text][2]
+                    brush = QBrush(QColor(r, g, b)) # Create brush and brush color
+                    item.setBackground(2, brush) # Set background to brush color
+                
+                # Set background color of status cells
+                elif i == 2 and info["entity_type"] in ["Task", "AssetBuild"]:
+                    text = info["status"]
+                    r, g, b = ASSET_BUILD_TASK_STATUSES[text][0], ASSET_BUILD_TASK_STATUSES[text][1], ASSET_BUILD_TASK_STATUSES[text][2]
+                    brush = QBrush(QColor(r, g, b))
+                    item.setBackground(2, brush)
+
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, item, i, tree_widget)
@@ -914,6 +929,21 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
+                
+                # Set background color of status cells
+                if i == 2 and child_info["entity_type"] == "Milestone":
+                    text = child_info["status"]
+                    r, g, b = MILESTONE_STATUSES[text][0], MILESTONE_STATUSES[text][1], MILESTONE_STATUSES[text][2]
+                    brush = QBrush(QColor(r, g, b)) # Create brush and brush color
+                    child_item.setBackground(2, brush) # Set background to brush color
+                
+                # Set background color of status cells
+                elif i == 2 and child_info["entity_type"] in ["Task", "AssetBuild"]:
+                    text = child_info["status"]
+                    r, g, b = ASSET_BUILD_TASK_STATUSES[text][0], ASSET_BUILD_TASK_STATUSES[text][1], ASSET_BUILD_TASK_STATUSES[text][2]
+                    brush = QBrush(QColor(r, g, b))
+                    child_item.setBackground(2, brush)
+
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, child_item, i, tree_widget)
