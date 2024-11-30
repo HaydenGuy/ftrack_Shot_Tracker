@@ -658,10 +658,20 @@ TASK_NAMES_ID = {
     }
 }
 
-MILESTONE_STATUSES = ["Not Started", "In Progress", "Completed"]
+MILESTONE_STATUSES = {
+    "Not Started": "#cacaca",
+    "In Progress": "#3498db",
+    "Completed": "#lcbc90"
+}
 
-ASSET_BUILD_TASK_STATUSES = ["Not started", "Ready to start", "In progress",
-          "Pending Review", "On Hold", "Approved"]
+ASSET_BUILD_TASK_STATUSES = {
+    "Not started": "#cacaca",
+    "Ready to start": "#00ffff",
+    "In progress": "#3498db",
+    "Pending Review": "#flc40f",
+    "On Hold": "#e74c3c",
+    "Approved": "#lcbc90"
+}
 
 LOCAL_TZ = tzlocal.get_localzone()
 
