@@ -978,9 +978,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         elif column == 2 and entity_type in ["AssetBuild", "Milestone", "Task"]:
             
             if entity_type == "Milestone":
-                combo.addItems(MILESTONE_STATUSES)
+                combo.addItems(list(MILESTONE_STATUSES.keys()))
             else:
-                combo.addItems(ASSET_BUILD_TASK_STATUSES)
+                combo.addItems(list(ASSET_BUILD_TASK_STATUSES.keys))
 
             active = combo.findText(current_text) # Find currently set text in the combo
             combo.setCurrentIndex(active) # Set the active text to the combo current index
