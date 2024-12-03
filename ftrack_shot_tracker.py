@@ -907,6 +907,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 if info["entity_type"] == "Milestone" and i == 5:
                     self.create_calendar_cells(
                         info[heading], item, info["id"], info["entity_type"], i, tree_widget)
+                elif info["entity_type"] != "Milestone" and i == 6:
+                    self.set_priority_labels(item, info, tree_widget)
                 else:
                     try:
                         item.setText(i, info[heading])
@@ -1020,6 +1022,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             tree_widget.setItemWidget(item, column, combo) # Replace column 2 with the combo box
             combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo, column))
             combo.showPopup()
+        
         else:
             pass
             
@@ -1098,6 +1101,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             combo_indexes.append(i)    
 
         combo.setCurrentIndexes(combo_indexes)
+
+    # Sets the priority column combo box
+    def set_priority_labels(self, item, info, tree_widget):
+        combo = QComboBox()
+        combo.addItems(PRIORITY_LABELS)
+        current_label = info["priority"] # Get the current priority for the item
+        active = combo.findText(current_label)
+        combo.setCurrentIndex(active) # Set the active combo item to the item priority
+        tree_widget.setItemWidget(item, 6, combo) # Set the cell to the combo
 
     # Calls a specific method when an item in a particular column is updated
     def item_changed(self, item, column):
