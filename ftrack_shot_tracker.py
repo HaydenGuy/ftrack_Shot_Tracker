@@ -1123,8 +1123,23 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         current_label = info["priority"] # Get the current priority for the item
         active = combo.findText(current_label)
         combo.setCurrentIndex(active) # Set the active combo item to the item priority
+        color = f"rgb{PRIORITY_LABELS[current_label]}" # e.g. rgb(255, 255, 255)
+        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}") # Changes combo to selected labels corresponding color
         tree_widget.setItemWidget(item, 6, combo) # Set the cell to the combo
 
+        combo.highlighted.connect(lambda _: self.highlight_priority(combo)) # Changes highlights to default color
+        combo.activated.connect(lambda index: self.priority_changed(index, combo)) # Changes combo to selected labels corresponding color
+
+    # Changes highlights to default color
+    def highlight_priority(self, combo):
+        combo.setStyleSheet(f"QComboBox {{ background-color: none; }}")
+
+    # Changes combo to selected labels corresponding color
+    def priority_changed(self, index, combo):
+        currently_selected = combo.itemText(index)
+        color = f"rgb{PRIORITY_LABELS[currently_selected]}"
+        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
+        
     # Calls a specific method when an item in a particular column is updated
     def item_changed(self, item, column):
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
