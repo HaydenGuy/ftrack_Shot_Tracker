@@ -673,6 +673,8 @@ ASSET_BUILD_TASK_STATUSES = {
     "Approved": (28, 188, 144)
 }
 
+PRIORITY_LABELS = ["Urgent", "High", "Medium", "Low", "None"]
+
 LOCAL_TZ = tzlocal.get_localzone()
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
