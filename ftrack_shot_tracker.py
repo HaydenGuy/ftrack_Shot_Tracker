@@ -1119,7 +1119,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Sets the priority column combo box
     def set_priority_labels(self, item, info, tree_widget):
         combo = QComboBox()
-        combo.addItems(PRIORITY_LABELS)
+        combo.addItems(list(PRIORITY_LABELS.keys()))
         current_label = info["priority"] # Get the current priority for the item
         active = combo.findText(current_label)
         combo.setCurrentIndex(active) # Set the active combo item to the item priority
