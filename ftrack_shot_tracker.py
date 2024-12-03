@@ -1128,17 +1128,22 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         tree_widget.setItemWidget(item, 6, combo) # Set the cell to the combo
 
         combo.highlighted.connect(lambda _: self.highlight_priority(combo)) # Changes highlights to default color
-        combo.activated.connect(lambda index: self.priority_changed(index, combo)) # Changes combo to selected labels corresponding color
+        combo.activated.connect(lambda index: self.priority_changed(index, combo, item)) # Changes combo to selected labels corresponding color
 
     # Changes highlights to default color
     def highlight_priority(self, combo):
         combo.setStyleSheet(f"QComboBox {{ background-color: none; }}")
 
     # Changes combo to selected labels corresponding color
-    def priority_changed(self, index, combo):
+    def priority_changed(self, index, combo, item):
         currently_selected = combo.itemText(index)
         color = f"rgb{PRIORITY_LABELS[currently_selected]}"
         combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
+
+        entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
+        id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
+        self.update_item("priority", currently_selected, entity_type, id) # NEED TO FIGURE OUT WHY THIS ISNT CHANGING ON FTRACK AND ALSO SEE IF STATUS IS WORKING
+        self.tree_item_and_info[item]["priority"] = currently_selected # ALSO I THINK SHOTS IS SHOWING STATUS WHEN IT SHOULDNT
         
     # Calls a specific method when an item in a particular column is updated
     def item_changed(self, item, column):
@@ -1150,7 +1155,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             new_name = item.text(column) # Get the text in the column
             self.update_item("name", new_name, entity_type, id) # Update the items name on ftrack
             self.tree_item_and_info[item]["name"] = new_name # Update the items name in the dict
-        if column == 1:
+        
+        elif column == 1:
             current_text = item.text(column)
             type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
             type_id = TASK_NAMES_ID[type_name]["ID"] # Get the type ID from the global dict
