@@ -673,7 +673,13 @@ ASSET_BUILD_TASK_STATUSES = {
     "Approved": (28, 188, 144)
 }
 
-PRIORITY_LABELS = ["Urgent", "High", "Medium", "Low", "None"]
+PRIORITY_LABELS = {
+    "Urgent": (231, 76, 60), 
+    "High": (230, 126, 34), 
+    "Medium": (241, 196, 15), 
+    "Low": (28, 188, 144), 
+    "None": (255, 255, 255)
+}
 
 LOCAL_TZ = tzlocal.get_localzone()
 
