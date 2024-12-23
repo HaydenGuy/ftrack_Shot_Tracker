@@ -707,7 +707,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.sequences = self.get_assets("Sequence", self.project)
         self.tasks = self.get_assets("Task", self.project)
 
-        # Stores QTreeWidgetItem as a key and the info dictionary from get_asset_info as values
+        # Stores QTreeWidgetItem as a key and the info dictionary from get_asset_information as values
         self.tree_item_and_info = {}
 
         # Get a set of the team_members and a set of the project_groups
@@ -830,7 +830,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         asset_info = {
             "name": asset["name"],
-            "type": self.set_type_info(asset), # Task (Editing), Asset Buiild (Character)
+            "type": self.set_type_info(asset), # Task (Editing), Asset Build (Character)
             "status": self.check_if_none(lambda: asset["status"]["name"]),
             "assignee": self.set_assignee_info(asset),
             "start_date": self.check_if_none(lambda: asset["start_date"]),
@@ -1140,14 +1140,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Changes combo to selected labels corresponding color
     def priority_changed(self, index, combo, item):
         currently_selected = combo.itemText(index)
+        new_priority = session.query(f"Priority where name is {currently_selected}").first() # Query the priority from ftrack to get all information needed for change
         color = f"rgb{PRIORITY_LABELS[currently_selected]}"
         combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
-
+        
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
         id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
-        self.update_item("priority", currently_selected, entity_type, id) # NEED TO FIGURE OUT WHY THIS ISNT CHANGING ON FTRACK AND ALSO SEE IF STATUS IS WORKING
-        self.tree_item_and_info[item]["priority"] = currently_selected # ALSO I THINK SHOTS IS SHOWING STATUS WHEN IT SHOULDNT
-        
+        self.update_item("priority", new_priority, entity_type, id) # Update the information on ftrack
+        self.tree_item_and_info[item]["priority"] = new_priority # Update the information in the dictionary
+
     # Calls a specific method when an item in a particular column is updated
     def item_changed(self, item, column):
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
