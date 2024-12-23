@@ -676,6 +676,14 @@ ASSET_BUILD_TASK_STATUSES = {
     "Completed": (28, 188, 144)
 }
 
+SHOT_STATUSES = {
+    "Not started": (255, 255, 255),
+    "In progress": (52, 152, 219),
+    "On Hold": (231, 76, 60),
+    "Omitted": (231, 76, 60),
+    "Completed": (28, 188, 144)
+}
+
 PRIORITY_LABELS = {
     "Urgent": (231, 76, 60), 
     "High": (230, 126, 34), 
@@ -702,6 +710,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.milestone_type_list = self.get_type_lists(self.project_type, "Milestone", TASK_NAMES_ID)
         self.task_type_list = self.get_type_lists(self.project_type, "Task", TASK_NAMES_ID)
 
+        # List of all objects that will be added to the UI
         self.milestones = self.get_assets("Milestone", self.project)
         self.asset_builds = self.get_assets("AssetBuild", self.project)
         self.sequences = self.get_assets("Sequence", self.project)
@@ -720,11 +729,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_2_tree.itemChanged.connect(self.item_changed)
         self.page_3_tree.itemChanged.connect(self.item_changed)
 
-        # Clicking items in column 1 or 2 on a tree widget calls a method to set the type or status
-        self.page_1_tree.itemClicked.connect(lambda item, column: self.set_type_or_status_list(item, column, self.page_1_tree))
-        self.page_2_tree.itemClicked.connect(lambda item, column: self.set_type_or_status_list(item, column, self.page_2_tree))
-        self.page_3_tree.itemClicked.connect(lambda item, column: self.set_type_or_status_list(item, column, self.page_3_tree))
-        
         self.save_btn.clicked.connect(self.save_session)
 
     # Check if an ftrack project exists by calling its code and return the project if it does
@@ -792,7 +796,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     # Sets the type info which is used in get_asset_information
     def set_type_info(self, asset):
         type = self.check_if_none(lambda: asset["type"]["name"]) # Check if None
-        entity_type = asset.entity_type # AssetBuild/Sequence/Shot etc. 
+        entity_type = asset.entity_type # AssetBuild/Sequence/Shot etc.
+        
         # Return Sequence or Shot - else return eg. Task (Concept Art)
         if entity_type == "Sequence" or entity_type == "Shot":
             return entity_type
@@ -889,19 +894,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
                 
-                # Set background color of status cells
-                if i == 2 and info["entity_type"] == "Milestone":
-                    text = info["status"]
-                    r, g, b = MILESTONE_STATUSES[text][0], MILESTONE_STATUSES[text][1], MILESTONE_STATUSES[text][2]
-                    brush = QBrush(QColor(r, g, b)) # Create brush and brush color
-                    item.setBackground(2, brush) # Set background to brush color
-                
-                # Set background color of status cells
-                elif i == 2 and info["entity_type"] in ["Task", "AssetBuild"]:
-                    text = info["status"]
-                    r, g, b = ASSET_BUILD_TASK_STATUSES[text][0], ASSET_BUILD_TASK_STATUSES[text][1], ASSET_BUILD_TASK_STATUSES[text][2]
-                    brush = QBrush(QColor(r, g, b))
-                    item.setBackground(2, brush)
+                if i == 1:
+                    self.set_type_labels(item, info, tree_widget)
+
+                if i == 2 and info["entity_type"] in ["Milestone", "AssetBuild", "Task", "Shot"]:
+                    self.set_status_labels(item, info, tree_widget)
 
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
@@ -946,19 +943,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
                 
-                # Set background color of status cells
-                if i == 2 and child_info["entity_type"] == "Milestone":
-                    text = child_info["status"]
-                    r, g, b = MILESTONE_STATUSES[text][0], MILESTONE_STATUSES[text][1], MILESTONE_STATUSES[text][2]
-                    brush = QBrush(QColor(r, g, b)) # Create brush and brush color
-                    child_item.setBackground(2, brush) # Set background to brush color
-                
-                # Set background color of status cells
-                elif i == 2 and child_info["entity_type"] in ["Task", "AssetBuild"]:
-                    text = child_info["status"]
-                    r, g, b = ASSET_BUILD_TASK_STATUSES[text][0], ASSET_BUILD_TASK_STATUSES[text][1], ASSET_BUILD_TASK_STATUSES[text][2]
-                    brush = QBrush(QColor(r, g, b))
-                    child_item.setBackground(2, brush)
+                if i == 1:
+                    self.set_type_labels(child_item, child_info, tree_widget)
+
+                if i == 2 and child_info["entity_type"] in ["Milestone", "AssetBuild", "Task", "Shot"]:
+                    self.set_status_labels(child_item, child_info, tree_widget)
 
                 # Sets the assignee combobox to team members if its a Task or Milestone 
                 if i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
@@ -1001,68 +990,70 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 tree_widget.setColumnWidth(3, 200)
 
     # Creates a combobox to be used when selecting an item from the type or status column
-    def set_type_or_status_list(self, item, column, tree_widget):
+    def set_type_labels(self, item, info, tree_widget):
         combo = QComboBox()
-        current_text = item.text(column)  # Get the current text in column 1
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type of item that was clicked
         
-        # Logic to create a type list combo
-        if column == 1 and entity_type in ["AssetBuild", "Milestone", "Task"]:
-            match entity_type: # Populate combo with respective type list
-                case "AssetBuild":
-                    combo.addItems(self.asset_build_type_list)
-                case "Milestone":
-                    combo.addItems(self.milestone_type_list)
-                case "Task":
-                    combo.addItems(self.task_type_list)
-
-            
-            type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
-            active = combo.findText(type_name)  # Find index of the extracted text
-            combo.setCurrentIndex(active)  # Set active combo item to extracted text name
-
-            tree_widget.setItemWidget(item, column, combo)  # Replace column 1 with the combo box
-            combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo, column))
-            combo.showPopup()
         
-        # Logic to create a status combo 
-        elif column == 2 and entity_type in ["AssetBuild", "Milestone", "Task"]:
-            
-            if entity_type == "Milestone":
-                combo.addItems(list(MILESTONE_STATUSES.keys()))
-            else:
-                combo.addItems(list(ASSET_BUILD_TASK_STATUSES.keys()))
+        match entity_type: # Populate combo with respective type list
+            case "AssetBuild":
+                combo.addItems(self.asset_build_type_list)
+            case "Milestone":
+                combo.addItems(self.milestone_type_list)
+            case "Task":
+                combo.addItems(self.task_type_list)
 
-            active = combo.findText(current_text) # Find currently set text in the combo
-            combo.setCurrentIndex(active) # Set the active text to the combo current index
+        type_name = info["type_name"]
+        active = combo.findText(type_name)  # Find index of the extracted text
+        combo.setCurrentIndex(active)  # Set active combo item to extracted text name
 
-            tree_widget.setItemWidget(item, column, combo) # Replace column 2 with the combo box
-            combo.activated.connect(lambda _: self.set_item_text_from_combo(tree_widget, item, combo, column))
-            combo.showPopup()
-        
-        else:
-            pass
-            
+        tree_widget.setItemWidget(item, 1, combo)  # Replace column 1 with the combo box
+        combo.activated.connect(lambda _: self.set_type_text_from_combo(tree_widget, item, combo, 1))
+    
     # Takes the passed combo item and sets its value as text in the column
-    def set_item_text_from_combo(self, tree_widget, item, combo, column):
+    def set_type_text_from_combo(self, tree_widget, item, combo, column):
         entity_type = self.tree_item_and_info[item]["entity_type"]
-        if column == 1: # For types
-            # Task (Layout), Asset Build (Modeling) etc.
-            text = f"{entity_type} ({combo.currentText()})"
-        else:
-            text = combo.currentText()
-            
-            # Return the rgb values of the key text in specified dictionary 
-            if entity_type == "Milestone":
-                r, g, b = MILESTONE_STATUSES[text][0], MILESTONE_STATUSES[text][1], MILESTONE_STATUSES[text][2]
-            else:
-                r, g, b = ASSET_BUILD_TASK_STATUSES[text][0], ASSET_BUILD_TASK_STATUSES[text][1], ASSET_BUILD_TASK_STATUSES[text][2]
-            
-            brush = QBrush(QColor(r, g, b)) # Create brush and brush color
-            item.setBackground(column, brush) # Set background to brush color
+
+        text = f"{entity_type} ({combo.currentText()})"
 
         item.setText(column, text)
         tree_widget.removeItemWidget(item, column)  # Remove the combo box
+
+    # Setup the status combo box
+    def set_status_labels(self, item, info, tree_widget):
+        combo = QComboBox()
+        entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type of item that was clicked
+
+        if entity_type == "Milestone":
+                combo.addItems(list(MILESTONE_STATUSES.keys()))
+                keys = MILESTONE_STATUSES
+        elif entity_type in ["AssetBuild", "Task"]:
+            combo.addItems(list(ASSET_BUILD_TASK_STATUSES.keys()))
+            keys = ASSET_BUILD_TASK_STATUSES
+        else:
+            combo.addItems(list(SHOT_STATUSES.keys()))
+            keys = SHOT_STATUSES
+
+        status = info["status"]
+        active = combo.findText(status) # Find currently set text in the combo
+        color = f"rgb{keys[status]}"
+        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
+        combo.setCurrentIndex(active) # Set the active text to the combo current index
+
+        tree_widget.setItemWidget(item, 2, combo) # Replace column 2 with the combo box
+        combo.activated.connect(lambda index: self.status_changed(index, combo, item, keys))
+
+    # Updates the status color and updates on ftrack 
+    def status_changed(self, index, combo, item, keys):
+        currently_selected = combo.itemText(index)
+        new_status = session.query(f"Status where name is '{currently_selected}'").one()
+        color = f"rgb{keys[currently_selected]}"
+        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
+
+        entity_type = self.tree_item_and_info[item]["entity_type"]
+        id = self.tree_item_and_info[item]["id"]
+        self.update_item("status", new_status, entity_type, id)
+        self.tree_item_and_info[item]["status"] = new_status
 
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
@@ -1182,7 +1173,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python script.py <target_project_code>")
         sys.exit(1)
-
+    
     # Initalize app, create and show the window
     app = QApplication()
     window = ftrack_Shot_Tracker()
