@@ -729,6 +729,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_2_tree.itemChanged.connect(self.item_changed)
         self.page_3_tree.itemChanged.connect(self.item_changed)
 
+        # Clicking items in column 1 on a tree widget calls a method to set the type
+        self.page_1_tree.itemClicked.connect(lambda item, column: self.set_type_labels(item, column, self.page_1_tree) if column == 1 else None)
+        self.page_2_tree.itemClicked.connect(lambda item, column: self.set_type_labels(item, column, self.page_2_tree) if column == 1 else None)
+        self.page_3_tree.itemClicked.connect(lambda item, column: self.set_type_labels(item, column, self.page_3_tree) if column == 1 else None)
+
         self.save_btn.clicked.connect(self.save_session)
 
     # Check if an ftrack project exists by calling its code and return the project if it does
@@ -893,9 +898,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                
-                if i == 1:
-                    self.set_type_labels(item, info, tree_widget)
 
                 if i == 2 and info["entity_type"] in ["Milestone", "AssetBuild", "Task", "Shot"]:
                     self.set_status_labels(item, info, tree_widget)
@@ -942,9 +944,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
-                
-                if i == 1:
-                    self.set_type_labels(child_item, child_info, tree_widget)
 
                 if i == 2 and child_info["entity_type"] in ["Milestone", "AssetBuild", "Task", "Shot"]:
                     self.set_status_labels(child_item, child_info, tree_widget)
@@ -990,11 +989,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 tree_widget.setColumnWidth(3, 200)
 
     # Creates a combobox to be used when selecting an item from the type or status column
-    def set_type_labels(self, item, info, tree_widget):
+    def set_type_labels(self, item, _, tree_widget):
+        current_text = item.text(1)
         combo = QComboBox()
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type of item that was clicked
-        
-        
+
         match entity_type: # Populate combo with respective type list
             case "AssetBuild":
                 combo.addItems(self.asset_build_type_list)
@@ -1003,22 +1002,32 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             case "Task":
                 combo.addItems(self.task_type_list)
 
-        type_name = info["type_name"]
-        active = combo.findText(type_name)  # Find index of the extracted text
-        combo.setCurrentIndex(active)  # Set active combo item to extracted text name
+        try:
+            type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
+            active = combo.findText(type_name)  # Find index of the extracted text
+            combo.setCurrentIndex(active)  # Set active combo item to extracted text name
 
-        tree_widget.setItemWidget(item, 1, combo)  # Replace column 1 with the combo box
-        combo.activated.connect(lambda _: self.set_type_text_from_combo(tree_widget, item, combo, 1))
-    
+            tree_widget.setItemWidget(item, 1, combo)  # Replace column 1 with the combo box
+            combo.activated.connect(lambda _: self.type_changed(tree_widget, item, combo))
+            combo.showPopup()
+        except IndexError:
+            pass
+        
     # Takes the passed combo item and sets its value as text in the column
-    def set_type_text_from_combo(self, tree_widget, item, combo, column):
+    def type_changed(self, tree_widget, item, combo):
         entity_type = self.tree_item_and_info[item]["entity_type"]
-
-        text = f"{entity_type} ({combo.currentText()})"
-
-        item.setText(column, text)
-        tree_widget.removeItemWidget(item, column)  # Remove the combo box
-
+        selected_type = combo.currentText()
+        new_type_text = f"{entity_type} ({selected_type})"
+        item.setText(1, new_type_text)
+        tree_widget.removeItemWidget(item, 1)  # Remove the combo box
+        
+        id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
+        type_id = TASK_NAMES_ID[selected_type]["ID"] # Get the type ID from the global dict
+        new_type = session.query(f"Type where id is '{type_id}'").one() # Query the type from ftrack
+        self.update_item("type", new_type, entity_type, id) # Update the items type on ftrack
+        self.tree_item_and_info[item]["type"] = new_type
+        self.tree_item_and_info[item]["type_name"] = selected_type
+    
     # Setup the status combo box
     def set_status_labels(self, item, info, tree_widget):
         combo = QComboBox()
@@ -1150,14 +1159,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             new_name = item.text(column) # Get the text in the column
             self.update_item("name", new_name, entity_type, id) # Update the items name on ftrack
             self.tree_item_and_info[item]["name"] = new_name # Update the items name in the dict
-        
-        elif column == 1:
-            current_text = item.text(column)
-            type_name = current_text.split("(")[1].split(")")[0]  # Extract type name in parentheses
-            type_id = TASK_NAMES_ID[type_name]["ID"] # Get the type ID from the global dict
-            new_type = session.query(f"Type where id is {type_id}").one() # Query the type from ftrack
-            self.update_item("type", new_type, entity_type, id) # Update the items type on ftrack
-            self.tree_item_and_info[item]["type"] = new_type["name"] # Update the items name in the dict
 
     # Update the name of the passed item on ftrack (ready for commit/save)
     def update_item(self, to_change, change_to, entity_type, id):
