@@ -672,7 +672,8 @@ ASSET_BUILD_TASK_STATUSES = {
     "In progress": (52, 152, 219),
     "Pending Review": (241, 196, 15),
     "On Hold": (231, 76, 60),
-    "Approved": (28, 188, 144)
+    "Approved": (28, 188, 144),
+    "Completed": (28, 188, 144)
 }
 
 PRIORITY_LABELS = {
