@@ -1142,22 +1142,33 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         active = combo.findText(current_label)
         combo.setCurrentIndex(active) # Set the active combo item to the item priority
         color = f"rgb{PRIORITY_LABELS[current_label]}" # e.g. rgb(255, 255, 255)
-        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}") # Changes combo to selected labels corresponding color
+        combo.setStyleSheet(f"""
+            QComboBox {{ 
+                background-color: {color}; 
+            }}
+            QComboBox::item {{
+                selection-background-color: #3584e1;
+                selection-color: #ffffff;
+            }}
+        """) # Changes combo to selected labels corresponding color
         tree_widget.setItemWidget(item, 6, combo) # Set the cell to the combo
 
-        combo.highlighted.connect(lambda _: self.highlight_priority(combo)) # Changes highlights to default color
         combo.activated.connect(lambda index: self.priority_changed(index, combo, item)) # Changes combo to selected labels corresponding color
-
-    # Changes highlights to default color
-    def highlight_priority(self, combo):
-        combo.setStyleSheet(f"QComboBox {{ background-color: none; }}")
 
     # Changes combo to selected labels corresponding color
     def priority_changed(self, index, combo, item):
         currently_selected = combo.itemText(index)
         new_priority = session.query(f"Priority where name is {currently_selected}").first() # Query the priority from ftrack to get all information needed for change
         color = f"rgb{PRIORITY_LABELS[currently_selected]}"
-        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
+        combo.setStyleSheet(f"""
+            QComboBox {{ 
+                background-color: {color}; 
+            }}
+            QComboBox::item {{
+                selection-background-color: #3584e1;
+                selection-color: #ffffff;
+            }}
+        """)
         
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
         id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
