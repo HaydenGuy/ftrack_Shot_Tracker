@@ -3,6 +3,7 @@
 import sys
 import os
 import ftrack_api
+import ftrack_api.exception
 import tzlocal
 from datetime import datetime
 
@@ -917,7 +918,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 # Sets up the priority column cells if not a milestone
                 elif info["entity_type"] != "Milestone" and i == 6:
                     self.set_priority_labels(item, info, tree_widget)
-
                 else:
                     try:
                         item.setText(i, info[heading])
@@ -1031,12 +1031,12 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         combo = QComboBox()
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type of item that was clicked
 
-        if entity_type == "Milestone":
-                combo.addItems(list(MILESTONE_STATUSES.keys()))
-                keys = MILESTONE_STATUSES
-        elif entity_type in ["AssetBuild", "Task"]:
-            combo.addItems(list(ASSET_BUILD_TASK_STATUSES.keys()))
-            keys = ASSET_BUILD_TASK_STATUSES
+        if entity_type in ["AssetBuild", "Milestone"]:
+                combo.addItems(list(ASSET_BUILD_MILESTONE_STATUSES.keys()))
+                keys = ASSET_BUILD_MILESTONE_STATUSES
+        elif entity_type == "Task":
+            combo.addItems(list(TASK_STATUSES.keys()))
+            keys = TASK_STATUSES
         else:
             combo.addItems(list(SHOT_STATUSES.keys()))
             keys = SHOT_STATUSES
@@ -1192,7 +1192,16 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         asset[to_change] = change_to
 
     def save_session(self):
-        session.commit()
+        try:
+            session.commit()
+        except ftrack_api.exception.ServerError as e:
+            error_message = e.args[0] if e.args else e.default_message
+
+            # Prints message if the chosen date is outside of the project dates else raise the error message
+            if "ValidationError(TypedContext dates must be within project start and end dates.)" in error_message: 
+                print("Selected date is out of bounds. Date must fall within the project start & end dates.")
+            else:
+                raise
 
 if __name__ == "__main__":
     # Print usage statement and exit if there are not two arguments
