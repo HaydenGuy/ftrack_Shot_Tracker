@@ -1045,7 +1045,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         status = info["status"]
         active = combo.findText(status) # Find currently set text in the combo
         color = f"rgb{keys[status]}"
-        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
+        combo.setStyleSheet(f"""
+            QComboBox {{ 
+                background-color: {color}; 
+            }}
+            QComboBox::item {{
+                selection-background-color: #3584e1;
+                selection-color: #ffffff;
+            }}
+        """)
         combo.setCurrentIndex(active) # Set the active text to the combo current index
 
         tree_widget.setItemWidget(item, 2, combo) # Replace column 2 with the combo box
@@ -1056,7 +1064,15 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         currently_selected = combo.itemText(index)
         new_status = session.query(f"Status where name is '{currently_selected}'").one()
         color = f"rgb{keys[currently_selected]}"
-        combo.setStyleSheet(f"QComboBox {{ background-color: {color}; }}")
+        combo.setStyleSheet(f"""
+            QComboBox {{ 
+                background-color: {color}; 
+            }}
+            QComboBox::item {{
+                selection-background-color: #3584e1;
+                selection-color: #ffffff;
+            }}
+        """)
 
         entity_type = self.tree_item_and_info[item]["entity_type"]
         id = self.tree_item_and_info[item]["id"]
