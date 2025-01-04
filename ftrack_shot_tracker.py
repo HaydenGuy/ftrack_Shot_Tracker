@@ -865,6 +865,22 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_1_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
         self.page_2_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
         self.page_3_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
+
+        stylesheet = """
+            QTreeWidget::item:selected {
+                background-color: transparent; /* Selected item no background color */
+                color: black; /* Text color */
+            }
+            QTreeWidget::item:hover { 
+                background-color: #ffe691; /* Hover color */
+                color: black; /* Text color */
+            }
+        """
+
+        # Apply the same stylesheet to all trees
+        for tree in [self.page_1_tree, self.page_2_tree, self.page_3_tree]:
+            tree.setStyleSheet(stylesheet)
+
         # Sets the page widget to page 1 (fixes issues where page is blank upon loading)
         self.page_widget.setCurrentIndex(0)
 
