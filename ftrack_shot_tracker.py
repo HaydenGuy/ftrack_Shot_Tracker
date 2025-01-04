@@ -659,20 +659,19 @@ TASK_NAMES_ID = {
     }
 }
 
-MILESTONE_STATUSES = {
+ASSET_BUILD_MILESTONE_STATUSES = {
     "Not started": (255, 255, 255),
     "In progress": (52, 152, 219),
     "Completed": (28, 188, 144)
 }
 
-ASSET_BUILD_TASK_STATUSES = {
+TASK_STATUSES = {
     "Not started": (255, 255, 255),
     "Ready to start": (0, 255, 255),
     "In progress": (52, 152, 219),
     "Pending Review": (241, 196, 15),
     "On Hold": (231, 76, 60),
-    "Approved": (28, 188, 144),
-    "Completed": (28, 188, 144)
+    "Approved": (28, 188, 144)
 }
 
 SHOT_STATUSES = {
