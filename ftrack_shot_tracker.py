@@ -1230,12 +1230,14 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                             if start_datetime:
                                 start_dates.append(start_datetime)
 
+                        # If empty value in cell
                         end = tree.itemWidget(tasks, 5)
                         if end:
                             end_datetime = end.dateTime() if end.dateTime() else None
                             if end_datetime:
                                 end_dates.append(end_datetime)
 
+                    # If not empty list
                     if start_dates:
                         min_date = min(start_dates).toString("yyyy-MM-dd")
                         shot.setText(4, min_date)
@@ -1243,6 +1245,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                         max_date = max(end_dates).toString("yyyy-MM-dd")
                         shot.setText(5, max_date)
             
+                # If min/max date not set
                 try:
                     sequence.setText(4, min_date)
                 except UnboundLocalError:
