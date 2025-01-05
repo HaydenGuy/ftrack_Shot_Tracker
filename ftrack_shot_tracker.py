@@ -24,9 +24,11 @@ session = ftrack_api.Session(server_url=f"{server_url}",
                              api_user=f"{api_user}",
                              api_key=f"{api_key}")
 
+# QTreeWidget Headings
 COLUMN_HEADINGS = ["name", "type", "status", "assignee",
                    "start_date", "end_date", "priority", "description"]
 
+# Task names and ID's and what type of project they appear in
 TASK_NAMES_ID = {
     "Animation": {
         "ID": "44dc3636-4164-11df-9218-0019bb4983d8",
@@ -660,12 +662,14 @@ TASK_NAMES_ID = {
     }
 }
 
+# Statuses and their corresponding color
 ASSET_BUILD_MILESTONE_STATUSES = {
     "Not started": (255, 255, 255),
     "In progress": (52, 152, 219),
     "Completed": (28, 188, 144)
 }
 
+# Statuses and their corresponding color
 TASK_STATUSES = {
     "Not started": (255, 255, 255),
     "Ready to start": (0, 255, 255),
@@ -675,6 +679,7 @@ TASK_STATUSES = {
     "Approved": (28, 188, 144)
 }
 
+# Statuses and their corresponding color
 SHOT_STATUSES = {
     "Not started": (255, 255, 255),
     "In progress": (52, 152, 219),
@@ -683,6 +688,7 @@ SHOT_STATUSES = {
     "Completed": (28, 188, 144)
 }
 
+# Priorities and their corresponding color
 PRIORITY_LABELS = {
     "Urgent": (231, 76, 60), 
     "High": (230, 126, 34), 
@@ -691,6 +697,7 @@ PRIORITY_LABELS = {
     "None": (255, 255, 255)
 }
 
+# Local timezone
 LOCAL_TZ = tzlocal.get_localzone()
 
 class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
@@ -733,6 +740,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.page_2_tree.itemClicked.connect(lambda item, column: self.set_type_labels(item, column, self.page_2_tree) if column == 1 else None)
         self.page_3_tree.itemClicked.connect(lambda item, column: self.set_type_labels(item, column, self.page_3_tree) if column == 1 else None)
 
+        # Call save sesion when save button is clicked
         self.save_btn.clicked.connect(self.save_session)
 
     # Check if an ftrack project exists by calling its code and return the project if it does
@@ -753,7 +761,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         return assets
     
-    # Returns two sets; 1.team_members ("John Smith", "Mary Anne") and 2.project_groups ("Modeling Team", "Lighting Team")
+    # Returns two sets; 1.team_members ("John Smith", "Mary Anne") and 2.project_groups ("Modeling Team", "Lighting Team", etc.)
     def get_project_team_members_and_groups(self, project):
         team_members = set()
         project_groups = set()
@@ -855,17 +863,25 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Calls all of the UI creation methods
     def create_ui(self):
+        # Creates the Milestone/AssetBuild/Sequences selection dropdown
         self.create_dropdown_menu()
+
+        # Fills the trees with information from objects from ftrack
         self.fill_tree_information(self.milestones, self.page_1_tree)
         self.fill_tree_information(self.asset_builds, self.page_2_tree)
         self.fill_tree_information(self.sequences, self.page_3_tree)
+
+        # Resize columns to fit information inside
         self.resize_columns(self.page_1_tree)
         self.resize_columns(self.page_2_tree)
         self.resize_columns(self.page_3_tree)
+
+        # Sort tree items in ascending order
         self.page_1_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
         self.page_2_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
         self.page_3_tree.sortItems(0, Qt.SortOrder.AscendingOrder)
 
+        # Styling for trees
         stylesheet = """
             QTreeWidget::item:selected {
                 background-color: transparent; /* Selected item no background color */
@@ -895,7 +911,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Change the page when the dropdown menu item is changed
     def change_page(self):
-        page_index = self.asset_type_combo.currentIndex()  # Get index of combo item
+        # Get index of combo item
+        page_index = self.asset_type_combo.currentIndex()
+
         # Change page to index of item
         self.page_widget.setCurrentIndex(page_index)
 
@@ -903,7 +921,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def fill_tree_information(self, assets, tree_widget):
         for asset in reversed(assets):
             item = QTreeWidgetItem(tree_widget)
-            item.setFlags(item.flags() | Qt.ItemIsEditable)
+            item.setFlags(item.flags() | Qt.ItemIsEditable) # Allows item to be edited directly
 
             # Creates a dictionary with asset information
             info = self.get_asset_information(asset)
@@ -914,6 +932,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
 
+                # Sets status labels for status column
                 if i == 2 and info["entity_type"] in ["Milestone", "AssetBuild", "Task", "Shot"]:
                     self.set_status_labels(item, info, tree_widget)
 
@@ -940,7 +959,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                     except TypeError:
                         pass
 
-            self.fill_child_information(asset, item, tree_widget)
+            # Fills info for Shots and Tasks
+            self.fill_child_information(asset, item, tree_widget) 
 
     # Retrieves the children for a parent asset/item and sets the information in the table widget
     def fill_child_information(self, parent_asset, parent_item, tree_widget):
@@ -948,7 +968,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         for child in children:  # Fills info for Shots and Tasks
             child_item = QTreeWidgetItem(parent_item)
-            child_item.setFlags(child_item.flags() | Qt.ItemIsEditable)
+            child_item.setFlags(child_item.flags() | Qt.ItemIsEditable) # Allows item to be edited directly
 
             # Creates a dictionary with asset information
             child_info = self.get_asset_information(child)
@@ -959,6 +979,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
 
+                # Sets status labels for status column
                 if i == 2 and child_info["entity_type"] in ["Milestone", "AssetBuild", "Task", "Shot"]:
                     self.set_status_labels(child_item, child_info, tree_widget)
 
@@ -1008,7 +1029,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         combo = QComboBox()
         entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type of item that was clicked
 
-        match entity_type: # Populate combo with respective type list
+        # Populate combo with respective type list
+        match entity_type: 
             case "AssetBuild":
                 combo.addItems(self.asset_build_type_list)
             case "Milestone":
@@ -1029,27 +1051,30 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         
     # Takes the passed combo item and sets its value as text in the column
     def type_changed(self, tree_widget, item, combo):
-        entity_type = self.tree_item_and_info[item]["entity_type"]
-        selected_type = combo.currentText()
-        new_type_text = f"{entity_type} ({selected_type})"
-        item.setText(1, new_type_text)
+        entity_type = self.tree_item_and_info[item]["entity_type"] # Task, Milestone etc
+        selected_type = combo.currentText() # Get text of selected item from combo box
+        new_type_text = f"{entity_type} ({selected_type})" # e.g. Task (Animation)
+        item.setText(1, new_type_text) # Set column 1 item to new text
         tree_widget.removeItemWidget(item, 1)  # Remove the combo box
         
         id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
         type_id = TASK_NAMES_ID[selected_type]["ID"] # Get the type ID from the global dict
         new_type = session.query(f"Type where id is '{type_id}'").one() # Query the type from ftrack
         self.update_item("type", new_type, entity_type, id) # Update the items type on ftrack
-        self.tree_item_and_info[item]["type"] = new_type
+        self.tree_item_and_info[item]["type"] = new_type # Update info in the dictionary
         self.tree_item_and_info[item]["type_name"] = selected_type
     
     # Setup the status combo box
     def set_status_labels(self, item, info, tree_widget):
         combo = QComboBox()
-        entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type of item that was clicked
 
+        # Get entity type of item that was clicked
+        entity_type = self.tree_item_and_info[item]["entity_type"]
+
+        # Get a list of status names from respective dictionary and add to the combo. Keys variable initialized for color picking.
         if entity_type in ["AssetBuild", "Milestone"]:
-                combo.addItems(list(ASSET_BUILD_MILESTONE_STATUSES.keys()))
-                keys = ASSET_BUILD_MILESTONE_STATUSES
+            combo.addItems(list(ASSET_BUILD_MILESTONE_STATUSES.keys()))
+            keys = ASSET_BUILD_MILESTONE_STATUSES
         elif entity_type == "Task":
             combo.addItems(list(TASK_STATUSES.keys()))
             keys = TASK_STATUSES
@@ -1058,30 +1083,46 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             keys = SHOT_STATUSES
 
         status = info["status"]
-        active = combo.findText(status) # Find currently set text in the combo
+        active = combo.findText(status)  # Find currently set text in the combo
+        
+        # Find the color from keys which is the respective global dictionary selected above
         color = f"rgb{keys[status]}"
+        
+        # Set the background color of the cell and the highlight to default blue (Fusion)
         combo.setStyleSheet(f"""
-            QComboBox {{ 
-                background-color: {color}; 
+            QComboBox {{
+                background-color: {color};
             }}
             QComboBox::item {{
                 selection-background-color: #3584e1;
                 selection-color: #ffffff;
             }}
         """)
-        combo.setCurrentIndex(active) # Set the active text to the combo current index
 
-        tree_widget.setItemWidget(item, 2, combo) # Replace column 2 with the combo box
-        combo.activated.connect(lambda index: self.status_changed(index, combo, item, keys))
+        # Set the active text to the combo current index
+        combo.setCurrentIndex(active)  
 
-    # Updates the status color and updates on ftrack 
+        # Replace column 2 with the combo box
+        tree_widget.setItemWidget(item, 2, combo)
+        combo.activated.connect(
+            lambda index: self.status_changed(index, combo, item, keys))
+
+    # Updates the status color and updates on ftrack
     def status_changed(self, index, combo, item, keys):
+        # Get the new selection text
         currently_selected = combo.itemText(index)
-        new_status = session.query(f"Status where name is '{currently_selected}'").one()
+        
+        # Query the new status on ftrack
+        new_status = session.query(f"Status where name is '{
+                                   currently_selected}'").one()
+        
+        # Get the color from the keys dictionary which is the global dictionary
         color = f"rgb{keys[currently_selected]}"
+
+        # Set the background color of the cell and the highlight to default blue (Fusion)
         combo.setStyleSheet(f"""
-            QComboBox {{ 
-                background-color: {color}; 
+            QComboBox {{
+                background-color: {color};
             }}
             QComboBox::item {{
                 selection-background-color: #3584e1;
@@ -1089,11 +1130,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             }}
         """)
 
+        # Update the information in the tree_item_and_info dictionaries and on ftrack (unsaved until commit) 
         entity_type = self.tree_item_and_info[item]["entity_type"]
         id = self.tree_item_and_info[item]["id"]
-        self.update_item("status", new_status, entity_type, id)
         self.tree_item_and_info[item]["status"] = new_status
 
+        self.update_item("status", new_status, entity_type, id)
+        
     # Creates a QDateEdit with a calendar popup tool in YYYY-MM-DD format and set it to the treewidget cell
     def create_calendar_cells(self, date, item, id, entity_type, column, tree_widget):
         try:
@@ -1108,20 +1151,24 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Create QDateTimeEdit and set it to the tree widget cell
             datetime_edit = QDateTimeEdit()
-            datetime_edit.setCalendarPopup(True)
+            datetime_edit.setCalendarPopup(True) # Calendar appears when cell is clicked
             datetime_edit.setDisplayFormat("yyyy-MM-dd")
-            datetime_edit.setDateTime(QDateTime(QDate(int(year), int(month), int(day)), QTime(int(hours), int(minutes), int(seconds))))
+            datetime_edit.setDateTime(QDateTime(QDate(int(year), int(month), int(
+                day)), QTime(int(hours), int(minutes), int(seconds))))
             tree_widget.setItemWidget(item, column, datetime_edit)
-            
+
             # When the date is changed call the date_changed method and pass it additional variables using lambda
-            datetime_edit.dateTimeChanged.connect(lambda date_time: self.date_changed(date_time, id, entity_type, column))
+            datetime_edit.dateTimeChanged.connect(
+                lambda date_time: self.date_changed(date_time, id, entity_type, column))
         except AttributeError:
             pass
 
     # Sets the start/end date of the changed date cell to the correct utc date
     def date_changed(self, date_time, id, entity_type, column):
         utc = date_time.toUTC()
-        utc_datetime = datetime(utc.date().year(), utc.date().month(), utc.date().day())
+        utc_datetime = datetime(
+            utc.date().year(), utc.date().month(), utc.date().day())
+
         asset = session.query(f"{entity_type} where id is '{id}'").one()
 
         if column == 4:
@@ -1130,7 +1177,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             asset["end_date"] = utc_datetime
         else:
             pass
-        
+
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
         combo = MultiSelectComboBox()
@@ -1139,67 +1186,94 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         return combo
 
-    # Takes an *item*["assignee"] and checks those on in the passed combobox 
+    # Takes an *item*["assignee"] and checks those on in the passed combobox
     def set_combo_box_assignees(self, info_assignees, combo):
         combo_indexes = []
 
         for name in info_assignees:
             i = combo.findText(name)
-            combo_indexes.append(i)    
+            combo_indexes.append(i)
 
         combo.setCurrentIndexes(combo_indexes)
 
     # Sets the priority column combo box
     def set_priority_labels(self, item, info, tree_widget):
         combo = QComboBox()
-        combo.addItems(list(PRIORITY_LABELS.keys()))
-        current_label = info["priority"] # Get the current priority for the item
+        combo.addItems(list(PRIORITY_LABELS.keys())) # List of just of names of priorities 
+
+        # Get the current priority for the item
+        current_label = info["priority"]
         active = combo.findText(current_label)
-        combo.setCurrentIndex(active) # Set the active combo item to the item priority
-        color = f"rgb{PRIORITY_LABELS[current_label]}" # e.g. rgb(255, 255, 255)
-        combo.setStyleSheet(f"""
-            QComboBox {{ 
-                background-color: {color}; 
-            }}
-            QComboBox::item {{
-                selection-background-color: #3584e1;
-                selection-color: #ffffff;
-            }}
-        """) # Changes combo to selected labels corresponding color
-        tree_widget.setItemWidget(item, 6, combo) # Set the cell to the combo
 
-        combo.activated.connect(lambda index: self.priority_changed(index, combo, item)) # Changes combo to selected labels corresponding color
+        # Set the active combo item to the item priority
+        combo.setCurrentIndex(active)
 
-    # Changes combo to selected labels corresponding color
-    def priority_changed(self, index, combo, item):
-        currently_selected = combo.itemText(index)
-        new_priority = session.query(f"Priority where name is {currently_selected}").first() # Query the priority from ftrack to get all information needed for change
-        color = f"rgb{PRIORITY_LABELS[currently_selected]}"
+        # Get the color from the global priority dictionary
+        color = f"rgb{PRIORITY_LABELS[current_label]}"
+
+        # Set the background color of the cell and the highlight to default blue (Fusion)
         combo.setStyleSheet(f"""
-            QComboBox {{ 
-                background-color: {color}; 
+            QComboBox {{
+                background-color: {color};
             }}
             QComboBox::item {{
                 selection-background-color: #3584e1;
                 selection-color: #ffffff;
             }}
         """)
-        
-        entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
-        id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
-        self.update_item("priority", new_priority, entity_type, id) # Update the information on ftrack
-        self.tree_item_and_info[item]["priority"] = new_priority # Update the information in the dictionary
+
+        # Set the cell to the combo
+        tree_widget.setItemWidget(item, 6, combo)  
+
+        # When priority is changed call method
+        combo.activated.connect(
+            lambda index: self.priority_changed(index, combo, item))
+
+    # Changes cell color and updates information when priority is changed
+    def priority_changed(self, index, combo, item):
+        currently_selected = combo.itemText(index)
+
+        # Query the priority from ftrack to get all information needed for change
+        new_priority = session.query(f"Priority where name is {
+                                     currently_selected}").first()
+
+        # Get the color from the global priority dictionary             
+        color = f"rgb{PRIORITY_LABELS[currently_selected]}"
+
+        # Set the background color of the cell and the highlight to default blue (Fusion)
+        combo.setStyleSheet(f"""
+            QComboBox {{
+                background-color: {color};
+            }}
+            QComboBox::item {{
+                selection-background-color: #3584e1;
+                selection-color: #ffffff;
+            }}
+        """)
+
+        # Update the information in the tree_item_and_info dictionaries and on ftrack (unsaved until commit) 
+        entity_type = self.tree_item_and_info[item]["entity_type"]
+        id = self.tree_item_and_info[item]["id"]
+        self.tree_item_and_info[item]["priority"] = new_priority
+        self.update_item("priority", new_priority, entity_type, id)
 
     # Calls a specific method when an item in a particular column is updated
     def item_changed(self, item, column):
-        entity_type = self.tree_item_and_info[item]["entity_type"] # Get entity type (Task, Milestone, etc.)
-        id = self.tree_item_and_info[item]["id"] # Get the id of the item from the dict
+        # Get entity type (Task, Milestone, etc.)
+        entity_type = self.tree_item_and_info[item]["entity_type"]
 
-        # Get the updated text on the tree widget and update item name on ftrack 
+        # Get the id of the item from the dict
+        id = self.tree_item_and_info[item]["id"]
+
+        # Get the updated text on the tree widget and update item name on ftrack
         if column == 0:
-            new_name = item.text(column) # Get the text in the column
-            self.update_item("name", new_name, entity_type, id) # Update the items name on ftrack
-            self.tree_item_and_info[item]["name"] = new_name # Update the items name in the dict
+            new_name = item.text(column) 
+
+            # Update the items name on ftrack
+            self.update_item("name", new_name, entity_type, id)
+            
+            # Update the items name in the dict
+            self.tree_item_and_info[item]["name"] = new_name
 
     # Update the name of the passed item on ftrack (ready for commit/save)
     def update_item(self, to_change, change_to, entity_type, id):
