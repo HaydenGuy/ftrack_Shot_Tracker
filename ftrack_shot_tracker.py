@@ -873,6 +873,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         # Fills the correct start/end dates for AssetBuild and Sequence/Shot parents
         self.set_parent_dates(self.page_2_tree)
+        self.set_parent_dates(self.page_3_tree)
 
         # Resize columns to fit information inside
         self.resize_columns(self.page_1_tree)
@@ -1168,27 +1169,59 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Sets the cells dates for AssetBuilds, Sequences, Shots based on the children lowest start and highest end dates
     def set_parent_dates(self, tree):
-        for i in range(tree.topLevelItemCount()):
-            parent = tree.topLevelItem(i)
 
-            start_dates = []
-            end_dates = []
+        # PLACEHOLDER MILESTONE START == END
+        
+        if tree == self.page_3_tree:
+            for i in range (tree.topLevelItemCount()):
+                sequence = tree.topLevelItem(i)
 
-            for j in range(parent.childCount()):
-                child = parent.child(j)
+                for j in range(sequence.childCount()):
+                    parent = sequence.child(j)
 
-                start_date = tree.itemWidget(child, 4)
-                start_date_dt = start_date.dateTime()
-                start_dates.append(start_date_dt)
+                    start_dates = []
+                    end_dates = []
 
-                end_date = tree.itemWidget(child, 5)
-                end_date_dt = end_date.dateTime()
-                end_dates.append(end_date_dt)
+                    for k in range(parent.childCount()):
+                        tasks = parent.child(k)
+                        
+                        start = tree.itemWidget(tasks, 4)
+                        start_datetime = start.dateTime()
+                        start_dates.append(start_datetime)
 
-            min_date = min(start_dates).toString("yyyy-MM-dd")
-            max_date = max(end_dates).toString("yyyy-MM-dd")
-            parent.setText(4, min_date)
-            parent.setText(5, max_date)
+                        end = tree.itemWidget(tasks, 5)
+                        end_datetime = end.dateTime()
+                        end_dates.append(end_datetime)
+
+                    min_date = min(start_dates).toString("yyyy-MM-dd")
+                    max_date = max(end_dates).toString("yyyy-MM-dd")
+                    parent.setText(4, min_date)
+                    parent.setText(5, max_date)
+
+                sequence.setText(4, min_date)
+                sequence.setText(5, max_date)
+        else:
+            for i in range(tree.topLevelItemCount()):
+                parent = tree.topLevelItem(i)
+                
+                start_dates = []
+                end_dates = []
+
+                for j in range(parent.childCount()):
+                    tasks = parent.child(j)
+                    
+                    start = tree.itemWidget(tasks, 4)
+                    start_datetime = start.dateTime()
+                    start_dates.append(start_datetime)
+
+                    end = tree.itemWidget(tasks, 5)
+                    end_datetime = end.dateTime()
+                    end_dates.append(end_datetime)
+
+                min_date = min(start_dates).toString("yyyy-MM-dd")
+                max_date = max(end_dates).toString("yyyy-MM-dd")
+                parent.setText(4, min_date)
+                parent.setText(5, max_date)
 
     # Sets the start/end date of the changed date cell to the correct utc date
     def date_changed(self, date_time, id, entity_type, column):
