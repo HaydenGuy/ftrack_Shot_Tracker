@@ -937,7 +937,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                     self.set_status_labels(item, info, tree_widget)
 
                 # Sets the assignee combobox to team members if its a Task or Milestone 
-                if i == 3 and info["entity_type"] in ["Task", "Milestone"]:
+                elif i == 3 and info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, item, i, tree_widget)
                     self.set_combo_box_assignees(info["assignee"], combo)
 
@@ -946,7 +946,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                     self.set_combo_box_assignees(info["assignee"], combo)
 
                 # If the item is a Milestone set the end_date calendar cells
-                if info["entity_type"] == "Milestone" and i == 5:
+                elif info["entity_type"] == "Milestone" and i == 5:
                     self.create_calendar_cells(
                         info[heading], item, info["id"], info["entity_type"], i, tree_widget)
                 
@@ -984,7 +984,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                     self.set_status_labels(child_item, child_info, tree_widget)
 
                 # Sets the assignee combobox to team members if its a Task or Milestone 
-                if i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
+                elif i == 3 and child_info["entity_type"] in ["Task", "Milestone"]:
                     combo = self.create_multi_combo_box(self.team_members, child_item, i, tree_widget)
                     self.set_combo_box_assignees(child_info["assignee"], combo)
 
@@ -994,7 +994,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                     self.set_combo_box_assignees(child_info["assignee"], combo)
 
                 # If the type is an accepted task type create calendar cells
-                if child_info["type_name"] in TASK_NAMES_ID and i in {4, 5}:
+                elif child_info["type_name"] in TASK_NAMES_ID and i in {4, 5}:
                     self.create_calendar_cells(
                         child_info[heading], child_item, child_info["id"], child_info["entity_type"], i, tree_widget)
                 
@@ -1271,7 +1271,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Update the items name on ftrack
             self.update_item("name", new_name, entity_type, id)
-            
+
             # Update the items name in the dict
             self.tree_item_and_info[item]["name"] = new_name
 
