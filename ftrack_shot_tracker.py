@@ -745,8 +745,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
     # Check if an ftrack project exists by calling its code and return the project if it does
     def get_target_project(self, project_code):
-        project = session.query(f"Project where name is {
-                                project_code}").first()
+        project = session.query(f"Project where name is '{
+                                project_code}'").first()
 
         if not project:
             print("Could not find target project")
@@ -1234,8 +1234,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         currently_selected = combo.itemText(index)
 
         # Query the priority from ftrack to get all information needed for change
-        new_priority = session.query(f"Priority where name is {
-                                     currently_selected}").first()
+        new_priority = session.query(f"Priority where name is '{
+                                     currently_selected}'").first()
 
         # Get the color from the global priority dictionary             
         color = f"rgb{PRIORITY_LABELS[currently_selected]}"
