@@ -872,9 +872,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.fill_tree_information(self.sequences, self.page_3_tree)
 
         # Fills the empty cell dates for unchangeable dates with child or end date information
-        self.set_parent_dates(self.page_1_tree)
-        self.set_parent_dates(self.page_2_tree)
-        self.set_parent_dates(self.page_3_tree)
+        self.set_empty_cell_dates(self.page_1_tree)
+        self.set_empty_cell_dates(self.page_2_tree)
+        self.set_empty_cell_dates(self.page_3_tree)
 
         # Resize columns to fit information inside
         self.resize_columns(self.page_1_tree)
@@ -1174,62 +1174,83 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             for i in range(tree.topLevelItemCount()):
                 milestone = tree.topLevelItem(i)
 
-                end = tree.itemWidget(milestone, 5)
-                end_datetime = end.dateTime()
-                end_date = end_datetime.toString("yyyy-MM-dd")
-                milestone.setText(4, end_date)
+                try:
+                    end = tree.itemWidget(milestone, 5)
+                    end_datetime = end.dateTime()
+                    end_date = end_datetime.toString("yyyy-MM-dd")
+                    milestone.setText(4, end_date)
+                except:
+                    pass
 
         elif tree == self.page_2_tree:
             for i in range(tree.topLevelItemCount()):
-                parent = tree.topLevelItem(i)
+                asset_build = tree.topLevelItem(i)
                 
                 start_dates = []
                 end_dates = []
 
-                for j in range(parent.childCount()):
-                    tasks = parent.child(j)
+                for j in range(asset_build.childCount()):
+                    tasks = asset_build.child(j)
                     
                     start = tree.itemWidget(tasks, 4)
-                    start_datetime = start.dateTime()
-                    start_dates.append(start_datetime)
+                    if start:
+                        start_datetime = start.dateTime() if start.dateTime() else None
+                        if start_datetime:
+                            start_dates.append(start_datetime)
 
                     end = tree.itemWidget(tasks, 5)
-                    end_datetime = end.dateTime()
-                    end_dates.append(end_datetime)
+                    if end:
+                        end_datetime = end.dateTime() if end.dateTime() else None
+                        if end_datetime:
+                            end_dates.append(end_datetime)
 
-                min_date = min(start_dates).toString("yyyy-MM-dd")
-                max_date = max(end_dates).toString("yyyy-MM-dd")
-                parent.setText(4, min_date)
-                parent.setText(5, max_date)
+                if start_dates:
+                    min_date = min(start_dates).toString("yyyy-MM-dd")
+                    asset_build.setText(4, min_date)
+                if end_dates:
+                    max_date = max(end_dates).toString("yyyy-MM-dd")
+                    asset_build.setText(5, max_date)
 
         else:
             for i in range (tree.topLevelItemCount()):
                 sequence = tree.topLevelItem(i)
 
                 for j in range(sequence.childCount()):
-                    parent = sequence.child(j)
+                    shot = sequence.child(j)
 
                     start_dates = []
                     end_dates = []
 
-                    for k in range(parent.childCount()):
-                        tasks = parent.child(k)
+                    for k in range(shot.childCount()):
+                        tasks = shot.child(k)
                         
                         start = tree.itemWidget(tasks, 4)
-                        start_datetime = start.dateTime()
-                        start_dates.append(start_datetime)
+                        if start:
+                            start_datetime = start.dateTime() if start.dateTime() else None
+                            if start_datetime:
+                                start_dates.append(start_datetime)
 
                         end = tree.itemWidget(tasks, 5)
-                        end_datetime = end.dateTime()
-                        end_dates.append(end_datetime)
+                        if end:
+                            end_datetime = end.dateTime() if end.dateTime() else None
+                            if end_datetime:
+                                end_dates.append(end_datetime)
 
-                    min_date = min(start_dates).toString("yyyy-MM-dd")
-                    max_date = max(end_dates).toString("yyyy-MM-dd")
-                    parent.setText(4, min_date)
-                    parent.setText(5, max_date)
-
-                sequence.setText(4, min_date)
-                sequence.setText(5, max_date)
+                    if start_dates:
+                        min_date = min(start_dates).toString("yyyy-MM-dd")
+                        shot.setText(4, min_date)
+                    if end_dates:
+                        max_date = max(end_dates).toString("yyyy-MM-dd")
+                        shot.setText(5, max_date)
+            
+                try:
+                    sequence.setText(4, min_date)
+                except UnboundLocalError:
+                    pass
+                try:
+                    sequence.setText(5, max_date)
+                except UnboundLocalError:
+                    pass
 
     # Sets the start/end date of the changed date cell to the correct utc date
     def date_changed(self, date_time, id, entity_type, column):
