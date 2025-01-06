@@ -1164,8 +1164,26 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # When the date is changed call the date_changed method and pass it additional variables using lambda
             datetime_edit.dateTimeChanged.connect(
-                lambda date_time: self.date_changed(date_time, id, entity_type, column))
+                lambda date_time: self.date_changed(date_time, item, id, entity_type, column))
         except AttributeError:
+            pass
+
+    # Sets the start/end date of the changed date cell to the correct utc date
+    def date_changed(self, date_time, item, id, entity_type, column):
+        utc = date_time.toUTC()
+        utc_datetime = datetime(
+            utc.date().year(), utc.date().month(), utc.date().day())
+
+        # Update the information in the tree_item_and_info dictionaries and on ftrack (unsaved until commit) 
+        entity_type = self.tree_item_and_info[item]["entity_type"]
+        id = self.tree_item_and_info[item]["id"]
+        if column == 4:
+            self.tree_item_and_info[item]["start_date"] = utc_datetime
+            self.update_item("start_date", utc_datetime, entity_type, id)
+        elif column == 5:
+            self.tree_item_and_info[item]["end_date"] = utc_datetime
+            self.update_item("end_date", utc_datetime, entity_type, id)
+        else:
             pass
 
     # Fills the start date cells for milestones that have an end date
@@ -1270,21 +1288,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 sequence.setText(5, max_date) # Set the end date cell of the Sequence
             except UnboundLocalError:
                 pass
-
-    # Sets the start/end date of the changed date cell to the correct utc date
-    def date_changed(self, date_time, id, entity_type, column):
-        utc = date_time.toUTC()
-        utc_datetime = datetime(
-            utc.date().year(), utc.date().month(), utc.date().day())
-
-        asset = session.query(f"{entity_type} where id is '{id}'").one()
-
-        if column == 4:
-            asset["start_date"] = utc_datetime
-        elif column == 5:
-            asset["end_date"] = utc_datetime
-        else:
-            pass
 
     # Creates a MultiSelectComboBox which allows multiple options to be selected and displayed in a cell
     def create_multi_combo_box(self, combo_items, item, column, tree_widget):
