@@ -871,7 +871,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.fill_tree_information(self.asset_builds, self.page_2_tree)
         self.fill_tree_information(self.sequences, self.page_3_tree)
 
-        # Fills the empty cell dates for unchangeable dates with child or end date information
+        # Fills the empty cell dates for Milestones, AssetBuild, Sequences and Shots
         self.set_milestone_start_dates(self.page_1_tree)
         self.set_asset_build_empty_cell_dates(self.page_2_tree)
         self.set_sequence_shot_empty_cell_dates(self.page_3_tree)
