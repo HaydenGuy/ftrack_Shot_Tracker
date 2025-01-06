@@ -872,9 +872,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.fill_tree_information(self.sequences, self.page_3_tree)
 
         # Fills the empty cell dates for unchangeable dates with child or end date information
-        self.set_empty_cell_dates(self.page_1_tree)
-        self.set_empty_cell_dates(self.page_2_tree)
-        self.set_empty_cell_dates(self.page_3_tree)
+        self.set_milestone_start_dates(self.page_1_tree)
+        self.set_asset_build_empty_cell_dates(self.page_2_tree)
+        self.set_sequence_shot_empty_cell_dates(self.page_3_tree)
 
         # Resize columns to fit information inside
         self.resize_columns(self.page_1_tree)
@@ -1168,92 +1168,108 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         except AttributeError:
             pass
 
-    # Sets the empty cell dates for unchangeable dates with child or end date information
-    def set_empty_cell_dates(self, tree):
-        if tree == self.page_1_tree:
-            for i in range(tree.topLevelItemCount()):
-                milestone = tree.topLevelItem(i)
+    # Fills the start date cells for milestones that have an end date
+    def set_milestone_start_dates(self, tree):
+        # Iterate through all milestones
+        for i in range(tree.topLevelItemCount()):
+            milestone = tree.topLevelItem(i)
 
+            # No date set if error
+            try:
+                end = tree.itemWidget(milestone, 5) # Get the end date calendar widget
+                end_datetime = end.dateTime() # Convert current end date value to datetime
+                end_date = end_datetime.toString("yyyy-MM-dd") # Convert datetime to string
+                milestone.setText(4, end_date) # Set the start date cell to the end date string
+            except AttributeError:
+                pass
+
+    # Fills the AssetBuild start/end date cells with information from it's Tasks
+    def set_asset_build_empty_cell_dates(self, tree):
+        # Iterate through all AssetBuilds
+        for i in range(tree.topLevelItemCount()):
+            asset_build = tree.topLevelItem(i)
+            
+            # Lists of task start/end dates
+            start_dates = []
+            end_dates = []
+
+            # Iterate through all of the Tasks in an AssetBuild
+            for j in range(asset_build.childCount()):
+                tasks = asset_build.child(j)
+                
+                # No dates added to list if error
                 try:
-                    end = tree.itemWidget(milestone, 5)
-                    end_datetime = end.dateTime()
-                    end_date = end_datetime.toString("yyyy-MM-dd")
-                    milestone.setText(4, end_date)
-                except:
+                    start = tree.itemWidget(tasks, 4) # Get the start date calendar widget
+                    start_datetime = start.dateTime() # Convert current start date value to datetime
+                    start_dates.append(start_datetime) # Append datetime to list
+                except AttributeError:
                     pass
 
-        elif tree == self.page_2_tree:
-            for i in range(tree.topLevelItemCount()):
-                asset_build = tree.topLevelItem(i)
-                
+                try:
+                    end = tree.itemWidget(tasks, 5)
+                    end_datetime = end.dateTime()
+                    end_dates.append(end_datetime)
+                except AttributeError:
+                    pass
+
+            # If the lists are not empty
+            if start_dates:
+                min_date = min(start_dates).toString("yyyy-MM-dd") # Convert datetime to string
+                asset_build.setText(4, min_date) # Set the start date cell of the AssetBuild
+            if end_dates:
+                max_date = max(end_dates).toString("yyyy-MM-dd")
+                asset_build.setText(5, max_date) # Set the end date cell of the AssetBuild
+
+    # Fills the Sequence/Shot start/end date cells with information from it's Tasks
+    def set_sequence_shot_empty_cell_dates(self, tree):
+        # Iterate through all Sequences
+        for i in range (tree.topLevelItemCount()):
+            sequence = tree.topLevelItem(i)
+
+            # Iterate through all Shots in a Sequence
+            for j in range(sequence.childCount()):
+                shot = sequence.child(j)
+
+                # Lists of task start/end dates
                 start_dates = []
                 end_dates = []
 
-                for j in range(asset_build.childCount()):
-                    tasks = asset_build.child(j)
+                # Iterate through all of the Tasks in a Shot
+                for k in range(shot.childCount()):
+                    tasks = shot.child(k)
                     
-                    start = tree.itemWidget(tasks, 4)
-                    if start:
-                        start_datetime = start.dateTime() if start.dateTime() else None
-                        if start_datetime:
-                            start_dates.append(start_datetime)
+                    # No dates added to list if error
+                    try:
+                        start = tree.itemWidget(tasks, 4) # Get the start date calendar widget
+                        start_datetime = start.dateTime() # Convert current start date value to datetime
+                        start_dates.append(start_datetime) # Append datetime to list
+                    except AttributeError:
+                        pass
 
-                    end = tree.itemWidget(tasks, 5)
-                    if end:
-                        end_datetime = end.dateTime() if end.dateTime() else None
-                        if end_datetime:
-                            end_dates.append(end_datetime)
+                    try:
+                        end = tree.itemWidget(tasks, 5)
+                        end_datetime = end.dateTime()
+                        end_dates.append(end_datetime)
+                    except AttributeError:
+                        pass
 
+                # If the lists are not empty
                 if start_dates:
-                    min_date = min(start_dates).toString("yyyy-MM-dd")
-                    asset_build.setText(4, min_date)
+                    min_date = min(start_dates).toString("yyyy-MM-dd") # Convert datetime to string
+                    shot.setText(4, min_date) # Set the start date cell of the Shot
                 if end_dates:
                     max_date = max(end_dates).toString("yyyy-MM-dd")
-                    asset_build.setText(5, max_date)
-
-        else:
-            for i in range (tree.topLevelItemCount()):
-                sequence = tree.topLevelItem(i)
-
-                for j in range(sequence.childCount()):
-                    shot = sequence.child(j)
-
-                    start_dates = []
-                    end_dates = []
-
-                    for k in range(shot.childCount()):
-                        tasks = shot.child(k)
-                        
-                        start = tree.itemWidget(tasks, 4)
-                        if start:
-                            start_datetime = start.dateTime() if start.dateTime() else None
-                            if start_datetime:
-                                start_dates.append(start_datetime)
-
-                        # If empty value in cell
-                        end = tree.itemWidget(tasks, 5)
-                        if end:
-                            end_datetime = end.dateTime() if end.dateTime() else None
-                            if end_datetime:
-                                end_dates.append(end_datetime)
-
-                    # If not empty list
-                    if start_dates:
-                        min_date = min(start_dates).toString("yyyy-MM-dd")
-                        shot.setText(4, min_date)
-                    if end_dates:
-                        max_date = max(end_dates).toString("yyyy-MM-dd")
-                        shot.setText(5, max_date)
-            
-                # If min/max date not set
-                try:
-                    sequence.setText(4, min_date)
-                except UnboundLocalError:
-                    pass
-                try:
-                    sequence.setText(5, max_date)
-                except UnboundLocalError:
-                    pass
+                    shot.setText(5, max_date) # Set the end date cell of the Shot
+        
+            # If min_date or max_date exist as a set variable
+            try:
+                sequence.setText(4, min_date) # Set the start date cell of the Sequence
+            except UnboundLocalError:
+                pass
+            try:
+                sequence.setText(5, max_date) # Set the end date cell of the Sequence
+            except UnboundLocalError:
+                pass
 
     # Sets the start/end date of the changed date cell to the correct utc date
     def date_changed(self, date_time, id, entity_type, column):
