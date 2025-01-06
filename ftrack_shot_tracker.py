@@ -1173,6 +1173,29 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         utc = date_time.toUTC()
         utc_datetime = datetime(
             utc.date().year(), utc.date().month(), utc.date().day())
+        local_date_string = date_time.toString("yyyy-MM-dd")
+
+        # try:
+        #     asset_build_or_shot = item.parent()
+        #     sequence = asset_build_or_shot.parent() 
+        # except AttributeError:
+        #     pass
+
+        # if asset_build_or_shot and column == 4:
+        #     if local_date_string < asset_build_or_shot.text(4):
+        #         asset_build_or_shot.setText(4, local_date_string)
+
+        #         if sequence:
+        #             sequence.setText(4, local_date_string)             
+
+        # elif asset_build_or_shot and column == 5:
+        #     if local_date_string > asset_build_or_shot.text(5):
+        #         asset_build_or_shot.setText(5, local_date_string)
+                
+        #         if sequence:
+        #             sequence.setText(5, local_date_string)
+        # else:
+        #     item.setText(4, local_date_string)
 
         # Update the information in the tree_item_and_info dictionaries and on ftrack (unsaved until commit) 
         entity_type = self.tree_item_and_info[item]["entity_type"]
