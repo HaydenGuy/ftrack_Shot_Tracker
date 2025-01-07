@@ -1165,15 +1165,19 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # When the date is changed call the date_changed method and pass it additional variables using lambda
             datetime_edit.dateTimeChanged.connect(
                 lambda date_time: self.date_changed(date_time, item, id, entity_type, column))
-        except AttributeError:
-            pass
+        except AttributeError: # NoneType
+            default_date = (datetime.now(LOCAL_TZ)) # Todays date
+
+            # Call method again with default date
+            self.create_calendar_cells(
+                default_date, item, id, entity_type, column, tree_widget)
 
     # Sets the start/end date of the changed date cell to the correct utc date
     def date_changed(self, date_time, item, id, entity_type, column):
-        utc = date_time.toUTC()
-        utc_datetime = datetime(
-            utc.date().year(), utc.date().month(), utc.date().day())
-        local_date_string = date_time.toString("yyyy-MM-dd")
+        # Convert date_time to useable format
+        date = date_time.toString("yyyy-MM-ddThh:mm:ss")
+
+        # local_date_string = date_time.toString("yyyy-MM-dd")
 
         # try:
         #     asset_build_or_shot = item.parent()
@@ -1201,11 +1205,11 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         entity_type = self.tree_item_and_info[item]["entity_type"]
         id = self.tree_item_and_info[item]["id"]
         if column == 4:
-            self.tree_item_and_info[item]["start_date"] = utc_datetime
-            self.update_item("start_date", utc_datetime, entity_type, id)
+            self.tree_item_and_info[item]["start_date"] = date
+            self.update_item("start_date", date, entity_type, id)
         elif column == 5:
-            self.tree_item_and_info[item]["end_date"] = utc_datetime
-            self.update_item("end_date", utc_datetime, entity_type, id)
+            self.tree_item_and_info[item]["end_date"] = date
+            self.update_item("end_date", date, entity_type, id)
         else:
             pass
 
