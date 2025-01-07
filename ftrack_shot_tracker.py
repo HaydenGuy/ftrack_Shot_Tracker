@@ -873,8 +873,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
         # Fills the empty cell dates for Milestones, AssetBuild, Sequences and Shots
         self.set_milestone_start_dates(self.page_1_tree)
-        self.set_asset_build_empty_cell_dates(self.page_2_tree)
-        self.set_sequence_shot_empty_cell_dates(self.page_3_tree)
+        self.set_asset_build_dates(self.page_2_tree)
+        self.set_sequence_shot_dates(self.page_3_tree)
 
         # Resize columns to fit information inside
         self.resize_columns(self.page_1_tree)
@@ -1193,30 +1193,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             }
         """)
 
-        # local_date_string = date_time.toString("yyyy-MM-dd")
-
-        # try:
-        #     asset_build_or_shot = item.parent()
-        #     sequence = asset_build_or_shot.parent() 
-        # except AttributeError:
-        #     pass
-
-        # if asset_build_or_shot and column == 4:
-        #     if local_date_string < asset_build_or_shot.text(4):
-        #         asset_build_or_shot.setText(4, local_date_string)
-
-        #         if sequence:
-        #             sequence.setText(4, local_date_string)             
-
-        # elif asset_build_or_shot and column == 5:
-        #     if local_date_string > asset_build_or_shot.text(5):
-        #         asset_build_or_shot.setText(5, local_date_string)
-                
-        #         if sequence:
-        #             sequence.setText(5, local_date_string)
-        # else:
-        #     item.setText(4, local_date_string)
-
         # Update the information in the tree_item_and_info dictionaries and on ftrack (unsaved until commit) 
         entity_type = self.tree_item_and_info[item]["entity_type"]
         id = self.tree_item_and_info[item]["id"]
@@ -1245,7 +1221,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 pass
 
     # Fills the AssetBuild start/end date cells with information from it's Tasks
-    def set_asset_build_empty_cell_dates(self, tree):
+    def set_asset_build_dates(self, tree):
         # Iterate through all AssetBuilds
         for i in range(tree.topLevelItemCount()):
             asset_build = tree.topLevelItem(i)
@@ -1282,7 +1258,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 asset_build.setText(5, max_date) # Set the end date cell of the AssetBuild
 
     # Fills the Sequence/Shot start/end date cells with information from it's Tasks
-    def set_sequence_shot_empty_cell_dates(self, tree):
+    def set_sequence_shot_dates(self, tree):
         # Iterate through all Sequences
         for i in range (tree.topLevelItemCount()):
             sequence = tree.topLevelItem(i)
@@ -1439,8 +1415,8 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         try:
             session.commit()
             self.set_milestone_start_dates(self.page_1_tree)
-            self.set_asset_build_empty_cell_dates(self.page_2_tree)
-            self.set_sequence_shot_empty_cell_dates(self.page_3_tree)
+            self.set_asset_build_dates(self.page_2_tree)
+            self.set_sequence_shot_dates(self.page_3_tree)
         except ftrack_api.exception.ServerError as e:
             error_message = e.args[0] if e.args else e.default_message
 
