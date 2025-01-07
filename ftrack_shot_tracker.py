@@ -1438,6 +1438,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
     def save_session(self):
         try:
             session.commit()
+            self.set_milestone_start_dates(self.page_1_tree)
+            self.set_asset_build_empty_cell_dates(self.page_2_tree)
+            self.set_sequence_shot_empty_cell_dates(self.page_3_tree)
         except ftrack_api.exception.ServerError as e:
             error_message = e.args[0] if e.args else e.default_message
 
