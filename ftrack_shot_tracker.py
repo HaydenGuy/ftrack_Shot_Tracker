@@ -10,6 +10,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QDateTimeEdit, QComboBox
 from PySide6.QtCore import Qt, QDate, QTime, QDateTime
+from PySide6.QtGui import QBrush, QColor, QFont
+
 from UI.shot_tracker import Ui_ftrack_Shot_Tracker
 from pyqt6_multiselect_combobox import MultiSelectComboBox
 
@@ -934,6 +936,13 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             # Adds the tree item and its info to dictionary for easy use in other methods
             self.tree_item_and_info[item] = info
 
+            # Adds font and background styling for parent nodes
+            if info["entity_type"] in ["AssetBuild", "Sequence", "Shot"]:
+                bold_font = QFont()
+                bold_font.setWeight(QFont.Bold)
+                item.setFont(0, bold_font)
+                item.setBackground(0, QBrush(QColor(200, 200, 200)))
+
             # Calls the info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
 
@@ -980,6 +989,10 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
 
             # Adds the tree item and its info to dictionary for easy use in other methods
             self.tree_item_and_info[child_item] = child_info
+
+            # Adds background styling for parent nodes
+            if child_info["entity_type"] in ["AssetBuild", "Sequence", "Shot"]:
+                child_item.setBackground(0, QBrush(QColor(230, 230, 230)))
 
             # Calls the child_info dictionary and set the tree widget index i to the respective value
             for i, heading in enumerate(COLUMN_HEADINGS):
