@@ -732,7 +732,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         
         self.create_ui()
 
-        # Call item_changed when an item updated on any of tree widgets
+        # Call name_or_description_changed when names or descriptions are updated
         self.page_1_tree.itemChanged.connect(self.name_or_description_changed)
         self.page_2_tree.itemChanged.connect(self.name_or_description_changed)
         self.page_3_tree.itemChanged.connect(self.name_or_description_changed)
