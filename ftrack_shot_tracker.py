@@ -733,9 +733,9 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         self.create_ui()
 
         # Call item_changed when an item updated on any of tree widgets
-        self.page_1_tree.itemChanged.connect(self.item_changed)
-        self.page_2_tree.itemChanged.connect(self.item_changed)
-        self.page_3_tree.itemChanged.connect(self.item_changed)
+        self.page_1_tree.itemChanged.connect(self.name_or_description_changed)
+        self.page_2_tree.itemChanged.connect(self.name_or_description_changed)
+        self.page_3_tree.itemChanged.connect(self.name_or_description_changed)
 
         # Clicking items in column 1 on a tree widget calls a method to set the type
         self.page_1_tree.itemClicked.connect(lambda item, column: self.set_type_labels(item, column, self.page_1_tree) if column == 1 else None)
@@ -1040,6 +1040,34 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 tree_widget.resizeColumnToContents(i)
             else:
                 tree_widget.setColumnWidth(3, 200)
+
+        # Calls update item to change name or description when changes are made
+    
+    # Updates the name or description when changes are made to them on the tree widget
+    def name_or_description_changed(self, item, column):
+        # Get entity type (Task, Milestone, etc.)
+        entity_type = self.tree_item_and_info[item]["entity_type"]
+
+        # Get the id of the item from the dict
+        id = self.tree_item_and_info[item]["id"]
+
+        # Get the updated text on the tree widget and update item name on ftrack
+        if column == 0:
+            new_name = item.text(column) 
+
+            # Update the items name on ftrack
+            self.update_item("name", new_name, entity_type, id)
+
+            # Update the items name in the dict
+            self.tree_item_and_info[item]["name"] = new_name
+
+        # Get the updated description from the tree widgget and update item on ftrack
+        if column == 7:
+            new_description = item.text(column)
+
+            self.update_item("description", new_description, entity_type, id)
+
+            self.tree_item_and_info[item]["description"] = new_description
 
     # Creates a combobox to be used when selecting an item from the type or status column
     def set_type_labels(self, item, _, tree_widget):
@@ -1399,24 +1427,6 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
         id = self.tree_item_and_info[item]["id"]
         self.tree_item_and_info[item]["priority"] = new_priority
         self.update_item("priority", new_priority, entity_type, id)
-
-    # Calls a specific method when an item in a particular column is updated
-    def item_changed(self, item, column):
-        # Get entity type (Task, Milestone, etc.)
-        entity_type = self.tree_item_and_info[item]["entity_type"]
-
-        # Get the id of the item from the dict
-        id = self.tree_item_and_info[item]["id"]
-
-        # Get the updated text on the tree widget and update item name on ftrack
-        if column == 0:
-            new_name = item.text(column) 
-
-            # Update the items name on ftrack
-            self.update_item("name", new_name, entity_type, id)
-
-            # Update the items name in the dict
-            self.tree_item_and_info[item]["name"] = new_name
 
     # Update the name of the passed item on ftrack (ready for commit/save)
     def update_item(self, to_change, change_to, entity_type, id):
