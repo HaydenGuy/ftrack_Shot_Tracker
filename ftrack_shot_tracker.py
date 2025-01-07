@@ -1162,20 +1162,36 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                 day)), QTime(int(hours), int(minutes), int(seconds))))
             tree_widget.setItemWidget(item, column, datetime_edit)
 
+            # If default date is used change cells to red
+            if year == 2000: 
+                datetime_edit.setStyleSheet("""
+                    QDateTimeEdit {
+                        background-color:rgb(255, 0, 0);  /* Red background */
+                        color:rgb(0, 0, 0);  /* Black text */
+                    }
+                """)
+
             # When the date is changed call the date_changed method and pass it additional variables using lambda
             datetime_edit.dateTimeChanged.connect(
-                lambda date_time: self.date_changed(date_time, item, id, entity_type, column))
+                lambda date_time: self.date_changed(date_time, item, id, entity_type, column, datetime_edit))
         except AttributeError: # NoneType
-            default_date = (datetime.now(LOCAL_TZ)) # Todays date
+            default_date = datetime(2000, 1, 1, 0, 0, 0) # 1 Jan 2000
 
             # Call method again with default date
             self.create_calendar_cells(
                 default_date, item, id, entity_type, column, tree_widget)
 
     # Sets the start/end date of the changed date cell to the correct utc date
-    def date_changed(self, date_time, item, id, entity_type, column):
+    def date_changed(self, date_time, item, id, entity_type, column, datetime_edit):
         # Convert date_time to useable format
         date = date_time.toString("yyyy-MM-ddThh:mm:ss")
+
+        # Change the default date cells back to white 
+        datetime_edit.setStyleSheet("""
+            QDateTimeEdit {
+                background-color: white;
+            }
+        """)
 
         # local_date_string = date_time.toString("yyyy-MM-dd")
 
