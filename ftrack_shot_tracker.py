@@ -1207,7 +1207,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
             if year == 2000: 
                 datetime_edit.setStyleSheet("""
                     QDateTimeEdit {
-                        background-color:rgb(255, 0, 0);  /* Red background */
+                        background-color:rgb(231, 76, 60);  /* Red background */
                         color:rgb(0, 0, 0);  /* Black text */
                     }
                 """)
