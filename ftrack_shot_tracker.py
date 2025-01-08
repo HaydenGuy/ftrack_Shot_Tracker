@@ -678,7 +678,7 @@ TASK_STATUSES = {
     "In progress": (52, 152, 219),
     "Pending Review": (241, 196, 15),
     "On Hold": (231, 76, 60),
-    "Approved": (28, 188, 144)
+    "Client approved": (28, 188, 144)
 }
 
 # Statuses and their corresponding color
