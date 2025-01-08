@@ -965,7 +965,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                         info[heading], item, info["id"], info["entity_type"], i, tree_widget)
                 
                 # Sets up the priority column cells if not a milestone
-                elif info["entity_type"] != "Milestone" and i == 6:
+                elif i == 6:
                     self.set_priority_labels(item, info, tree_widget)
                 else:
                     try:
@@ -1017,7 +1017,7 @@ class ftrack_Shot_Tracker(QMainWindow, Ui_ftrack_Shot_Tracker):
                         child_info[heading], child_item, child_info["id"], child_info["entity_type"], i, tree_widget)
                 
                 # Sets up the priority column cells if not a milestone
-                elif child_info["entity_type"] != "Milestone" and i == 6:
+                elif i == 6:
                     self.set_priority_labels(child_item, child_info, tree_widget)
 
                 else:
